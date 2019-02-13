@@ -35,8 +35,8 @@ admin.site.login_form = AdminAuthenticationForm
 
 
 urlpatterns = [
-    url(r'^', include('misago.urls', namespace='misago')),
-    url(r'^', include('social_django.urls', namespace='social')),
+    url(r'^forum/', include('misago.urls', namespace='misago')),
+    url(r'^social', include('social_django.urls', namespace='social')),
 
     # Javascript translations
     url(
@@ -56,8 +56,8 @@ urlpatterns = [
 
     url(r'^cms/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
-    url(r'^pages/', include(wagtail_urls)),
-    
+#    url(r'^pages/', include(wagtail_urls)),
+    url(r'', include(wagtail_urls))
 ]
 
 

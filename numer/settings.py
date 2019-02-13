@@ -143,6 +143,8 @@ STATICFILES_DIRS = [
 # Email configuration
 # https://docs.djangoproject.com/en/1.11/ref/settings/#email-backend
 
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
 
@@ -214,11 +216,20 @@ INSTALLED_APPS = [
     'wagtail.documents',
     'wagtail.images',
     'wagtail.search',
+    'wagtail.contrib.modeladmin',
     'wagtail.admin',
     'wagtail.core',
+    'wagtail.contrib.routable_page',
 
     'modelcluster',
     'taggit',
+    #see how it work but in some time remove this - do it by react from frontend
+    'el_pagination',
+    'wagtailmenus',
+    'wagtailemoji',
+
+    # our soft
+    'blog'
 ]
 
 INTERNAL_IPS = [
@@ -330,6 +341,7 @@ TEMPLATES = [
                 # Note: keep frontend_context processor last for previous processors
                 # to be able to expose data UI app via request.frontend_context
                 'misago.core.context_processors.frontend_context',
+                'wagtailmenus.context_processors.wagtailmenus',
             ],
         },
     },
