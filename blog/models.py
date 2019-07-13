@@ -23,6 +23,8 @@ from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
+from wagtail.api import APIField
+from wagtail.search import index
 
 #from blog.blocks import TwoColumnBlock
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -34,6 +36,10 @@ from taggit.models import TaggedItemBase
 
 class BlogPage(RoutablePageMixin, Page):
     description = models.CharField(max_length=255, blank=True,)
+
+    api_fields = [
+        APIField('description'),
+    ]
 
     content_panels = Page.content_panels + [
         FieldPanel('description', classname="full")
@@ -121,6 +127,26 @@ class PostPage(Page):
     categories = ParentalManyToManyField('blog.BlogCategory', blank=True)
     tags = ClusterTaggableManager(through='blog.BlogPageTag', blank=True)
 
+    search_fields = Page.search_fields + [ # Inherit search_fields from Page
+        index.SearchField('body', partial_match=True, boost=3),
+        index.RelatedFields('tags', [
+                index.SearchField('name', partial_match=True, boost=10),
+            ]),
+#        index.SearchField('tags'),
+#        index.SearchField('categories'),
+#        index.FilterField('tags'),
+#        index.FilterField('categories'),
+        index.FilterField('date'),
+    ]
+
+    api_fields = [
+        APIField('body'),
+        APIField('date'),
+        APIField('header_image'),
+        APIField('categories'),
+        APIField('tags'),
+    ]
+
     content_panels = Page.content_panels + [
         ImageChooserPanel('header_image'),
         FieldPanel('body',classname='full'),
@@ -202,3 +228,44 @@ class FormPage(AbstractEmailForm):
     @property
     def blog_page(self):
         return self.get_parent().specific
+
+
+class ServicePage(Page):
+    descr = RichTextField(blank=True)
+    price = models.PositiveIntegerField(blank=True)
+    expert = models.BooleanField(blank=True)
+
+    date_cnt = models.SmallIntegerField(blank=True)
+
+    date = models.DateTimeField(verbose_name="Service Added", default=datetime.datetime.today)
+
+    search_fields = Page.search_fields + [ # Inherit search_fields from Page
+        index.SearchField('title', partial_match=True, boost=3),
+        index.SearchField('descr'),
+        index.FilterField('expert'),
+    ]
+
+    api_fields = [
+        APIField('title'),
+        APIField('descr'),
+        APIField('price'),
+        APIField('expert'),
+        APIField('date_cnt'),
+    ]
+
+    content_panels = Page.content_panels + [
+        FieldPanel('descr',classname='full'),
+        FieldPanel('price',classname='full'),
+        FieldPanel('expert',classname='full'),
+        FieldPanel('date_cnt',classname='full'),
+    ]
+
+    settings_panels = Page.settings_panels + [
+        FieldPanel('date'),
+    ]
+
+    @property
+    def blog_page(self):
+        return self.get_parent().specific
+
+

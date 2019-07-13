@@ -1,0 +1,20 @@
+{
+  "main.css": "/static/css/main.904a7920.chunk.css",
+  "main.js": "/static/js/main.20f29853.chunk.js",
+  "main.js.map": "/static/js/main.20f29853.chunk.js.map",
+  "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+  "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+  "static/js/2.d0fc0ebe.chunk.js": "/static/js/2.d0fc0ebe.chunk.js",
+  "static/js/2.d0fc0ebe.chunk.js.map": "/static/js/2.d0fc0ebe.chunk.js.map",
+  "index.html": "/index.html",
+  "precache-manifest.f46ec9dcc3221b0bc636476adb0ae9f4.js": "/precache-manifest.f46ec9dcc3221b0bc636476adb0ae9f4.js",
+  "service-worker.js": "/service-worker.js",
+  "static/css/main.904a7920.chunk.css.map": "/static/css/main.904a7920.chunk.css.map",
+  "static/media/Roboto-Bold.ttf": "/static/media/Roboto-Bold.ee7b96fa.ttf",
+  "static/media/Roboto-BoldItalic.ttf": "/static/media/Roboto-BoldItalic.1eb7a893.ttf",
+  "static/media/Roboto-Italic.ttf": "/static/media/Roboto-Italic.42bbe4ee.ttf",
+  "static/media/Roboto-Regular.ttf": "/static/media/Roboto-Regular.3e1af3ef.ttf",
+  "static/media/image001.png": "/static/media/image001.94c59ff0.png",
+  "static/media/orbit-icons.ttf": "/static/media/orbit-icons.0c4fdf1a.ttf",
+  "static/media/test_avatar.png": "/static/media/test_avatar.d92d5060.png"
+}

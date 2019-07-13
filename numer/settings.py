@@ -36,7 +36,9 @@ DEBUG = True
 # A list of strings representing the host/domain names that this Django site can serve.
 # If you are unsure, just enter here your domain name, eg. ['mysite.com', 'www.mysite.com']
 
-ALLOWED_HOSTS = ['numerolog.privatebot.info']
+ALLOWED_HOSTS = ['numerolog.privatebot.info',
+		 'blog.numerolog.privatebot.info',
+		 'serv.numerolog.privatebot.info']
 
 
 WAGTAIL_SITE_NAME = 'Nenumerolog Olga Perceva'
@@ -137,6 +139,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'theme', 'static'),
+    os.path.join(BASE_DIR, 'frontend', 'static'),
 ]
 
 
@@ -219,6 +222,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'wagtail.admin',
     'wagtail.core',
+    'wagtail.api.v2',
     'wagtail.contrib.routable_page',
 
     'modelcluster',
@@ -229,8 +233,14 @@ INSTALLED_APPS = [
     'wagtailemoji',
 
     # our soft
-    'blog'
+    'blog',
+    'simple_calc',
+    'frontend'
 ]
+
+if DEBUG:
+    INSTALLED_APPS+= ('corsheaders',)
+    CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 INTERNAL_IPS = [
     '127.0.0.1'
@@ -248,10 +258,12 @@ MIDDLEWARE = [
     'misago.users.middleware.RealIPMiddleware',
     'misago.core.middleware.frontendcontext.FrontendContextMiddleware',
 
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'numer.disable.DisableCSRF',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -311,6 +323,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'theme', 'templates'),
+            os.path.join(BASE_DIR, 'frontend', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

@@ -26,8 +26,11 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.core import urls as wagtail_urls
 
+from frontend.urls import urls as frontend_urls
 
 from misago.users.forms.auth import AdminAuthenticationForm
+from blog.api import api_router
+
 
 
 admin.autodiscover()
@@ -56,8 +59,10 @@ urlpatterns = [
 
     url(r'^cms/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
-#    url(r'^pages/', include(wagtail_urls)),
-    url(r'', include(wagtail_urls))
+    url(r'^pages/', include(wagtail_urls)),
+    url(r'^api/v2/',api_router.urls),
+    url(r'^', include(frontend_urls)),
+    url(r'^', include(wagtail_urls)),
 ]
 
 
