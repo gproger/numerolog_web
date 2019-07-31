@@ -235,7 +235,12 @@ INSTALLED_APPS = [
     # our soft
     'blog',
     'simple_calc',
-    'frontend'
+# javascript frontend dummy page
+    'frontend',
+# user saved favorites saves
+    'favorites', 
+# user app (application) - buy sell items
+    'app',
 ]
 
 if DEBUG:
