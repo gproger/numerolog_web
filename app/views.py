@@ -1,16 +1,13 @@
-
 from django.shortcuts import render
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets, generics
-from rest_framework.decorators import detail_route
-from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from .models import *
 
-from .serializers import AppOrderSerializer
+from .serializers import AppOrderSerializer, AppWorkSerializer
 
 class AppOrderListViewSet(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -24,6 +21,16 @@ class AppOrderListViewSet(generics.ListCreateAPIView):
             return Response(serializer.data)
         else:
             raise Http404
+
+class AppWorkListViewSet(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = AppOrderSerializer
+
+    def list(self, request):
+        queryset = AppOrder.objects.filter(doer=request.user)
+        serializer = AppWorkSerializer(queryset, many = True)
+        return Response(serializer.data)
+
 
 
 # Create your views here.
