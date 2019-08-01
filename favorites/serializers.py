@@ -6,3 +6,4 @@ class FavoritesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorites
         fields = '__all__'
+        exclude = ['user']
