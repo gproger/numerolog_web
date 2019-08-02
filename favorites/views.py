@@ -13,7 +13,7 @@ class FavoritesListView(generics.ListCreateAPIView):
     serializer_class = FavoritesSerializer
 
     def list(self, request):
-        queryset = Favorites.objects.filter(user=request.user)
+        queryset = Favorites.objects.filter(user=request.user).order_by('-pk')
         serializer = FavoritesSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -32,7 +32,7 @@ class FavoritesDestroyView(generics.DestroyAPIView):
 
     def get_queryset(self):
         queryset = Favorites.objects.filter(user=self.request.user,
-                                            pk=self.kwargs['pk']).order_by('-pk')
+                                            pk=self.kwargs['pk'])
         return queryset
 
     def perform_destroy(self, instance):
