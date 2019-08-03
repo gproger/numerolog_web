@@ -2,7 +2,8 @@ from django.db import models
 from django.utils.crypto import get_random_string
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
-
+import datetime
+import random
 
 class AppUser(models.Model):
 
@@ -10,13 +11,31 @@ class AppUser(models.Model):
     name = models.CharField(max_length=254, blank=True, null=True)
     code = models.PositiveIntegerField()
     registered = models.BooleanField(default=False)
-    code_time = models.DateTimeField(auto_now=True)
+    code_time = models.DateTimeField(auto_now=False, blank = True)
     slug = models.SlugField(unique=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         """ Add Slug creating/checking to save method.  """
         slug_save(self)
         super(AppUser, self).save(*args, **kwargs)
+
+    def request_new_code(self):
+        cur_time = datetime.datetime.now()
+        if not self.code_time:
+            self.code_time = cur_time
+            self.code = random.randrange(100000, 999999)
+            # todo add send mail to email
+            self.save()
+        else:
+            timediff = cur_time - self.code_time
+            timediff_s = timediff.total_seconds()
+            if timediff_s > 180:
+                # 3 minutes
+                self.code_time = cur_time
+                self.code = random.randrange(100000, 999999)
+                self.save()
+                # todo add send mail to email
+
 
 
 class AppOrder(models.Model):
@@ -38,6 +57,8 @@ class AppOrder(models.Model):
         """ Add Slug creating/checking to save method.  """
         slug_save(self)
         super(AppOrder, self).save(*args, **kwargs)
+
+## TODO: add notification to email on create ( or pay? )
 
 
 # .........
