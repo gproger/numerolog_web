@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 from django.conf import settings
 
 # обязательные параметры - реквизиты магазина
@@ -13,7 +13,7 @@ USE_POST = getattr(settings, 'ROBOKASSA_USE_POST', True)
 STRICT_CHECK = getattr(settings, 'ROBOKASSA_STRICT_CHECK', True)
 
 # тестовый режим
-TEST_MODE = getattr(settings, 'ROBOKASSA_TEST_MODE', False)
+TEST_MODE = getattr(settings, 'ROBOKASSA_TEST_MODE', True)
 
 # url, по которому будет идти отправка форм
 FORM_TARGET = 'https://auth.robokassa.ru/Merchant/Index.aspx'

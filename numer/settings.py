@@ -238,7 +238,7 @@ INSTALLED_APPS = [
 # javascript frontend dummy page
     'frontend',
 # user saved favorites saves
-    'favorites', 
+    'favorites',
 # user app (application) - buy sell items
     'app',
 ]
@@ -500,3 +500,7 @@ MISAGO_PROFILE_FIELDS = [
         ],
     },
 ]
+
+
+ROBOKASSA_LOGIN = 'demo'
+ROBOKASSA_PASSWORD1 = 'Password_1'
