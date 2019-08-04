@@ -11,7 +11,8 @@ class AppUser(models.Model):
     name = models.CharField(max_length=254, blank=True, null=True)
     code = models.PositiveIntegerField()
     registered = models.BooleanField(default=False)
-    code_time = models.DateTimeField(auto_now=False, blank = True)
+    valid = models.BooleanField(default=False)
+    code_time = models.DateTimeField(auto_now=False, blank=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -36,6 +37,19 @@ class AppUser(models.Model):
                 self.save()
                 # todo add send mail to email
 
+#### we need check valid of AppUser - if no valideation in 4 day - we delete registration
+
+    def check_valid(self):
+        if self.valid:
+            return True
+
+        cur_time = datetime.datetime.now()
+        if not self.code_time:
+            return True
+        timediff = cur_time - self.code_time
+        timediff_s = timediff.total_seconds()
+        if (timediff_s / 60*24*4) > 1:
+            return False
 
 
 class AppOrder(models.Model):
