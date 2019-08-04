@@ -241,6 +241,9 @@ INSTALLED_APPS = [
     'favorites',
 # user app (application) - buy sell items
     'app',
+
+# payment gate
+	'django_robokassa'
 ]
 
 if DEBUG:
