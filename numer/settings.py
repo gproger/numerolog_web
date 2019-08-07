@@ -243,7 +243,9 @@ INSTALLED_APPS = [
     'app',
 
 # payment gate
-	'django_robokassa'
+    'django_robokassa',
+# school application form
+    'schoolform',
 ]
 
 if DEBUG:
@@ -506,4 +508,4 @@ MISAGO_PROFILE_FIELDS = [
 
 
 ROBOKASSA_LOGIN = 'demo'
-ROBOKASSA_PASSWORD1 = 'Password_1'
+ROBOKASSA_PASSWORD1 = 'password_1'
