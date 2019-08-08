@@ -20,3 +20,11 @@ class SchoolAppForm(models.Model):
     accepted = models.CharField(max_length=40)
     payed_by = models.CharField(max_length=240, blank=True, null=True)
     flow = models.ForeignKey(SchoolAppFlow)
+
+    def save(self, *args, **kwargs):
+        c_flow = SchoolAppFlow.objects.all().last()
+        self.flow = c_flow
+        print(args)
+        print(kwargs)
+        print("setted flow to")
+        super(SchoolAppForm, self).save(*args, **kwargs)

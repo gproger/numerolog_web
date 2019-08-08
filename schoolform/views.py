@@ -1,6 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
 
 from .models import SchoolAppForm, SchoolAppFlow
@@ -33,6 +33,8 @@ class SchoolAppFormListView(generics.ListAPIView):
 
 class SchoolAppFormCreateView(generics.CreateAPIView):
     serializer_class = SchoolAppFormSerializer
+    queryset = SchoolAppForm.objects.all()
+    permisiion_classes = [AllowAny]
 
 
 class SchoolAppFlowListView(generics.ListCreateAPIView):
