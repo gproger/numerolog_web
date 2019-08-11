@@ -5,7 +5,8 @@ from django.contrib.auth import get_user_model
 
 from .models import SchoolAppForm, SchoolAppFlow
 
-from .serializers import SchoolAppFormSerializer, SchoolAppFlowSerializer
+from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
+from .serializers import SchoolAppFlowSerializer
 from django.shortcuts import render
 
 # Create your views here.
@@ -19,9 +20,15 @@ class SchoolAppFormListView(generics.ListAPIView):
         query_params = self.request.query_params
         flow_num = query_params.get('flow', None)
         if flow_num == None:
-            flow_num = SchoolAppFlow.objects.all().last()
+            try:
+                flow_num = SchoolAppFlow.objects.all().last()
+            except SchoolAppFlow.DoesNotExist:
+                return None
         else:
-            flow_num = SchoolAppFlow.objects.get(flow=flow_num)
+            try:
+                flow_num = SchoolAppFlow.objects.get(flow=flow_num)
+            except SchoolAppFlow.DoesNotExist:
+                return None
 
         return SchoolAppForm.objects.all().filter(flow=flow_num)
 
@@ -39,10 +46,15 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
 
 class SchoolAppFlowListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = SchoolAppFlowSerializer
+    serializer_class = SchoolAppFlowListSerializer
 
     def list(self, request):
         queryset = SchoolAppFlow.objects.all()
-        serializer = SchoolAppFlowSerializer(queryset, many=True)
+        serializer = SchoolAppFlowListSerializer(queryset, many=True)
         return Response(serializer.data)
+
+class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = SchoolAppFlowSerializer
+
 

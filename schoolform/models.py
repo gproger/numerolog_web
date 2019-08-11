@@ -3,8 +3,17 @@ from django.db import models
 # Create your models here.
 
 class SchoolAppFlow(models.Model):
-    
+    STATES = (
+        (0, "created"),
+        (1, "recruitment"),
+        (2, "register"),
+        (3, "started"),
+        (4, "finished")
+    )
+
     flow = models.PositiveIntegerField()
+    state = models.IntegerField(choices=STATES, default=0)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.flow)
@@ -20,6 +29,7 @@ class SchoolAppForm(models.Model):
     accepted = models.CharField(max_length=40)
     payed_by = models.CharField(max_length=240, blank=True, null=True)
     flow = models.ForeignKey(SchoolAppFlow)
+    created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         c_flow = SchoolAppFlow.objects.all().last()
