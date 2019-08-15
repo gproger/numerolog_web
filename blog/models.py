@@ -31,6 +31,8 @@ from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import Tag as TaggitTag
 from taggit.models import TaggedItemBase
+from comments.serializers import CommentBlogSerializer
+from comments.models import CommentBlogThread
 #from wagtailmd.utils import MarkdownField, MarkdownPanel
 
 
@@ -145,6 +147,7 @@ class PostPage(Page):
         APIField('header_image'),
         APIField('categories'),
         APIField('tags'),
+        APIField('comments',serializer=CommentBlogSerializer())
     ]
 
     content_panels = Page.content_panels + [
@@ -169,6 +172,13 @@ class PostPage(Page):
         context['blog_page'] = self.blog_page
         context['post'] = self
         return context
+
+    def save(self, *args, **kwargs):
+        if not hasattr(self,comments):
+            comment = CommentBlogThread.objects.create()
+            self.comment = comment
+        super(PostPage,self).save(*args, **kwargs)
+
 
 @register_snippet
 class BlogCategory(models.Model):
