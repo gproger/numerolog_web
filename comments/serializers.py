@@ -7,9 +7,18 @@ from likes.serializers import LikeCommentSerializer, LikeReplySerializer
 
 class ShortUserSerializer(serializers.ModelSerializer):
 
+    name = serializers.SerializerMethodField('get_user_name')
+
+    def get_user_name(self,obj):
+        r_name = obj.profile_fields.get('real_name')
+        if len(r_name) > 0:
+            return r_name
+        else:
+            return obj.username
+
     class Meta:
         model = get_user_model()
-        fields = ['id']
+        fields = ['id','name']
 
 
 class CommentReplySerializer(serializers.ModelSerializer):
