@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import LikePost, LikeComment, LikeReply
-from likes.serializers import LikesSerializer
 
 
 
@@ -8,9 +7,10 @@ class LikeCommentSerializer(serializers.ModelSerializer):
     liked = serializers.SerializerMethodField()
 
     def get_liked(self,obj):
-        if self.request.user.is_anonymous:
+        print(self.context)
+        if self.context.get('request').user.is_anonymous:
             return False
-        return obj.filter(id=self.request.user.id).exists()
+        return obj.likes.filter(id=self.context.get('request').user.id).exists()
 
     class Meta:
         model = LikeComment
@@ -21,9 +21,10 @@ class LikePostSerializer(serializers.ModelSerializer):
     liked = serializers.SerializerMethodField()
 
     def get_liked(self,obj):
-        if self.request.user.is_anonymous:
+        print(self.context)
+        if self.context.get('request').user.is_anonymous:
             return False
-        return obj.filter(id=self.request.user.id).exists()
+        return obj.likes.filter(id=self.context.get('request').user.id).exists()
 
     class Meta:
         model = LikePost
@@ -35,9 +36,10 @@ class LikeReplySerializer(serializers.ModelSerializer):
     liked = serializers.SerializerMethodField()
 
     def get_liked(self,obj):
-        if self.request.user.is_anonymous:
+        print(self.context)
+        if self.context.get('request').user.is_anonymous:
             return False
-        return obj.filter(id=self.request.user.id).exists()
+        return obj.likes.filter(id=self.context.get('request').user.id).exists()
 
     class Meta:
         model = LikeReply

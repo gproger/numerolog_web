@@ -1,13 +1,30 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from .models import CommentBlogThread, Comment, CommentReply
 from likes.serializers import LikeCommentSerializer, LikeReplySerializer
 
 
 
+class ShortUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ['id']
+
+
 class CommentReplySerializer(serializers.ModelSerializer):
     date = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S", read_only=True,required=False)
     user = ShortUserSerializer()
-    like = LikeReplySerializer(required=False)
+    like = serializers.SerializerMethodField('get_like_serializer')
+
+
+    def get_like_serializer(self, obj):
+        if not hasattr(obj,'like'):
+            return None
+        serializer_context = {'request':self.context.get('request')}
+        serializer = LikeReplySerializer(obj.like,read_only=True, context = serializer_context)
+        return serializer.data
+
 
     class Meta:
         model = Comment
@@ -18,18 +35,41 @@ class CommentReplySerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     date = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S", read_only=True,required=False)
     user = ShortUserSerializer()
-    like = LikeCommentSerializer(required=False)
-    reply = CommentReplySerializer(many=True, read_only = True, required=False)
+    like = serializers.SerializerMethodField('get_like_serializer')
+    reply = serializers.SerializerMethodField('get_reply_serializer')
+
+    def get_like_serializer(self, obj):
+        if not hasattr(obj,'like'):
+            return None
+        serializer_context = {'request':self.context.get('request')}
+        serializer = LikeCommentSerializer(obj.like,read_only=True, context = serializer_context)
+        return serializer.data
+
+    def get_reply_serializer(self, obj):
+        if not hasattr(obj,'reply'):
+            return None
+        serializer_context = {'request':self.context.get('request')}
+        serializer = CommentReplySerializer(obj.reply,read_only=True, context = serializer_context, many=True, required=False)
+        return serializer.data
+
 
     class Meta:
         model = Comment
-        fields = ['text','date','user','like','reply']
+        fields = ['text','date','user','like','reply','cnt']
 
 
 
 class CommentBlogSerializer(serializers.ModelSerializer):
-    comment = CommentSerializer(many=True, read_only = True)
+    comment = serializers.SerializerMethodField('get_comment_serializer')
+
+    def get_comment_serializer(self, obj):
+        if not hasattr(obj,'comment'):
+            return None
+        serializer_context = {'request':self.context.get('request')}
+        serializer = CommentSerializer(obj.comment,read_only=True, context = serializer_context, many = True)
+        return serializer.data
+
 
     class Meta:
         model = CommentBlogThread
-        fields = ['comment']
+        fields = ['id','comment','cnt']

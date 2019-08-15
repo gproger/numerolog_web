@@ -29,6 +29,8 @@ from wagtail.core import urls as wagtail_urls
 from frontend.urls import urls as frontend_urls
 from favorites.urls import urls as numer_favs_api
 from schoolform.urls import urls as numer_school_form_api
+from blog.urls import urls as wgtail_custom_api
+
 from app.urls import urls as numer_app_api
 
 from misago.users.forms.auth import AdminAuthenticationForm
@@ -68,6 +70,7 @@ urlpatterns = [
     url(r'^', include(numer_favs_api)),
     url(r'^', include(numer_school_form_api)),
     url(r'^', include(frontend_urls)),
+    url(r'^', include(wgtail_custom_api)),
     url(r'^', include(wagtail_urls)),
 ]
 

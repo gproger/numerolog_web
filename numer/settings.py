@@ -246,6 +246,8 @@ INSTALLED_APPS = [
     'django_robokassa',
 # school application form
     'schoolform',
+    'comments',
+    'likes'
 ]
 
 if DEBUG:
