@@ -4,7 +4,7 @@ from .models import SchoolAppForm, SchoolAppFlow
 
 class SchoolAppFormSerializer(serializers.ModelSerializer):
     bid = serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y'])
-    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'])
+    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
 
     class Meta:
         model = SchoolAppForm
@@ -13,7 +13,7 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
 class SchoolAppFlowListSerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField()
-    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'])
+    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'],required=False)
 
     def get_state(self, obj):
         return obj.get_state_display()

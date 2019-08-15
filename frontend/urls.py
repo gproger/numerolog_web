@@ -13,5 +13,5 @@ urls = [
     url(r'^services/$',TemplateView.as_view(template_name='index.html')),
     url(r'^profile/$',TemplateView.as_view(template_name='index.html')),
     url(r'^profile/user/$',TemplateView.as_view(template_name='index.html')),
-
+    url(r'^admin/school/*',TemplateView.as_view(template_name='index.html')),
 ]

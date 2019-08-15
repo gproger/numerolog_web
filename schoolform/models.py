@@ -25,6 +25,7 @@ class SchoolAppForm(models.Model):
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
     middle_name = models.CharField(max_length=40)
+    instagramm = models.CharField(max_length=80)
     bid = models.DateField()
     accepted = models.CharField(max_length=40)
     payed_by = models.CharField(max_length=240, blank=True, null=True)
