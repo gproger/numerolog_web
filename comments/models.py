@@ -17,12 +17,17 @@ class Comment(models.Model):
     )
     thread = models.ForeignKey(CommentBlogThread,related_name='comment')
 
+
+    class Meta:
+        ordering = ['date']
+
     def save(self, *args, **kwargs):
         if self.pk is None:
             'Possible race condition on db access on save'
             self.thread.cnt = self.thread.cnt + 1
             self.thread.save( update_fields=['cnt'])
         super(Comment,self).save(*args, **kwargs)
+
 
 
 class CommentReply(models.Model):
@@ -32,6 +37,10 @@ class CommentReply(models.Model):
         get_user_model()
     )
     comment=models.ForeignKey(Comment,related_name='reply')
+
+    class Meta:
+        ordering = ['date']
+
 
     def save(self, *args, **kwargs):
         if self.pk is None:

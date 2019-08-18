@@ -38,7 +38,6 @@ class CommentReplySerializer(serializers.ModelSerializer):
 
     def get_diff_time(self,obj):
         d_rel = relativedelta(dt1=self.d_now,dt2=obj.date)
-        print(d_rel)
         if d_rel.years > 0:
             return str(d_rel.years) + ' г.'
         if d_rel.months > 0:
@@ -51,6 +50,9 @@ class CommentReplySerializer(serializers.ModelSerializer):
             return str(d_rel.hours) + ' ч.'
         if d_rel.minutes > 0:
             return str(d_rel.minutes) + ' мин.'
+        if d_rel.seconds > 0:
+            return str(d_rel.seconds) + ' сек.'
+
 
     def get_like_serializer(self, obj):
         if not hasattr(obj,'like'):
@@ -77,7 +79,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def get_diff_time(self,obj):
         d_rel = relativedelta(dt1=self.d_now,dt2=obj.date)
-        print(d_rel)
         if d_rel.years > 0:
             return str(d_rel.years) + ' г.'
         if d_rel.months > 0:
@@ -90,7 +91,8 @@ class CommentSerializer(serializers.ModelSerializer):
             return str(d_rel.hours) + ' ч.'
         if d_rel.minutes > 0:
             return str(d_rel.minutes) + ' мин.'
-
+        if d_rel.seconds > 0:
+            return str(d_rel.seconds) + ' сек.'
 
 
 
@@ -137,3 +139,38 @@ class CommentShortBlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentBlogThread
         fields = ['id','cnt']
+
+class CommentAddSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        text = validated_data.pop('text')
+        user = self.context.get('request').user
+        post_page = self.context.get('postpage')
+
+        if hasattr(post_page,'comments'):
+            thread = post_page.comments
+        else:
+            thread = CommentBlogThread.objects.create(post=post_page)
+
+        com = Comment.objects.create(text=text,user=user,thread=thread)
+        return com
+
+
+    class Meta:
+        model = Comment
+        fields = ['text']
+
+class CommentAddReplySerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        text = validated_data.pop('text')
+        user = self.context.get('request').user
+        comment = self.context.get('comment')
+
+
+        com = CommentReply.objects.create(text=text,user=user,comment=comment)
+        return com
+
+    class Meta:
+        model = CommentReply
+        fields = ['text']
