@@ -55,16 +55,16 @@ class CommentReplySerializer(serializers.ModelSerializer):
 
 
     def get_like_serializer(self, obj):
-        if not hasattr(obj,'like'):
+        if not hasattr(obj,'likes'):
             return None
         serializer_context = {'request':self.context.get('request')}
-        serializer = LikeReplySerializer(obj.like,read_only=True, context = serializer_context)
+        serializer = LikeReplySerializer(obj.likes,read_only=True, context = serializer_context)
         return serializer.data
 
 
     class Meta:
         model = Comment
-        fields = ['text','date','user','like']
+        fields = ['id','text','date','user','like']
 
 
 
@@ -98,10 +98,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
     def get_like_serializer(self, obj):
-        if not hasattr(obj,'like'):
+        if not hasattr(obj,'likes'):
             return None
         serializer_context = {'request':self.context.get('request')}
-        serializer = LikeCommentSerializer(obj.like,read_only=True, context = serializer_context)
+        serializer = LikeCommentSerializer(obj.likes,read_only=True, context = serializer_context)
         return serializer.data
 
     def get_reply_serializer(self, obj):
