@@ -7,6 +7,7 @@ from .serializers import CommentSerializer
 from rest_framework import generics
 from rest_framework import permissions
 from blog.models import PostPage
+from .models import Comment
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -17,6 +18,9 @@ class CommentsPagePagination(PageNumberPagination):
     max_page_size = 40
 
     def get_paginated_response(self, data):
+        print('paginated response')
+        print(data)
+        print('response')
         return Response({
             'links': {
                 'next': self.get_next_link(),
@@ -34,19 +38,20 @@ class CommentsPageListView(generics.ListAPIView):
     pagination_class = CommentsPagePagination
 
     def get_queryset(self):
+        print(self.kwargs)
         pp_pk = self.kwargs.get('id',None)
         if pp_pk is None:
-            return None
+            return Comment.objects.none()
         try:
             pp = PostPage.objects.get(pk=pp_pk)
         except PostPage.DoesNotExist:
-            return None
+            return Comment.objects.none()
 
         if not hasattr(pp,'comments'):
-            return None
+            return Comment.objects.none()
 
         if not hasattr(pp.comments,'comment'):
-            return None
+            return Comment.objects.none()
 
         return pp.comments.comment.all()
 
