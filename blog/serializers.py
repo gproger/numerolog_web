@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import PostPage
 from wagtail.images.models import Image
-from comments.serializers import CommentBlogSerializer
+from comments.serializers import CommentShortBlogSerializer
 from likes.serializers import LikePostSerializer
 
 class ImageWagtailCustomSerializer(serializers.ModelSerializer):
@@ -27,7 +27,7 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
         if not hasattr(obj,'comments'):
             return None
         serializer_context = {'request':self.context.get('request')}
-        serializer = CommentBlogSerializer(obj.comments,read_only=True, context = serializer_context)
+        serializer = CommentShortBlogSerializer(obj.comments,read_only=True, context = serializer_context)
         return serializer.data
 
     class Meta:

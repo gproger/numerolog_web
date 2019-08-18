@@ -38,7 +38,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['numerolog.privatebot.info',
 		 'blog.numerolog.privatebot.info',
-		 'serv.numerolog.privatebot.info']
+		 'serv.numerolog.privatebot.info',
+                 'localhost']
 
 
 WAGTAIL_SITE_NAME = 'Nenumerolog Olga Perceva'

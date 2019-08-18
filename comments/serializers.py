@@ -64,7 +64,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['text','date','user','like','reply','cnt']
+        fields = ['id','text','date','user','like','reply','cnt']
 
 
 
@@ -82,3 +82,10 @@ class CommentBlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentBlogThread
         fields = ['id','comment','cnt']
+
+
+class CommentShortBlogSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CommentBlogThread
+        fields = ['id','cnt']
