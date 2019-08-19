@@ -27,7 +27,7 @@ class PostPageListView(generics.ListAPIView):
     serializer_class = PostPageCustomSerializer
     permission_classes = [permissions.AllowAny]
     queryset = PostPage.objects.all()
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['id', 'last_published_at']
     search_fields = ['@title', '@body']
     ordering = ['-last_published_at']

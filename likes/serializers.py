@@ -7,7 +7,6 @@ class LikePostSerializer(serializers.ModelSerializer):
     liked = serializers.SerializerMethodField()
 
     def get_liked(self,obj):
-        print(self.context)
         if self.context.get('request').user.is_anonymous:
             return False
         return obj.likes.filter(id=self.context.get('request').user.id).exists()
@@ -21,7 +20,6 @@ class LikeCommentSerializer(serializers.ModelSerializer):
     liked = serializers.SerializerMethodField()
 
     def get_liked(self,obj):
-        print(self.context)
         if self.context.get('request').user.is_anonymous:
             return False
         return obj.likes.filter(id=self.context.get('request').user.id).exists()
@@ -35,7 +33,6 @@ class LikeReplySerializer(serializers.ModelSerializer):
     liked = serializers.SerializerMethodField()
 
     def get_liked(self,obj):
-        print(self.context)
         if self.context.get('request').user.is_anonymous:
             return False
         return obj.likes.filter(id=self.context.get('request').user.id).exists()

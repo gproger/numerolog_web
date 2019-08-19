@@ -21,9 +21,6 @@ class CommentsPagePagination(PageNumberPagination):
     max_page_size = 40
 
     def get_paginated_response(self, data):
-        print('paginated response')
-        print(data)
-        print('response')
         return Response({
             'links': {
                 'next': self.get_next_link(),
@@ -41,7 +38,6 @@ class CommentsPageListView(generics.ListAPIView):
     pagination_class = CommentsPagePagination
 
     def get_queryset(self):
-        print(self.kwargs)
         pp_pk = self.kwargs.get('id',None)
         if pp_pk is None:
             return Comment.objects.none()
@@ -66,7 +62,6 @@ class CommentAddView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        print(self.kwargs)
         pp_pk = self.kwargs.get('id',None)
         if pp_pk is None:
             return Comment.objects.none()
@@ -96,7 +91,6 @@ class CommentAddReplyView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        print(self.kwargs)
         pp_pk = self.kwargs.get('id',None)
         if pp_pk is None:
             return Comment.objects.none()
