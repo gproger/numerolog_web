@@ -28,7 +28,10 @@ class Comment(models.Model):
             self.thread.save( update_fields=['cnt'])
         super(Comment,self).save(*args, **kwargs)
 
-
+    def less_comments(self, *args, **kwargs):
+        print('less comment Comment')
+        print(args)
+        print(kwargs)
 
 class CommentReply(models.Model):
     text = models.TextField()
@@ -53,3 +56,8 @@ class CommentReply(models.Model):
             self.comment.thread.save(update_fields=['cnt'])
             print(self.comment.thread.cnt)
         super(CommentReply,self).save(*args, **kwargs)
+
+    def less_comments(self, *args, **kwargs):
+        print('less comment CommentReply')
+        print(args)
+        print(kwargs)

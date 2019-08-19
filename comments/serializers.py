@@ -14,7 +14,7 @@ class ShortUserSerializer(serializers.ModelSerializer):
 
     def get_user_name(self,obj):
         r_name = obj.profile_fields.get('real_name')
-        if len(r_name) > 0:
+        if not r_name is None:
             return r_name
         else:
             return obj.username
@@ -108,7 +108,13 @@ class CommentSerializer(serializers.ModelSerializer):
         if not hasattr(obj,'reply'):
             return None
         serializer_context = {'request':self.context.get('request')}
-        serializer = CommentReplySerializer(obj.reply,read_only=True, context = serializer_context, many=True, required=False)
+        less = self.context.get('limit',None)
+        if less is None:
+            serializer = CommentReplySerializer(obj.reply,read_only=True, context = serializer_context, many=True, required=False)
+        else:
+            serializer = CommentReplySerializer(obj.reply,read_only=True, context = serializer_context, many=True, required=False, source='less_comments')
+
+        
         return serializer.data
 
 
@@ -135,10 +141,19 @@ class CommentBlogSerializer(serializers.ModelSerializer):
 
 
 class CommentShortBlogSerializer(serializers.ModelSerializer):
+    comment = serializers.SerializerMethodField('get_comment_serializer')
+
+
+    def get_comment_serializer(self, obj):
+        if not hasattr(obj,'comment'):
+            return None
+        serializer_context = {'request':self.context.get('request'), 'limit': 1}
+        serializer = CommentSerializer(obj.comment,read_only=True, context = serializer_context, many = True, source='less_comments')
+        return serializer.data
 
     class Meta:
         model = CommentBlogThread
-        fields = ['id','cnt']
+        fields = ['id','cnt','comment']
 
 class CommentAddSerializer(serializers.ModelSerializer):
 
