@@ -43,6 +43,7 @@ class LikeReplySerializer(serializers.ModelSerializer):
 
 
 class LikePostAddSerializer(serializers.ModelSerializer):
+    post = serializers.PrimaryKeyRelatedField(read_only=True)
 
     def create(self, validated_data):
         postPage = self.context.get('postPage',None)
@@ -61,10 +62,12 @@ class LikePostAddSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LikePost
-        fields = ['cnt']
+        fields = ['cnt','post']
 
 
 class LikeCommentAddSerializer(serializers.ModelSerializer):
+    comment = serializers.PrimaryKeyRelatedField(read_only=True)
+
 
     def create(self, validated_data):
         comment_id = self.context.get('id')
@@ -84,10 +87,12 @@ class LikeCommentAddSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LikeComment
-        fields = ['cnt']
+        fields = ['cnt','comment']
 
 
 class LikeReplyAddSerializer(serializers.ModelSerializer):
+    reply = serializers.PrimaryKeyRelatedField(read_only=True)
+
 
     def create(self, validated_data):
         reply_id = self.context.get('id')
@@ -107,4 +112,4 @@ class LikeReplyAddSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LikeReply
-        fields = ['cnt']
+        fields = ['cnt','reply']

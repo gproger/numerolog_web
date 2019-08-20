@@ -156,6 +156,7 @@ class CommentShortBlogSerializer(serializers.ModelSerializer):
         fields = ['id','cnt','comment']
 
 class CommentAddSerializer(serializers.ModelSerializer):
+    thread = serializers.PrimaryKeyRelatedField(read_only=True)
 
     def create(self, validated_data):
         text = validated_data.pop('text')
@@ -173,9 +174,11 @@ class CommentAddSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['text']
+        fields = ['text','id','thread']
 
 class CommentAddReplySerializer(serializers.ModelSerializer):
+    comment = serializers.PrimaryKeyRelatedField(read_only=True)
+
 
     def create(self, validated_data):
         text = validated_data.pop('text')
@@ -188,4 +191,4 @@ class CommentAddReplySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommentReply
-        fields = ['text']
+        fields = ['text','id','comment']
