@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from .serializers import PostPageCustomSerializer
+from .serializers import ServicesCustomSerializer
 from rest_framework import generics
 from rest_framework import permissions
-from .models import PostPage
+from .models import PostPage, ServicePage
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -32,6 +33,14 @@ class PostPageListView(generics.ListAPIView):
     search_fields = ['@title', '@body']
     ordering = ['-last_published_at']
     pagination_class = PostPagePagination
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+class ServicesListView(generics.ListAPIView):
+    serializer_class = ServicesCustomSerializer
+    permission_classes = [permissions.AllowAny]
+    queryset = ServicePage.objects.all()
 
     def get_serializer_context(self):
         return {'request': self.request}

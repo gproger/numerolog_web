@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import PostPage
+from .models import ServicePage
 from wagtail.images.models import Image
 from comments.serializers import CommentShortBlogSerializer
 from likes.serializers import LikePostSerializer
@@ -58,3 +59,10 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostPage
         fields = ['id','title','body','comments','header_image','last_published_at','likes']
+
+
+class ServicesCustomSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ServicePage
+        fields = ['descr','price','expert','date_cnt','date','title']
