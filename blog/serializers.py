@@ -22,10 +22,10 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
 #    last_published_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S", read_only=True,required=False)
     last_published_at = serializers.SerializerMethodField('get_published_date')
     tz = tzutc()
-    d_now = datetime.datetime.now(tz=tz)
 
     def get_published_date(self,obj):
-        d_rel = relativedelta(dt1=self.d_now,dt2=obj.last_published_at)
+        d_now = datetime.datetime.now(tz=self.tz)
+        d_rel = relativedelta(dt1=d_now,dt2=obj.last_published_at)
         if d_rel.years > 0:
             return str(d_rel.years) + ' г.'
         if d_rel.months > 0:
