@@ -26,7 +26,7 @@ class PostPagePagination(PageNumberPagination):
 class PostPageListView(generics.ListAPIView):
     serializer_class = PostPageCustomSerializer
     permission_classes = [permissions.AllowAny]
-    queryset = PostPage.objects.all()
+    queryset = PostPage.objects.all().filter(live=True)
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['id', 'last_published_at']
     search_fields = ['@title', '@body']
