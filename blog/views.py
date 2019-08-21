@@ -46,7 +46,7 @@ class ServicesListView(generics.ListAPIView):
     def get_serializer_context(self):
         return {'request': self.request}
 
-class TermsOfServiceView(generics.RetriveAPIView):
+class TermsOfServiceView(generics.RetrieveAPIView):
     serializer_class = TermsOfServiceCustomSerializer
     permission_classes = [permissions.AllowAny]
 

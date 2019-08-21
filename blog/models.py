@@ -282,9 +282,6 @@ class TermsOfServicePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('descr',classname='full'),
-        FieldPanel('price',classname='full'),
-        FieldPanel('expert',classname='full'),
-        FieldPanel('date_cnt',classname='full'),
     ]
 
     settings_panels = Page.settings_panels + [
