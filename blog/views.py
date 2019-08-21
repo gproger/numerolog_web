@@ -40,7 +40,7 @@ class PostPageListView(generics.ListAPIView):
 class ServicesListView(generics.ListAPIView):
     serializer_class = ServicesCustomSerializer
     permission_classes = [permissions.AllowAny]
-    queryset = ServicePage.objects.all()
+    queryset = ServicePage.objects.all(live=True)
 
     def get_serializer_context(self):
         return {'request': self.request}
