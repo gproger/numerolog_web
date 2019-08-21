@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import PostPage
 from .models import ServicePage
+from .models import TermsOfServicePage
 from wagtail.images.models import Image
 from comments.serializers import CommentShortBlogSerializer
 from likes.serializers import LikePostSerializer
@@ -66,3 +67,9 @@ class ServicesCustomSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServicePage
         fields = ['descr','price','expert','date_cnt','date','title']
+
+class TermsOfServiceCustomSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TermsOfServicePage
+        fields = ['descr','date','title']

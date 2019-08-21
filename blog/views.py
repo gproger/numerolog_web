@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .serializers import PostPageCustomSerializer
 from .serializers import ServicesCustomSerializer
+from .serializers import TermsOfServiceCustomSerializer
 from rest_framework import generics
 from rest_framework import permissions
 from .models import PostPage, ServicePage
@@ -41,6 +42,17 @@ class ServicesListView(generics.ListAPIView):
     serializer_class = ServicesCustomSerializer
     permission_classes = [permissions.AllowAny]
     queryset = ServicePage.objects.all().filter(live=True)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+class TermsOfServiceView(generics.RetriveAPIView):
+    serializer_class = TermsOfServiceCustomSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        id = self.kwargs.get('id',None)
+        queryset = ServicePage.objects.get(pk=id)
 
     def get_serializer_context(self):
         return {'request': self.request}

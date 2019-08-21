@@ -275,3 +275,22 @@ class ServicePage(Page):
         return self.get_parent().specific
 
 
+class TermsOfServicePage(Page):
+    descr = RichTextField(blank=True)
+
+    date = models.DateTimeField(verbose_name="Service Added", default=datetime.datetime.today)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('descr',classname='full'),
+        FieldPanel('price',classname='full'),
+        FieldPanel('expert',classname='full'),
+        FieldPanel('date_cnt',classname='full'),
+    ]
+
+    settings_panels = Page.settings_panels + [
+        FieldPanel('date'),
+    ]
+
+    @property
+    def blog_page(self):
+        return self.get_parent().specific
