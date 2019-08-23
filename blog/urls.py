@@ -6,5 +6,5 @@ from .views import TermsOfServiceView
 urls = [
     url(r'^wgtail/api/postpage/$', PostPageListView.as_view()),
     url(r'^wgtail/api/services/$', ServicesListView.as_view()),
-    url(r'^wgtail/api/terms/(?P<id>[0-9]+)/$', TermsOfServiceView.as_view()),
+    url(r'^wgtail/api/terms/(?P<pk>[0-9]+)/$', TermsOfServiceView.as_view()),
 ]
