@@ -68,15 +68,23 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
         model = PostPage
         fields = ['id','title','body','comments','header_image','last_published_at','likes','tags']
 
+class TermsOfServiceCustomShortSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TermsOfServicePage
+        fields = ['id','title']
+
 
 class ServicesCustomSerializer(serializers.ModelSerializer):
+    toss = TermsOfServiceCustomShortSerializer(many=True, read_only=True)
+
 
     class Meta:
         model = ServicePage
-        fields = ['descr','price','expert','date_cnt','date','title']
+        fields = ['descr','price','expert','date_cnt','date','title','toss']
 
 class TermsOfServiceCustomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TermsOfServicePage
-        fields = ['descr','date','title']
+        fields = ['id','descr','date','title']

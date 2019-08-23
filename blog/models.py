@@ -245,6 +245,18 @@ class ServicePage(Page):
 
     date = models.DateTimeField(verbose_name="Service Added", default=datetime.datetime.today)
 
+    toss = ParentalManyToManyField(
+        'blog.TermsOfServicePage',
+        null=True,
+        blank=True,
+        related_name='related_services',
+        verbose_name='Соглашения и договора',
+	)
+
+
+
+
+
     search_fields = Page.search_fields + [ # Inherit search_fields from Page
         index.SearchField('title', partial_match=True, boost=3),
         index.SearchField('descr'),
@@ -264,6 +276,7 @@ class ServicePage(Page):
         FieldPanel('price',classname='full'),
         FieldPanel('expert',classname='full'),
         FieldPanel('date_cnt',classname='full'),
+        FieldPanel('toss', widget=forms.CheckboxSelectMultiple),
     ]
 
     settings_panels = Page.settings_panels + [
@@ -291,3 +304,5 @@ class TermsOfServicePage(Page):
     @property
     def blog_page(self):
         return self.get_parent().specific
+
+
