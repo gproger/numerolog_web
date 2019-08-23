@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import PostPage
 from .models import ServicePage
+from taggit.models import Tag
 from .models import TermsOfServicePage
 from wagtail.images.models import Image
 from comments.serializers import CommentShortBlogSerializer
@@ -21,6 +22,7 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
     header_image = ImageWagtailCustomSerializer(read_only=True, required=False)
     comments = serializers.SerializerMethodField('get_comments_serializer')
 #    last_published_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S", read_only=True,required=False)
+    tags = serializers.SerializerMethodField('get_tags_serializer')
     last_published_at = serializers.SerializerMethodField('get_published_date')
     tz = tzutc()
 
@@ -42,6 +44,11 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
         if d_rel.seconds > 0:
             return str(d_rel.seconds) + ' сек.'
 
+    def get_tags_serializer(self, obj):
+        if not hasattr(obj,'tags'):
+            return None
+
+        return obj.tags.names()
 
     def get_likes_serializer(self, obj):
         if not hasattr(obj,'likes'):
@@ -59,7 +66,7 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostPage
-        fields = ['id','title','body','comments','header_image','last_published_at','likes']
+        fields = ['id','title','body','comments','header_image','last_published_at','likes','tags']
 
 
 class ServicesCustomSerializer(serializers.ModelSerializer):
