@@ -4,7 +4,7 @@ from .serializers import ServicesCustomSerializer
 from .serializers import TermsOfServiceCustomSerializer
 from rest_framework import generics
 from rest_framework import permissions
-from .models import PostPage, ServicePage
+from .models import PostPage, ServicePage, TermsOfServicePage
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -52,7 +52,7 @@ class TermsOfServiceView(generics.RetrieveAPIView):
 
     def get_queryset(self):
         id = self.kwargs.get('id',None)
-        queryset = ServicePage.objects.get(pk=id)
+        queryset = TermsOfServicePage.objects.get(pk=id)
 
     def get_serializer_context(self):
         return {'request': self.request}
