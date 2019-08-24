@@ -41,7 +41,7 @@ class FavoritesDestroyView(generics.DestroyAPIView):
 
 class FavoritesPostAdd(generics.CreateAPIView):
     serializer_class = FavoritesPostAddSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         print(self.kwargs)

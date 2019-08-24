@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import FavoritesListView, FavoritesDestroyView
+from .views import FavoritesListView, FavoritesDestroyView, FavoritesPostAdd
 
 urls = [
     url(r'^numer/api/favss', FavoritesListView.as_view()),

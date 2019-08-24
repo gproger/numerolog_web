@@ -26,6 +26,7 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
 #    last_published_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S", read_only=True,required=False)
     tags = serializers.SerializerMethodField('get_tags_serializer')
     last_published_at = serializers.SerializerMethodField('get_published_date')
+    fav = serializers.SerializerMethodField('get_favorite_serializer')
     tz = tzutc()
 
     def get_published_date(self,obj):
@@ -75,7 +76,7 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostPage
-        fields = ['id','title','body','comments','header_image','last_published_at','likes','tags']
+        fields = ['id','title','body','comments','header_image','last_published_at','likes','tags','fav']
 
 class TermsOfServiceCustomShortSerializer(serializers.ModelSerializer):
 

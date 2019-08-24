@@ -38,7 +38,6 @@ class CommentReplySerializer(serializers.ModelSerializer):
     def get_diff_time(self,obj):
         d_now = datetime.datetime.now(tz=self.tz)
         d_rel = relativedelta(dt1=d_now,dt2=obj.date)
-        print(d_rel)
         if d_rel.years > 0:
             return str(d_rel.years) + ' г.'
         if d_rel.months > 0:
@@ -49,10 +48,8 @@ class CommentReplySerializer(serializers.ModelSerializer):
             return str(d_rel.days) + ' д.'
         if d_rel.hours > 0:
             return str(d_rel.hours) + ' ч.'
-        print(d_rel.minutes)
         if d_rel.minutes > 0:
             return str(d_rel.minutes) + ' мин.'
-        print(d_rel.seconds)
         if d_rel.seconds > 0:
             return str(d_rel.seconds) + ' сек.'
 

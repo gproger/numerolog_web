@@ -42,5 +42,5 @@ class FavoritesPostSerializer(serializers.ModelSerializer):
         return obj.fav_post.filter(id=self.context.get('request').user.id).exists()
 
     class Meta:
-        model = LikePost
+        model = FavoritesPost
         fields = ['favs']
