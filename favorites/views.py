@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from .models import Favorites
 
 from .serializers import FavoritesSerializer
-
+from .serializers import FavoritesPostAddSerializer
 
 class FavoritesListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -37,3 +37,25 @@ class FavoritesDestroyView(generics.DestroyAPIView):
 
     def perform_destroy(self, instance):
         return instance.delete()
+
+
+class FavoritesPostAdd(generics.CreateAPIView):
+    serializer_class = FavoritesPostAddSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        print(self.kwargs)
+        pp_pk = self.kwargs.get('id',None)
+        if pp_pk is None:
+            return PostPage.objects.none()
+        try:
+            pp = PostPage.objects.get(pk=pp_pk)
+        except PostPage.DoesNotExist:
+            return PostPage.objects.none()
+
+
+    def get_serializer_context(self):
+        pp_pk = self.kwargs.get('id',None)
+        postPage = PostPage.objects.get(pk=pp_pk)
+
+        return {'request': self.request,'postPage' : postPage}

@@ -6,6 +6,8 @@ from .models import TermsOfServicePage
 from wagtail.images.models import Image
 from comments.serializers import CommentShortBlogSerializer
 from likes.serializers import LikePostSerializer
+from favorites.serializers import FavoritesPostSerializer
+
 import datetime
 from dateutil.tz import tzutc
 from dateutil.relativedelta import relativedelta
@@ -55,6 +57,13 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
             return None
         serializer_context = {'request':self.context.get('request')}
         serializer = LikePostSerializer(obj.likes,read_only=True, context = serializer_context)
+        return serializer.data
+
+    def get_favorite_serializer(self, obj):
+        if not hasattr(obj,'fav_post'):
+            return None
+        serializer_context = {'request':self.context.get('request')}
+        serializer = FavoritesPostSerializer(obj.fav_post,read_only=True, context = serializer_context)
         return serializer.data
 
     def get_comments_serializer(self, obj):
