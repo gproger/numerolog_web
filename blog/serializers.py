@@ -61,10 +61,11 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_favorite_serializer(self, obj):
-        if not hasattr(obj,'fav_post'):
+        if not hasattr(obj,'favs'):
             return None
+        print('Favs not null')
         serializer_context = {'request':self.context.get('request')}
-        serializer = FavoritesPostSerializer(obj.fav_post,read_only=True, context = serializer_context)
+        serializer = FavoritesPostSerializer(obj.favs,read_only=True, context = serializer_context)
         return serializer.data
 
     def get_comments_serializer(self, obj):

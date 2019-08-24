@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 
 from .models import Favorites
+from blog.models import PostPage
 
 from .serializers import FavoritesSerializer
 from .serializers import FavoritesPostAddSerializer
@@ -45,7 +46,7 @@ class FavoritesPostAdd(generics.CreateAPIView):
 
     def get_queryset(self):
         print(self.kwargs)
-        pp_pk = self.kwargs.get('id',None)
+        pp_pk = self.kwargs.get('pk',None)
         if pp_pk is None:
             return PostPage.objects.none()
         try:
@@ -55,7 +56,7 @@ class FavoritesPostAdd(generics.CreateAPIView):
 
 
     def get_serializer_context(self):
-        pp_pk = self.kwargs.get('id',None)
+        pp_pk = self.kwargs.get('pk',None)
         postPage = PostPage.objects.get(pk=pp_pk)
 
         return {'request': self.request,'postPage' : postPage}

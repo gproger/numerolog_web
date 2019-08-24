@@ -14,23 +14,33 @@ class FavoritesSerializer(serializers.ModelSerializer):
 class FavoritesPostAddSerializer(serializers.ModelSerializer):
     post = serializers.PrimaryKeyRelatedField(read_only=True)
 
+    favs = serializers.SerializerMethodField()
+
+    def get_favs(self,obj):
+        if self.context.get('request').user.is_anonymous:
+            return False
+        return obj.users.filter(id=self.context.get('request').user.id).exists()
+
     def create(self, validated_data):
         postPage = self.context.get('postPage',None)
         favs = None
         user = self.context.get('request',None).user
-        if hasattr(postPage,'fav_post'):
-            favs = postPage.fav_post
+        if hasattr(postPage,'favs'):
+            favs = postPage.favs
         else:
             favs = FavoritesPost.objects.create(post=postPage)
 
-        favs.users.add(user)
+        if favs.users.filter(id=user.id).exists():
+            favs.users.remove(user)
+        else:
+            favs.users.add(user)
 
         favs.save()
         return favs
 
     class Meta:
         model = FavoritesPost
-        fields = ['post']
+        fields = ['post','favs']
 
 
 class FavoritesPostSerializer(serializers.ModelSerializer):
@@ -39,7 +49,7 @@ class FavoritesPostSerializer(serializers.ModelSerializer):
     def get_favs(self,obj):
         if self.context.get('request').user.is_anonymous:
             return False
-        return obj.fav_post.filter(id=self.context.get('request').user.id).exists()
+        return obj.users.filter(id=self.context.get('request').user.id).exists()
 
     class Meta:
         model = FavoritesPost
