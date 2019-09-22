@@ -255,6 +255,7 @@ if DEBUG:
     INSTALLED_APPS+= ('corsheaders',)
     CORS_ORIGIN_ALLOW_ALL = DEBUG
 
+
 INTERNAL_IPS = [
     '127.0.0.1'
 ]
@@ -428,6 +429,9 @@ REST_FRAMEWORK = {
 # correct value, or what value is correct in case you've didn't.
 
 MISAGO_ADDRESS = 'http://numerolog.privatebot.info'
+
+if DEBUG:
+	MISAGO_ADDRESS = 'http://numerolog.privatebot.info:8080'
 
 
 # PostgreSQL text search configuration to use in searches
