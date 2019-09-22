@@ -147,21 +147,21 @@ STATICFILES_DIRS = [
 # Email configuration
 # https://docs.djangoproject.com/en/1.11/ref/settings/#email-backend
 
-EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 25
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 
 # If either of these settings is empty, Django won't attempt authentication.
 
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = 'numerolog.test@gmail.com'
+EMAIL_HOST_PASSWORD = '_Rfhfcbr43'
 
 
 # Default email address to use for various automated correspondence from the site manager(s).
 
-DEFAULT_FROM_EMAIL = 'Forums <%s>' % EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'Numerolog <%s>' % EMAIL_HOST_USER
 
 
 # Application definition

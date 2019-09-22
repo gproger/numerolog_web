@@ -63,7 +63,6 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
     def get_favorite_serializer(self, obj):
         if not hasattr(obj,'favs'):
             return None
-        print('Favs not null')
         serializer_context = {'request':self.context.get('request')}
         serializer = FavoritesPostSerializer(obj.favs,read_only=True, context = serializer_context)
         return serializer.data

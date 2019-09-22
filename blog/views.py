@@ -52,12 +52,10 @@ class TermsOfServiceView(generics.RetrieveAPIView):
 
     def get_queryset(self):
         pk = self.kwargs.get('pk',None)
-        print('Resulted pk %s' % (pk))
         queryset = TermsOfServicePage.objects.filter(pk=pk)
         return queryset
 
     def get_serializer_context(self):
-        print('request')
         return {'request': self.request}
 
 # Create your views here.
