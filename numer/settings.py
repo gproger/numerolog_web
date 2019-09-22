@@ -161,7 +161,7 @@ EMAIL_HOST_PASSWORD = ''
 
 # Default email address to use for various automated correspondence from the site manager(s).
 
-DEFAULT_FROM_EMAIL = 'Forums <%s>' % EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'NeNumerolog.ru <%s>' % EMAIL_HOST_USER
 
 
 # Application definition
@@ -254,6 +254,7 @@ INSTALLED_APPS = [
 if DEBUG:
     INSTALLED_APPS+= ('corsheaders',)
     CORS_ORIGIN_ALLOW_ALL = DEBUG
+
 
 INTERNAL_IPS = [
     '127.0.0.1'
@@ -428,6 +429,9 @@ REST_FRAMEWORK = {
 # correct value, or what value is correct in case you've didn't.
 
 MISAGO_ADDRESS = 'http://numerolog.privatebot.info'
+
+if DEBUG:
+	MISAGO_ADDRESS = 'http://numerolog.privatebot.info:8080'
 
 
 # PostgreSQL text search configuration to use in searches
