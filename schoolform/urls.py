@@ -4,7 +4,7 @@ from .views import SchoolAppFlowView
 
 urls = [
     url(r'^numer/api/flow', SchoolAppFlowListView.as_view()),
-    url(r'^numer/api/flowdesc/',SchoolAppFlowView.as_view()),
+    url(r'^numer/api/flowdesc/<int:id>/',SchoolAppFlowView.as_view()),
     url(r'^numer/api/schoolflow', SchoolAppFormListView.as_view()),
     url(r'^numer/api/addrecord', SchoolAppFormCreateView.as_view()),
 ]

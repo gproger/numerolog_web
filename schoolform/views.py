@@ -57,4 +57,13 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = SchoolAppFlowSerializer
 
+    def get_queryset(self):
+        id = self.kwargs.get('id', None)
+        if id is None:
+            return None
+        return SchoolAppFlow.objects.get(flow=id)
+
+
+        
+
 
