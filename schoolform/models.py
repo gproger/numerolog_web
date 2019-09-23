@@ -1,5 +1,5 @@
 from django.db import models
-
+from blog.models import TermsOfServicePage
 # Create your models here.
 
 class SchoolAppFlow(models.Model):
@@ -14,6 +14,18 @@ class SchoolAppFlow(models.Model):
     flow = models.PositiveIntegerField()
     state = models.IntegerField(choices=STATES, default=0)
     created = models.DateTimeField(auto_now_add=True)
+#   education price
+    price=models.PositiveIntegerField(default=30000, null=True, blank=True)
+
+#   recruitment fields
+    toss = models.ManyToManyField(TermsOfServicePage, null=True, blank=True)
+    recruitment_start = models.DateField(null=True, blank=True)
+    recruitment_stop = models.DateField(null=True, blank=True)
+
+#   started fields
+    education_start = models.DateField(null=True, blank=True)
+    education_stop = models.DateField(null=True, blank=True)
+
 
     def __str__(self):
         return str(self.flow)
