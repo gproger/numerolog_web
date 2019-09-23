@@ -37,9 +37,10 @@ class SchoolAppFlowSerializer(serializers.ModelSerializer):
     education_start = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
     education_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
 
+    choices = serializers.SerializerMethodField()
 
-    def get_state(self, obj):
-        return obj.get_state_display()
+    def get_choices(self, obj):
+        return SchoolAppFlow.STATES
 
     class Meta:
         model = SchoolAppFlow
