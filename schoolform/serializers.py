@@ -25,12 +25,11 @@ class SchoolAppFlowListSerializer(serializers.ModelSerializer):
 
 class SchoolAppFlowSerializer(serializers.ModelSerializer):
 #    state = serializers.SerializerMethodField(required=False)
-    state = serizliers.ChoiceField(SchollAppFlow.STATES)
+    state = serializers.ChoiceField(SchoolAppFlow.STATES)
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
-    price = models.IntegerField(default=30000, required = False)
+    price = serializers.IntegerField(default=30000, required = False)
 
 #   recruitment fields
-    toss = models.ManyToManyField(required = False)
     recruitment_start = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
     recruitment_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
 
