@@ -49,3 +49,21 @@ class SchoolAppFlowSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolAppFlow
         fields = '__all__'
+
+
+class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
+
+#    state = serializers.SerializerMethodField()
+    price = serializers.IntegerField(default=30000, required = False)
+
+#   recruitment fields
+    recruitment_start = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+    recruitment_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+
+#   started fields
+    education_start = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+    education_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+
+    class Meta:
+        model = SchoolAppFlow
+        fields = '__all__'

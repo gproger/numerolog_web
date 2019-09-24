@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from .models import SchoolAppForm, SchoolAppFlow
 
 from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
-from .serializers import SchoolAppFlowSerializer
+from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializer
 from django.shortcuts import render
 
 # Create your views here.
@@ -71,6 +71,6 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
         return obj
 
 class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
-    serializer_class = SchoolAppFlowSerializer
+    serializer_class = SchoolAppFlowWOChoicesSerializer
     queryset = SchoolAppFlow.objects.all().filter(state=1)
     permisiion_classes = [AllowAny]
