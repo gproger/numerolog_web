@@ -69,7 +69,7 @@ class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
     def get_toss(self,obj):
         lis = []
         for x in obj.toss.all():
-            lis.append((x.id,x.title))
+            lis.append({'id': x.id,'title' : x.title})
         return lis
 
     class Meta:
