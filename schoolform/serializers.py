@@ -24,8 +24,8 @@ class SchoolAppFlowListSerializer(serializers.ModelSerializer):
 
 
 class SchoolAppFlowSerializer(serializers.ModelSerializer):
-#    state = serializers.SerializerMethodField(required=False)
-    state = serializers.ChoiceField(SchoolAppFlow.STATES)
+#    state = serializers.SerializerMethodField()
+    state = serializers.ChoiceField(choices=SchoolAppFlow.STATES)
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
     price = serializers.IntegerField(default=30000, required = False)
 
@@ -41,6 +41,10 @@ class SchoolAppFlowSerializer(serializers.ModelSerializer):
 
     def get_choices(self, obj):
         return SchoolAppFlow.STATES
+
+    def get_state(self, obj):
+        return obj.get_state_display()
+
 
     class Meta:
         model = SchoolAppFlow
