@@ -62,7 +62,7 @@ class TermsOfServiceView(generics.RetrieveAPIView):
 class TermsOfServiceListView(generics.ListAPIView):
     serializer_class = TermsOfServiceCustomShortSerializer
     permission_classes = [permissions.AllowAny]
-    queryset = TermsOfServiceCustomShortSerializer.objects.all()
+    queryset = TermsOfServicePage.objects.all()
 
     
 
