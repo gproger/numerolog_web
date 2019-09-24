@@ -62,7 +62,7 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
         obj = None
         print(id)
         if id is None:
-            return SchoolAppFlow.obcets.none()
+            return SchoolAppFlow.objects.none()
         try:
             obj = SchoolAppFlow.objects.get(flow=id)
         except SchoolAppFlow.DoesNotExist:
@@ -70,6 +70,7 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
 
         return obj
 
-        
-
-
+class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
+    serializer_class = SchoolAppFlowSerializer
+    queryset = SchoolAppFlow.objects.all().filter(state=1)
+    permisiion_classes = [AllowAny]
