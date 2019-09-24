@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .serializers import PostPageCustomSerializer
 from .serializers import ServicesCustomSerializer
 from .serializers import TermsOfServiceCustomSerializer
+from .serializers import TermsOfServiceCustomShortSerializer
 from rest_framework import generics
 from rest_framework import permissions
 from .models import PostPage, ServicePage, TermsOfServicePage
@@ -57,5 +58,12 @@ class TermsOfServiceView(generics.RetrieveAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
+class TermsOfServiceListView(generics.ListAPIView):
+    serializer_class = TermsOfServiceCustomShortSerializer
+    permission_classes = [permissions.AllowAny]
+    queryset = TermsOfServiceCustomShortSerializer.objects.all()
+
+    
 
 # Create your views here.
