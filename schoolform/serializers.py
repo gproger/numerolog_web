@@ -64,6 +64,11 @@ class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
     education_start = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
     education_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
 
+    toss = serializers.SerializerMethodField()
+
+    get_toss(self,obj):
+        return (obj.id,obj.title)
+
     class Meta:
         model = SchoolAppFlow
         fields = '__all__'
