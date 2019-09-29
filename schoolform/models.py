@@ -43,6 +43,7 @@ class SchoolAppForm(models.Model):
     payed_by = models.CharField(max_length=240, blank=True, null=True)
     flow = models.ForeignKey(SchoolAppFlow)
     created = models.DateTimeField(auto_now_add=True)
+    accepted_toss = models.ManyToManyField(TermsOfServicePage)
 
     def save(self, *args, **kwargs):
         c_flow = SchoolAppFlow.objects.all().last()
