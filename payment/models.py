@@ -28,7 +28,7 @@ class Payment(models.Model):
         (UNKNOWN, 'Unknown')
     ]
 
-    merch = models.CharField(max_length=3, choices=MERCH, default=ROBOKASSA)
+    merch = models.CharField(max_length=3, choices=MERCH, default=TINKOFF)
     app = models.ForeignKey('AppOrder', on_delete=models.DO_NOTHING,
                             related_name='payment',
                             related_query_name='payment')

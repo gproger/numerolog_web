@@ -1,5 +1,8 @@
 from django.db import models
 from blog.models import TermsOfServicePage
+from django_tinkoff_merchant.models import Payment
+from django_tinkoff_merchant.services import MerchantAPI
+from django.conf import settings
 # Create your models here.
 
 class SchoolAppFlow(models.Model):
@@ -44,11 +47,28 @@ class SchoolAppForm(models.Model):
     flow = models.ForeignKey(SchoolAppFlow)
     created = models.DateTimeField(auto_now_add=True)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
+    payment = models.OneToOneField(to=Payment, on_delete=models.DO_NOTHING, verbose_name=_('Payment'), blank=True, default = NULL)
 
     def save(self, *args, **kwargs):
         c_flow = SchoolAppFlow.objects.all().last()
         self.flow = c_flow
-        print(args)
-        print(kwargs)
-        print("setted flow to")
         super(SchoolAppForm, self).save(*args, **kwargs)
+
+    def create_payment(self, *args, **kwargs):
+        order_id = 'Обучение в школе нумерологии № '
+        order_id += str(self.pk)
+        items = [
+            {'name': 'Обучение в школе нумерологии', 'price': self.flow.price*100, 'quantity': 1},
+        ]
+
+        payment = Payment(order_id=order_id, amount=self.flow.price*100) \
+            .with_receipt(email=self.email) \
+            .with_items(items)
+
+        MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).init(payment)
+
+        self.payment = payment
+        self.save()
+
+
+
