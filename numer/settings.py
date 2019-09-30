@@ -521,7 +521,7 @@ ROBOKASSA_PASSWORD1 = 'password_1'
 
 TERMINAL_KEY='1525120204909DEMO'
 TERMINAL_SECRET_KEY='r8wft99b2dgje74c'
-notify_tinkoff_url=MISAGO_ADDRESS+'/notification/'
-success_tinkoff_url=MISAGO_ADDRESS+'/success/'
-fail_tinkoff_url=MISAGO_ADDRESS+'/fail/'
+NOTIFY_TINKOFF_URL = MISAGO_ADDRESS+'/notification/'
+SUCCESS_TINKOFF_URL = MISAGO_ADDRESS+'/success/'
+FAIL_TINKOFF_URL = MISAGO_ADDRESS+'/fail/'
 

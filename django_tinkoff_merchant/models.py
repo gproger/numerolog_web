@@ -69,9 +69,9 @@ class Payment(models.Model):
             'Amount': self.amount,
             'OrderId': self.order_id,
             'Description': self.description,
-            'NotificationURL' : settings.notify_tinkoff_url,
-            'SuccessURL' : settings.success_tinkoff_url,
-            'FailURL' : settings.fail_tinkoff_url, 
+            'NotificationURL' : settings.NOTIFY_TINKOFF_URL,
+            'SuccessURL' : settings.SUCCESS_TINKOFF_URL,
+            'FailURL' : settings.FAIL_TINKOFF_URL, 
         }
 
         if hasattr(self, 'receipt'):
