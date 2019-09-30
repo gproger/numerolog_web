@@ -70,5 +70,18 @@ class SchoolAppForm(models.Model):
         self.payment = payment
         self.save()
 
+    def get_payment_status(self):
+        if not self.hasattr('payment'):
+            return False
+
+        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(payment)   
+        
+    def cancel_payment(self):
+        if not self.hasattr('payment'):
+            return False
+
+        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(payment)   
+
+
 
 
