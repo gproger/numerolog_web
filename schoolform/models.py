@@ -47,7 +47,7 @@ class SchoolAppForm(models.Model):
     flow = models.ForeignKey(SchoolAppFlow)
     created = models.DateTimeField(auto_now_add=True)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
-    payment = models.OneToOneField(to=Payment, on_delete=models.DO_NOTHING, verbose_name=_('Payment'), blank=True, default = NULL)
+    payment = models.OneToOneField(to=Payment, on_delete=models.DO_NOTHING, verbose_name='Payment', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         c_flow = SchoolAppFlow.objects.all().last()
@@ -55,14 +55,14 @@ class SchoolAppForm(models.Model):
         super(SchoolAppForm, self).save(*args, **kwargs)
 
     def create_payment(self, *args, **kwargs):
-        order_id = 'Обучение в школе нумерологии № '
+        order_id = 'РћР±СѓС‡РµРЅРёРµ РІ С€РєРѕР»Рµ РЅСѓРјРµСЂРѕР»РѕРіРёРё в„– '
         order_id += str(self.pk)
         items = [
-            {'name': 'Обучение в школе нумерологии', 'price': self.flow.price*100, 'quantity': 1},
+            {'name': 'РћР±СѓС‡РµРЅРёРµ РІ С€РєРѕР»Рµ РЅСѓРјРµСЂРѕР»РѕРіРёРё', 'price': self.flow.price*100, 'quantity': 1},
         ]
 
         payment = Payment(order_id=order_id, amount=self.flow.price*100) \
-            .with_receipt(email=self.email) \
+            .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
         MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).init(payment)
