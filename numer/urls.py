@@ -36,7 +36,7 @@ from app.urls import urls as numer_app_api
 
 from misago.users.forms.auth import AdminAuthenticationForm
 from blog.api import api_router
-
+from django_tinkoff_merchant.urls import urlpatterns as tinkoff_urls
 
 
 admin.autodiscover()
@@ -74,10 +74,10 @@ urlpatterns = [
     url(r'^', include(wgtail_custom_api)),
     url(r'^', include(wgtail_post_comments_api)),
     url(r'^', include(wgtail_likes_api)),
+    url(r'^', include(tinkoff_urls)),
     url(r'^', include(wagtail_urls)),
 
 ]
-
 
 # If debug mode is enabled, include debug toolbar
 if settings.DEBUG:

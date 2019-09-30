@@ -248,7 +248,8 @@ INSTALLED_APPS = [
 # school application form
     'schoolform',
     'comments',
-    'likes'
+    'likes',
+    'django_tinkoff_merchant',
 ]
 
 if DEBUG:

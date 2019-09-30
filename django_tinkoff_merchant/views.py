@@ -29,10 +29,16 @@ class Notification(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body.decode())
 
+        print(data)
+        print(self.merchant_api.terminal_key)
+
         if data.get('TerminalKey') != self.merchant_api.terminal_key:
+            print('Bad terminal key')
             return HttpResponse(b'Bad terminal key', status=400)
 
+
         if not self.merchant_api.token_correct(data.get('Token'), data):
+            print('Bad token')
             return HttpResponse(b'Bad token', status=400)
 
         payment = get_object_or_404(Payment, payment_id=data.get('PaymentId'))
@@ -42,3 +48,4 @@ class Notification(View):
         payment_update.send(self.__class__, payment=payment)
 
         return HttpResponse(b'OK', status=200)
+
