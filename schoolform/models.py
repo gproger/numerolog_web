@@ -55,32 +55,28 @@ class SchoolAppForm(models.Model):
         super(SchoolAppForm, self).save(*args, **kwargs)
 
     def create_payment(self, *args, **kwargs):
-        order_id = 'Обучение в школе нумерологии № '
+        order_id = 'Обучение в школе неНумерологии №'
         order_id += str(self.pk)
         items = [
-            {'name': 'Обучение в школе нумерологии', 'price': self.flow.price*100, 'quantity': 1},
+            {'name': 'Обучение в школе неНумерологии', 'price': self.flow.price*100, 'quantity': 1},
         ]
 
         payment = Payment(order_id=order_id, amount=self.flow.price*100) \
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
-        MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).init(payment)
+        self.payment = MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).init(payment)
 
-        self.payment = payment
+        self.payment.save()
         self.save()
 
     def get_payment_status(self):
-        if not self.hasattr('payment'):
-            return False
-
-        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(payment)   
+        
+        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(self.payment)   
         
     def cancel_payment(self):
-        if not self.hasattr('payment'):
-            return False
 
-        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(payment)   
+        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)   
 
 
 
