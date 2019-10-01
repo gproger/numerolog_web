@@ -55,8 +55,7 @@ class SchoolAppForm(models.Model):
         super(SchoolAppForm, self).save(*args, **kwargs)
 
     def create_payment(self, *args, **kwargs):
-        order_id = 'Обучение в школе неНумерологии №'
-        order_id += str(self.pk)
+        order_id = str(self.pk)
         items = [
             {'name': 'Обучение в школе неНумерологии', 'price': self.flow.price*100, 'quantity': 1},
         ]

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import SchoolAppForm, SchoolAppFlow
-
+from django_tinkoff_merchant.serializers import PaymentSerializer
 
 class SchoolAppFormSerializer(serializers.ModelSerializer):
     bid = serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y'])
@@ -75,3 +75,27 @@ class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolAppFlow
         fields = '__all__'
+
+
+class SchoolAppFormSerializer(serializers.ModelSerializer):
+
+    order = serializers.SerializerMethodField()
+
+    payment = PaymentSerializer()
+
+    def get_order(self,obj):
+        order = []
+        order.append({'name' : 'Заказ №', 'value' : obj.id})
+        order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow})
+        order.append({'name' : 'Фамилия:', 'value' : obj.last_name})
+        order.append({'name' : 'Имя:', 'value' : obj.first_name})
+        order.append({'name' : 'E-mail:', 'value' : obj.email})
+        order.append({'name' : 'Телефон:', 'value' : obj.phone})
+        order.append({'name' : 'Стоимость обучения:', 'value' : obj.flow.price})
+
+        return order
+
+    class Meta:
+        model = SchoolAppForm
+        fields = ['order','payment']
+

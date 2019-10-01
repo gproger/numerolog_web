@@ -74,3 +74,22 @@ class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializer
     queryset = SchoolAppFlow.objects.all().filter(state=1)
     permisiion_classes = [AllowAny]
+
+
+class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
+    
+    serializer_class = SchoolAppFormSerializer
+    permisiion_classes = [AllowAny]
+
+    def get_object(self):
+        id = self.kwargs.get('id', None)
+        print(self.request)
+        obj = None
+        if id is None:
+            return SchoolAppForm.objects.none()
+        try:
+            obj = SchoolAppForm.objects.get(pk=id)
+        except SchoolAppForm.DoesNotExist:
+            obj = None
+
+        return obj
