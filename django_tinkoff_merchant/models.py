@@ -70,8 +70,8 @@ class Payment(models.Model):
             'OrderId': self.order_id,
             'Description': self.description,
             'NotificationURL' : settings.NOTIFY_TINKOFF_URL,
-            'SuccessURL' : settings.SUCCESS_TINKOFF_URL,
-            'FailURL' : settings.FAIL_TINKOFF_URL, 
+            'SuccessURL' : settings.SUCCESS_TINKOFF_URL+self.order_id,
+            'FailURL' : settings.FAIL_TINKOFF_URL+self.order_id, 
         }
 
         if hasattr(self, 'receipt'):

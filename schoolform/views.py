@@ -93,3 +93,24 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
             obj = None
 
         return obj
+
+
+class SchoolAppFormShowUpdateURLView(generics.RetrieveAPIView):
+    
+    serializer_class = SchoolAppFormSerializer
+    permisiion_classes = [AllowAny]
+
+    def get_object(self):
+        id = self.kwargs.get('id', None)
+        print(self.request)
+        obj = None
+        if id is None:
+            return SchoolAppForm.objects.none()
+        try:
+            obj = SchoolAppForm.objects.get(pk=id)
+        except SchoolAppForm.DoesNotExist:
+            obj = None
+
+        obj.create_payment()
+
+        return obj
