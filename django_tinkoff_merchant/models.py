@@ -183,8 +183,8 @@ class TinkoffSettings(models.Model):
 
     @classmethod
     def get_school_terminal(cls):
-        return TinkoffSettings.objects.get(using_school=True).first()
+        return TinkoffSettings.objects.filter(using_school=True).first()
 
     @classmethod
     def get_services_terminal(cls):
-        return TinkoffSettings.objects.get(using_services=True).first()
+        return TinkoffSettings.objects.filter(using_services=True).first()
