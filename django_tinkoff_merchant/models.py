@@ -34,6 +34,7 @@ class Payment(models.Model):
         max_length=100, blank=True, default='', editable=False)
     message = models.TextField(verbose_name=_('Brief description of the error'), blank=True, default='', editable=False)
     details = models.TextField(verbose_name=_('Detailed description of the error'), blank=True, default='', editable=False)
+    terminal = models.ForeignKey('TinkoffSettings', verbose_name="Терминал")
 
     class Meta:
         verbose_name = 'Transaction'
@@ -71,7 +72,7 @@ class Payment(models.Model):
             'Description': self.description,
             'NotificationURL' : settings.NOTIFY_TINKOFF_URL,
             'SuccessURL' : settings.SUCCESS_TINKOFF_URL+self.order_id,
-            'FailURL' : settings.FAIL_TINKOFF_URL+self.order_id, 
+            'FailURL' : settings.FAIL_TINKOFF_URL+self.order_id,
         }
 
         if hasattr(self, 'receipt'):
@@ -143,3 +144,17 @@ class ReceiptItem(models.Model):
             'Ean13': self.ean13,
             'ShopCode': self.shop_code,
         }
+
+class TinkoffSettings(models.Model):
+    terminal_id = models.CharField(verbose_name="Номер терминала",max_length=40)
+    terminal_key = models.CharField(verbose_name="Пароль терминала", max_length=40)
+    using_school = models.BooleanField(verbose_name="Для школы", default = False)
+    using_services = models.BooleanField(verbose_name="Для услуг", default = False)
+
+    def __unicode__(self):
+        if self.using_school:
+            return "Школа"
+        elif self.using_services:
+            return "Услуги"
+        else:
+            return "Неизвестный"

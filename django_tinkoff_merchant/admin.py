@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from .models import Payment, Receipt, ReceiptItem
+from .models import Payment, Receipt, ReceiptItem, TinkoffSettings
 from .services import MerchantAPI
 
 
@@ -49,3 +49,5 @@ class ReceiptItemInline(PermissionsMixin, admin.TabularInline):
 class ReceiptAdmin(PermissionsMixin, admin.ModelAdmin):
     list_display = ['id', 'payment', 'email', 'phone']
     inlines = [ReceiptItemInline]
+
+admin.site.register(TinkoffSettings)
