@@ -3,6 +3,8 @@ from blog.models import TermsOfServicePage
 from django_tinkoff_merchant.models import Payment
 from django_tinkoff_merchant.services import MerchantAPI
 from django.conf import settings
+
+from django_tinkoff_merchant.models import TinkoffSettings
 # Create your models here.
 
 class SchoolAppFlow(models.Model):
@@ -59,6 +61,7 @@ class SchoolAppForm(models.Model):
         items = [
             {'name': 'Обучение в школе неНумерологии', 'price': self.flow.price*100, 'quantity': 1},
         ]
+
 
         payment = Payment(order_id=order_id, amount=self.flow.price*100) \
             .with_receipt(email=self.email,phone=self.phone) \

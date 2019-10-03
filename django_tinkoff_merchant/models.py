@@ -66,13 +66,27 @@ class Payment(models.Model):
         return self
 
     def to_json(self):
+        url_success = settings.SUCCESS_TINKOFF_URL;
+        url_fail = settings.FAIL_TINKOFF_URL;
+        if self.terminal.using_school:
+            url_success += '/school/'
+            url_fail += '/school/'
+        elif self.terminal.using_services:
+            url_success += '/services/'
+            url_fail += '/services/'
+        else:
+            url_success += '/unkwn/'
+            url_success += '/unkwn/'
+
+
+
         data = {
             'Amount': self.amount,
             'OrderId': self.order_id,
             'Description': self.description,
             'NotificationURL' : settings.NOTIFY_TINKOFF_URL,
-            'SuccessURL' : settings.SUCCESS_TINKOFF_URL+self.order_id,
-            'FailURL' : settings.FAIL_TINKOFF_URL+self.order_id,
+            'SuccessURL' : url_success+self.order_id,
+            'FailURL' : url_fail+self.order_id,
         }
 
         if hasattr(self, 'receipt'):
@@ -167,4 +181,10 @@ class TinkoffSettings(models.Model):
         else:
             return "Неизвестный"
 
+    @classmethod
+    def get_school_terminal(cls):
+        return TinkoffSettings.objects.get(using_school=True).first()
 
+    @classmethod
+    def get_services_terminal(cls):
+        return TinkoffSettings.objects.get(using_services=True).first()

@@ -34,12 +34,12 @@ class MerchantAPI(object):
             self._terminal_key = get_config()['TERMINAL_KEY']
         return self._terminal_key
 
-    def _request(self, url, method, data):
+    def _request(self, url, method, data, obj):
         url = get_config()['URLS'][url]
 
         data.update({
-            'TerminalKey': self.terminal_key,
-            'Token': self._token(data),
+            'TerminalKey': obj.terminal_id,
+            'Token': self._token(data, obj),
         })
 
         pay_request = method(url, data=json.dumps(data, cls=Encoder), headers={'Content-Type': 'application/json'})
@@ -49,13 +49,13 @@ class MerchantAPI(object):
 
         return pay_request
 
-    def _token(self, data):
+    def _token(self, data, settings):
         base = [
-            ['Password', self.secret_key],
+            ['Password', settings.terminal_key],
         ]
 
         if 'TerminalKey' not in data:
-            base.append(['TerminalKey', self.terminal_key])
+            base.append(['TerminalKey', settings.terminal_id])
 
         for name_token, value_token in data.items():
             if name_token == 'Token':
@@ -80,17 +80,17 @@ class MerchantAPI(object):
 
         return payment
 
-    def token_correct(self, token, data):
-        return token == self._token(data)
+    def token_correct(self, token, data, settings):
+        return token == self._token(data, settings)
 
     def init(self, payment):
-        response = self._request('INIT', requests.post, payment.to_json()).json()
+        response = self._request('INIT', requests.post, payment.to_json(), payment.terminal).json()
         return self.update_payment_from_response(payment, response)
 
     def status(self, payment):
-        response = self._request('GET_STATE', requests.post, {'PaymentId': payment.payment_id}).json()
+        response = self._request('GET_STATE', requests.post, {'PaymentId': payment.payment_id}, payment.terminal).json()
         return self.update_payment_from_response(payment, response)
 
     def cancel(self, payment):
-        response = self._request('CANCEL', requests.post, {'PaymentId': payment.payment_id}).json()
+        response = self._request('CANCEL', requests.post, {'PaymentId': payment.payment_id}, payment.terminal).json()
         return self.update_payment_from_response(payment, response)
