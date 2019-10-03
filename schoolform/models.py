@@ -63,7 +63,7 @@ class SchoolAppForm(models.Model):
         ]
 
 
-        payment = Payment(order_id=order_id, amount=self.flow.price*100) \
+        payment = Payment(order_id=order_id, amount=self.flow.price*100, terminal=TinkoffSettings.get_school_terminal()) \
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
