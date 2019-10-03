@@ -250,6 +250,7 @@ INSTALLED_APPS = [
     'comments',
     'likes',
     'django_tinkoff_merchant',
+    'emails',
 ]
 
 if DEBUG:
