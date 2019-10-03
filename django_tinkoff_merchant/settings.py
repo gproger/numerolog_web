@@ -11,8 +11,8 @@ DEFAULT_CONFIG = {
     },
     'TAXATION': 'usn_income',
     'ITEM_TAX': 'none',
-    'TERMINAL_KEY': settings.TERMINAL_KEY,
-    'SECRET_KEY': settings.TERMINAL_SECRET_KEY,
+    'TERMINAL_KEY': '',
+    'SECRET_KEY': '',
 }
 
 
