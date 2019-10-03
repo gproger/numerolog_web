@@ -6,5 +6,4 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payment
-        fields = '__all__'
-
+        fields = ['amount','order_id','success','error_code','payment_url','message']

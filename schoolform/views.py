@@ -42,7 +42,7 @@ class SchoolAppFormListView(generics.ListAPIView):
 class SchoolAppFormCreateView(generics.CreateAPIView):
     serializer_class = SchoolAppFormCreateSerializer
     queryset = SchoolAppForm.objects.all()
-    permisiion_classes = [AllowAny]
+    permission_classes = [AllowAny]
 
 
 class SchoolAppFlowListView(generics.ListCreateAPIView):
@@ -78,7 +78,7 @@ class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
 
 
 class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
-    
+
     serializer_class = SchoolAppFormSerializer
     permisiion_classes = [AllowAny]
 
@@ -97,7 +97,7 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
 
 
 class SchoolAppFormShowUpdateURLView(generics.RetrieveAPIView):
-    
+
     serializer_class = SchoolAppFormSerializer
     permisiion_classes = [AllowAny]
 
