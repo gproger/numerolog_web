@@ -29,9 +29,6 @@ class Notification(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body.decode())
 
-        print(data)
-        print(self.merchant_api.terminal_key)
-
         if data.get('TerminalKey') != self.merchant_api.terminal_key:
             print('Bad terminal key')
             return HttpResponse(b'Bad terminal key', status=400)
@@ -48,4 +45,3 @@ class Notification(View):
         payment_update.send(self.__class__, payment=payment)
 
         return HttpResponse(b'OK', status=200)
-

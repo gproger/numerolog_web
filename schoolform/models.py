@@ -34,7 +34,7 @@ class SchoolAppFlow(models.Model):
         return str(self.flow)
 
 class SchoolAppForm(models.Model):
-     
+
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     first_name = models.CharField(max_length=40)
@@ -70,13 +70,9 @@ class SchoolAppForm(models.Model):
         self.save()
 
     def get_payment_status(self):
-        
-        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(self.payment)   
-        
+
+        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(self.payment)
+
     def cancel_payment(self):
 
-        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)   
-
-
-
-
+        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
