@@ -34,7 +34,7 @@ class Payment(models.Model):
         max_length=100, blank=True, default='', editable=False)
     message = models.TextField(verbose_name=_('Brief description of the error'), blank=True, default='', editable=False)
     details = models.TextField(verbose_name=_('Detailed description of the error'), blank=True, default='', editable=False)
-    terminal = models.ForeignKey('TinkoffSettings', verbose_name="Терминал")
+    terminal = models.ForeignKey('TinkoffSettings', verbose_name="Терминал", blank=True, null=True)
 
     class Meta:
         verbose_name = 'Transaction'
@@ -158,3 +158,13 @@ class TinkoffSettings(models.Model):
             return "Услуги"
         else:
             return "Неизвестный"
+
+    def __str__(self):
+        if self.using_school:
+            return "Школа"
+        elif self.using_services:
+            return "Услуги"
+        else:
+            return "Неизвестный"
+
+
