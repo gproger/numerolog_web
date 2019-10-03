@@ -69,14 +69,14 @@ class Payment(models.Model):
         url_success = settings.SUCCESS_TINKOFF_URL;
         url_fail = settings.FAIL_TINKOFF_URL;
         if self.terminal.using_school:
-            url_success += '/school/'
-            url_fail += '/school/'
+            url_success += 'school/'
+            url_fail += 'school/'
         elif self.terminal.using_services:
-            url_success += '/services/'
-            url_fail += '/services/'
+            url_success += 'services/'
+            url_fail += 'services/'
         else:
-            url_success += '/unkwn/'
-            url_success += '/unkwn/'
+            url_success += 'unkwn/'
+            url_success += 'unkwn/'
 
 
 
