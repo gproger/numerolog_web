@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from .models import SchoolAppForm, SchoolAppFlow
 
 from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
+from .serializers import SchoolAppFormCreateSerializer
 from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializer
 from django.shortcuts import render
 
@@ -39,7 +40,7 @@ class SchoolAppFormListView(generics.ListAPIView):
 
 
 class SchoolAppFormCreateView(generics.CreateAPIView):
-    serializer_class = SchoolAppFormSerializer
+    serializer_class = SchoolAppFormCreateSerializer
     queryset = SchoolAppForm.objects.all()
     permisiion_classes = [AllowAny]
 
