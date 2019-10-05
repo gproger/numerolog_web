@@ -76,12 +76,13 @@ class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
         model = SchoolAppFlow
         fields = '__all__'
 
-
 class SchoolAppFormSerializer(serializers.ModelSerializer):
 
-    order = serializers.SerializerMethodField()
+    order = serializers.SerializerMethodField(required=False)
 
-    payment = PaymentSerializer()
+    payment = PaymentSerializer(required=False, many = True)
+
+    amount = serializers.SerializerMethodField()
 
     def get_order(self,obj):
         order = []
@@ -95,7 +96,15 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
         return order
 
+    def get_amount(self,obj):
+        total = 0
+        for k in obj.payment.all():
+            if k.status == 'CONFIRMED':
+                total += k.amount
+        return total/100
+
+
     class Meta:
         model = SchoolAppForm
-        fields = ['order','payment']
+        fields = ['order','payment','amount']
 
