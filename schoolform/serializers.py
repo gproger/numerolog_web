@@ -76,6 +76,24 @@ class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
         model = SchoolAppFlow
         fields = '__all__'
 
+class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
+    
+    amount = serializers.SerializerMethodField()
+    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+    bid = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+
+
+    def get_amount(self,obj):
+        total = 0
+        for k in obj.payment.all():
+            if k.status == 'CONFIRMED':
+                total += k.amount
+        return total/100
+
+    class Meta:
+        model = SchoolAppForm
+        fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount']
+
 class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     order = serializers.SerializerMethodField(required=False)

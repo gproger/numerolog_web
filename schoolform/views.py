@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from .models import SchoolAppForm, SchoolAppFlow
 
 from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
-from .serializers import SchoolAppFormCreateSerializer
+from .serializers import SchoolAppFormCreateSerializer,SchoolAppFormFlowStudentsList
 from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializer
 from django.shortcuts import render
 
@@ -35,7 +35,7 @@ class SchoolAppFormListView(generics.ListAPIView):
 
     def list(self, request):
         queryset = self.get_queryset()
-        serializer = SchoolAppFormSerializer(queryset, many=True)
+        serializer = SchoolAppFormFlowStudentsList(queryset, many=True)
         return Response(serializer.data)
 
 

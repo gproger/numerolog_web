@@ -81,8 +81,8 @@ class SchoolAppForm(models.Model):
 
 
     def get_payment_status(self):
-
-        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(self.payment)
+        for payment in  self.payment.all():
+             MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(payment).save()
 
     def cancel_payment(self):
 
