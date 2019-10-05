@@ -30,15 +30,15 @@ _ = lambda s: s
 SECRET_KEY = '%jq8j5az8vmsk)3doi9ir()qen&a)@+yaqkh00px7gcbwbjx+$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 # A list of strings representing the host/domain names that this Django site can serve.
 # If you are unsure, just enter here your domain name, eg. ['mysite.com', 'www.mysite.com']
 
-ALLOWED_HOSTS = ['numerolog.privatebot.info',
-		 'blog.numerolog.privatebot.info',
-		 'serv.numerolog.privatebot.info',
+ALLOWED_HOSTS = ['new.nenumerolog.ru',
+		 'blog.new.nenumerolog.ru',
+		 'serv.new.nenumerolog.ru',
                  'localhost']
 
 
@@ -51,7 +51,7 @@ DATABASES = {
     'default': {
         # Misago requires PostgreSQL to run
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'numer',
+        'NAME': 'prod',
         'USER': 'numer',
         'PASSWORD': 'numer',
         'HOST': 'localhost',
@@ -430,10 +430,10 @@ REST_FRAMEWORK = {
 # On Misago admin panel home page you will find a message telling you if you have entered the
 # correct value, or what value is correct in case you've didn't.
 
-MISAGO_ADDRESS = 'http://numerolog.privatebot.info'
+MISAGO_ADDRESS = 'http://new.nenumerolog.ru'
 
 if DEBUG:
-	MISAGO_ADDRESS = 'http://numerolog.privatebot.info:8080'
+	MISAGO_ADDRESS = 'http://new.nenumerolog.ru'
 
 
 # PostgreSQL text search configuration to use in searches

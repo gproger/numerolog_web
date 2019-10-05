@@ -49,6 +49,9 @@ class Payment(models.Model):
     def __unicode__(self):
         return 'Транзакция #{self.id}:{self.payment_id}'.format(self=self)
 
+    def __str__(self):
+        return 'Транзакция #{self.id}:{self.order_plural}:{self.order_obj}:{self.status}:{self.success}:{amount}'.format(self=self, amount=self.amount/100)
+
     def can_redirect(self):
         return self.status == 'NEW' and self.payment_url
 

@@ -87,3 +87,7 @@ class SchoolAppForm(models.Model):
     def cancel_payment(self):
 
         return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
+
+    def __str__(self):
+        return "{} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.last_name, self.first_name)
+

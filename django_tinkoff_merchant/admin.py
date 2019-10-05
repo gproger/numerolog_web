@@ -27,7 +27,7 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = ['id', 'order_obj', 'get_amount_rub', 'success', 'status', 'payment_id']
     list_filter = ['status', 'success']
     search_fields = ['order_obj', 'payment_id']
-    actions = [make_cancel]
+    actions = [make_cancel, make_status]
 
     def get_amount_rub(self, obj):
         return obj.amount / 100
