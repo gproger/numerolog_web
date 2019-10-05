@@ -20,7 +20,7 @@ class Payment(models.Model):
     }
 
     amount = models.IntegerField(verbose_name='The amount in cents', editable=False)
-    order_id = models.CharField(verbose_name='Order number', max_length=100, unique=True, editable=False)
+###models.CharField(verbose_name='Order number', max_length=100, unique=True, editable=False)
     description = models.TextField(verbose_name='Description', max_length=250, blank=True, default='', editable=False)
 
     success = models.BooleanField(verbose_name='Successfully completed', default=False, editable=False)
@@ -35,13 +35,17 @@ class Payment(models.Model):
     message = models.TextField(verbose_name=_('Brief description of the error'), blank=True, default='', editable=False)
     details = models.TextField(verbose_name=_('Detailed description of the error'), blank=True, default='', editable=False)
     terminal = models.ForeignKey('TinkoffSettings', verbose_name="Терминал", blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    order_plural = models.CharField(verbose_name="Название услуги", max_length=100,default='unknw')
+    order_obj = models.CharField(verbose_name="Номер услуги", max_length=100, default='unknw')
 
     class Meta:
         verbose_name = 'Transaction'
         verbose_name_plural = 'Transactions'
 
     def __unicode__(self):
-        return 'Транзакция #{self.id}:{self.order_id}:{self.payment_id}'.format(self=self)
+        return 'Транзакция #{self.id}:{self.payment_id}'.format(self=self)
 
     def can_redirect(self):
         return self.status == 'NEW' and self.payment_url
@@ -82,11 +86,11 @@ class Payment(models.Model):
 
         data = {
             'Amount': self.amount,
-            'OrderId': self.order_id,
+            'OrderId': self.id,
             'Description': self.description,
             'NotificationURL' : settings.NOTIFY_TINKOFF_URL,
-            'SuccessURL' : url_success+self.order_id,
-            'FailURL' : url_fail+self.order_id,
+            'SuccessURL' : url_success+self.order_obj,
+            'FailURL' : url_fail+self.order_obj,
         }
 
         if hasattr(self, 'receipt'):

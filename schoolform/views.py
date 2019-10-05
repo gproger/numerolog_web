@@ -96,10 +96,10 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
         return obj
 
 
-class SchoolAppFormShowUpdateURLView(generics.RetrieveAPIView):
+class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
     serializer_class = SchoolAppFormSerializer
-    permisiion_classes = [AllowAny]
+    permission_classes = [AllowAny]
 
     def get_object(self):
         id = self.kwargs.get('id', None)
@@ -112,6 +112,30 @@ class SchoolAppFormShowUpdateURLView(generics.RetrieveAPIView):
         except SchoolAppForm.DoesNotExist:
             obj = None
 
-        obj.create_payment()
+#        obj.create_payment()
 
         return obj
+
+    def put(self, request, *args, **kwargs):
+        inst = self.get_object()
+        
+        if request.data['amount']  <= 0:
+            return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
+        if request.data['amount'] % 500000 != 0:
+            return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
+        if request.data['amount'] > inst.flow.price*100:
+            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
+
+
+        total = 0
+        for k in inst.payment.all():
+            total += k.amount
+
+        if request.data['amount'] > inst.flow.price*100-total:
+            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
+        
+        inst.create_payment(amount=request.data['amount'])
+        inst.save()
+
+        print(request.data)
+        return super(SchoolAppFormShowUpdateURLView,self).put(request,*args,**kwargs)
