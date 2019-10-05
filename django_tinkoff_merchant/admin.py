@@ -11,7 +11,15 @@ def make_cancel(modeladmin, request, qs):
         MerchantAPI().cancel(p)
         p.save()
 
+def make_status(modeladmin, request, qs):
+    for p in qs:
+        MerchantAPI().status(p)
+        p.save()
+
+
+
 make_cancel.short_description = 'Отменить платеж'
+make_status.short_description = 'Проверить платеж'
 
 
 @admin.register(Payment)

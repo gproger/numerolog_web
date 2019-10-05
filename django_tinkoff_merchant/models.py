@@ -6,7 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from .consts import TAXES, TAXATIONS
 from .settings import get_config
+import logging
 
+logging.basicConfig(level='DEBUG')
 
 class Payment(models.Model):
     RESPONSE_FIELDS = {
@@ -83,7 +85,6 @@ class Payment(models.Model):
             url_success += 'unkwn/'
 
 
-
         data = {
             'Amount': self.amount,
             'OrderId': self.id,
@@ -92,6 +93,10 @@ class Payment(models.Model):
             'SuccessURL' : url_success+self.order_obj,
             'FailURL' : url_fail+self.order_obj,
         }
+
+        print(data)
+        logging.info(data)
+        logging.info("URL setted")
 
         if hasattr(self, 'receipt'):
             data['Receipt'] = self.receipt.to_json()
