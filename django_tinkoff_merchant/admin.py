@@ -11,7 +11,15 @@ def make_cancel(modeladmin, request, qs):
         MerchantAPI().cancel(p)
         p.save()
 
+def make_status(modeladmin, request, qs):
+    for p in qs:
+        MerchantAPI().status(p)
+        p.save()
+
+
+
 make_cancel.short_description = 'Отменить платеж'
+make_status.short_description = 'Проверить платеж'
 
 
 @admin.register(Payment)
@@ -19,7 +27,7 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = ['id', 'order_id', 'get_amount_rub', 'success', 'status', 'payment_id']
     list_filter = ['status', 'success']
     search_fields = ['order_id', 'payment_id']
-    actions = [make_cancel]
+    actions = [make_cancel, make_status]
 
     def get_amount_rub(self, obj):
         return obj.amount / 100
