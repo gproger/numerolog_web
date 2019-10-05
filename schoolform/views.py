@@ -93,6 +93,8 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
         except SchoolAppForm.DoesNotExist:
             obj = None
 
+        obj.get_payment_status()
+
         return obj
 
 
