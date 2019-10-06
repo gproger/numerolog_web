@@ -1,0 +1,16 @@
+{% extends "emails/base.txt" %}
+{% load i18n misago_absoluteurl %}
+
+
+{% block content %}
+{% blocktrans trimmed with user=user %}
+{{ user }}, Вы получили это письмо, так как вы зарегистрировались студентом
+в школе неНумерологии Ольги Перцевой.
+{% endblocktrans %}
+
+{% blocktrans trimmed %}
+Для оплаты обучения, проверки статуса оплаты, либо внесения оплаты, вы можете
+перейти по следующей ссылке:
+{% endblocktrans %}
+{% absoluteurl 'misago:options-confirm-email-change' token=token %}
+{% endblock content %}
