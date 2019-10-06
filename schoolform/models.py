@@ -94,7 +94,7 @@ class SchoolAppForm(models.Model):
             'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(self.id),
             'user_name' : self.first_name + ' ' + self.last_name,
         }
-        mail_user(self, "Школа нумерологии",'emails/create_school_form',context=context)
+        mail_user(self, "Школа неНумерологии",'emails/create_school_form',context=context)
 
     def __str__(self):
         return "{} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.last_name, self.first_name)
