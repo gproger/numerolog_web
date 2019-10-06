@@ -93,6 +93,7 @@ class SchoolAppForm(models.Model):
         context = {
             'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(self.id),
             'user_name' : self.first_name + ' ' + self.last_name,
+            "SITE_HOST" : settings.MISAGO_ADDRESS,
         }
         mail_user(self, "Школа неНумерологии",'emails/create_school_form',context=context)
 

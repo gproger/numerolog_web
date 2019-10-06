@@ -14,6 +14,7 @@ def build_mail(recipient, subject, template, sender=None, context=None):
             "LANGUAGE_CODE": 'ru',
 #            "LOGIN_URL": settings.LOGIN_URL,
 #            "forum_host": get_host_from_address(forum_address),
+            "SITE_HOST" : settings.MISAGO_ADDRESS,
             "user": recipient,
             "sender": sender,
             "subject": subject,
