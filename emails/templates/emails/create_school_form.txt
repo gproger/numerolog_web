@@ -4,7 +4,7 @@
 
 {% block content %}
 {% blocktrans trimmed with user=user %}
-{{ user.first_name }} {{ user.last_name }}, Вы получили это письмо, так как вы зарегистрировались студентом
+{{ user_name }}, Вы получили это письмо, так как вы зарегистрировались студентом
 в школе неНумерологии Ольги Перцевой.
 {% endblocktrans %}
 
