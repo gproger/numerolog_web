@@ -5,6 +5,7 @@ from django_tinkoff_merchant.services import MerchantAPI
 from django.conf import settings
 
 from django_tinkoff_merchant.models import TinkoffSettings
+from emails.emails import mail_user
 # Create your models here.
 
 class SchoolAppFlow(models.Model):
@@ -88,6 +89,11 @@ class SchoolAppForm(models.Model):
 
         return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
 
+    def send_mail_notification(self):
+        context = {
+            'url' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+self.id;
+        }
+        mail_user(self, "Школа нумерологии",'emails/create_school_form',context=context)
+
     def __str__(self):
         return "{} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.last_name, self.first_name)
-
