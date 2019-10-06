@@ -1,5 +1,5 @@
-{% extends "emails/base.txt" %}
-{% load i18n misago_absoluteurl %}
+{% extends "emails/base.html" %}
+{% load i18n %}
 
 
 {% block content %}
@@ -7,10 +7,14 @@
 {{ user }}, Вы получили это письмо, так как вы зарегистрировались студентом
 в школе неНумерологии Ольги Перцевой.
 {% endblocktrans %}
-
+<br>
+<br>
 {% blocktrans trimmed %}
 Для оплаты обучения, проверки статуса оплаты, либо внесения оплаты, вы можете
 перейти по следующей ссылке:
 {% endblocktrans %}
-{% absoluteurl 'misago:options-confirm-email-change' token=token %}
+<br>
+<br>
+<a href="">{% trans "Проверить оплату или оплатить" %}</a>
+<br>
 {% endblock content %}

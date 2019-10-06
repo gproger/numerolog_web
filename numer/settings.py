@@ -30,15 +30,13 @@ _ = lambda s: s
 SECRET_KEY = '%jq8j5az8vmsk)3doi9ir()qen&a)@+yaqkh00px7gcbwbjx+$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 # A list of strings representing the host/domain names that this Django site can serve.
 # If you are unsure, just enter here your domain name, eg. ['mysite.com', 'www.mysite.com']
 
-ALLOWED_HOSTS = ['new.nenumerolog.ru',
-		 'blog.new.nenumerolog.ru',
-		 'serv.new.nenumerolog.ru',
+ALLOWED_HOSTS = ['numerolog.privatebot.info',
                  'localhost']
 
 
@@ -51,7 +49,7 @@ DATABASES = {
     'default': {
         # Misago requires PostgreSQL to run
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'prod',
+        'NAME': 'numer',
         'USER': 'numer',
         'PASSWORD': 'numer',
         'HOST': 'localhost',
@@ -340,6 +338,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'theme', 'templates'),
             os.path.join(BASE_DIR, 'frontend', 'templates'),
+            os.path.join(BASE_DIR, 'emails', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

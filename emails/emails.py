@@ -8,14 +8,10 @@ from django.utils.translation import get_language
 
 def build_mail(recipient, subject, template, sender=None, context=None):
     context = context.copy() if context else {}
-    if not context.get("settings"):
-        raise ValueError("settings key is missing from context")
-
-#    forum_address = context["settings"].forum_address
 
     context.update(
         {
-            "LANGUAGE_CODE": get_language()[:2],
+            "LANGUAGE_CODE": 'ru',
 #            "LOGIN_URL": settings.LOGIN_URL,
 #            "forum_host": get_host_from_address(forum_address),
             "user": recipient,
