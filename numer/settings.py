@@ -429,10 +429,10 @@ REST_FRAMEWORK = {
 # On Misago admin panel home page you will find a message telling you if you have entered the
 # correct value, or what value is correct in case you've didn't.
 
-MISAGO_ADDRESS = 'http://new.nenumerolog.ru'
+MISAGO_ADDRESS = 'http://numerolog.privatebot.info:8080'
 
 if DEBUG:
-	MISAGO_ADDRESS = 'http://new.nenumerolog.ru'
+	MISAGO_ADDRESS = 'http://numerolog.privatebot.info:8080'
 
 
 # PostgreSQL text search configuration to use in searches
