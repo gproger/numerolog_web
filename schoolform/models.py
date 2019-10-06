@@ -91,7 +91,7 @@ class SchoolAppForm(models.Model):
 
     def send_mail_notification(self):
         context = {
-            'url' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+self.id;
+            'url' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+self.id,
         }
         mail_user(self, "Школа нумерологии",'emails/create_school_form',context=context)
 
