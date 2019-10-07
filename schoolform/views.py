@@ -49,7 +49,7 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
         print(request.data)
         if (ser.is_valid()):
             c_flow = SchoolAppFlow.objects.last()
-            objs = SchoolAppForm.objects.filter(flow=c_flow,email=ser.data.get('email'))
+            objs = SchoolAppForm.objects.filter(flow=c_flow,email=request.data.get('email'))
             if objs.count() > 0:
                 objs = objs.first()
                 ser = SchoolAppFormCreateSerializer(objs)
