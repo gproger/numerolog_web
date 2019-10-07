@@ -55,6 +55,7 @@ class SchoolAppForm(models.Model):
     def save(self, *args, **kwargs):
         c_flow = SchoolAppFlow.objects.all().last()
         self.flow = c_flow
+        
         super(SchoolAppForm, self).save(*args, **kwargs)
 
     def create_payment(self, *args, **kwargs):

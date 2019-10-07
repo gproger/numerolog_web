@@ -44,6 +44,18 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
     queryset = SchoolAppForm.objects.all()
     permission_classes = [AllowAny]
 
+    def post(cls, request, format=None):
+        ser = SchoolAppFormCreateSerializer(data=request.data)
+        print(request.data)
+        if (ser.is_valid()):
+            c_flow = SchoolAppFlow.objects.last()
+            objs = SchoolAppForm.objects.filter(flow=c_flow,email=ser.data.get('email'))
+            if objs.count() > 0:
+                objs = objs.first()
+                ser = SchoolAppFormCreateSerializer(objs)
+            else:
+                objs = ser.save()
+            return Response(ser.data)
 
 class SchoolAppFlowListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
