@@ -57,6 +57,7 @@ class SchoolAppForm(models.Model):
         self.flow = c_flow
         
         super(SchoolAppForm, self).save(*args, **kwargs)
+        self.send_mail_notification()
 
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)
