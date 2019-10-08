@@ -54,10 +54,15 @@ class SchoolAppForm(models.Model):
 
     def save(self, *args, **kwargs):
         c_flow = SchoolAppFlow.objects.all().last()
+        flow_ind = kwargs.pop('flow',None)
+        if flow_ind is not None:
+            c_flow=SchoolAppFlow.objects.get(flow=flow_ind)
+
         self.flow = c_flow
-        
+        new = self.pk is None
         super(SchoolAppForm, self).save(*args, **kwargs)
-        self.send_mail_notification()
+        if new:
+            self.send_mail_notification()
 
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)

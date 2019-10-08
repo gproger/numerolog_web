@@ -6,6 +6,10 @@ class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
     bid = serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y'])
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
 
+    def validate_email(self, value):
+        norm_value = value.lower()
+        return norm_value
+
     class Meta:
         model = SchoolAppForm
         exclude = ['flow','payment']
@@ -104,6 +108,8 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     def get_order(self,obj):
         order = []
+        if not hasattr(obj,'id'):
+            return order
         order.append({'name' : 'Заказ №', 'value' : obj.id})
         order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow})
         order.append({'name' : 'Фамилия:', 'value' : obj.last_name})
@@ -116,6 +122,8 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     def get_amount(self,obj):
         total = 0
+        if not hasattr(obj,'payment'):
+            return 0
         for k in obj.payment.all():
             if k.status == 'CONFIRMED':
                 total += k.amount

@@ -1,6 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 
 from .models import SchoolAppForm, SchoolAppFlow
@@ -49,7 +50,7 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
         print(request.data)
         if (ser.is_valid()):
             c_flow = SchoolAppFlow.objects.last()
-            objs = SchoolAppForm.objects.filter(flow=c_flow,email=request.data.get('email'))
+            objs = SchoolAppForm.objects.filter(flow=c_flow,email=request.data.get('email').lower())
             if objs.count() > 0:
                 objs = objs.first()
                 ser = SchoolAppFormCreateSerializer(objs)
@@ -95,9 +96,9 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
     permisiion_classes = [AllowAny]
 
     def get_object(self):
+
         id = self.kwargs.get('id', None)
-        print(self.request)
-        obj = None
+
         if id is None:
             return SchoolAppForm.objects.none()
         try:
@@ -108,6 +109,16 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
         obj.get_payment_status()
 
         return obj
+
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        email = request.GET.get('email', None)
+        if email is None:
+             raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
+        if email.lower() != obj.email.lower():
+             raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
+        
+        return super(SchoolAppFormShowUpdateView,self).get(request,*args,**kwargs)
 
 
 class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
