@@ -84,8 +84,8 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
     
     amount = serializers.SerializerMethodField()
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
-    bid = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
-
+    bid = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False) 
+    payment = PaymentSerializer(required=False, many = True)
 
     def get_amount(self,obj):
         total = 0
@@ -96,7 +96,7 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
 
     class Meta:
         model = SchoolAppForm
-        fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount']
+        fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount','payment']
 
 class SchoolAppFormSerializer(serializers.ModelSerializer):
 
@@ -117,6 +117,13 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order.append({'name' : 'E-mail:', 'value' : obj.email})
         order.append({'name' : 'Телефон:', 'value' : obj.phone})
         order.append({'name' : 'Стоимость обучения:', 'value' : obj.flow.price})
+
+
+        if hasattr(obj,'payed_by'):
+            order.append({'name' : 'Оплачено на карту:', 'value' : obj.payed_outline})
+        if hasattr(obj,'payed_by'):
+            if obj.payed_by != '':
+                order.append({'name' : 'Оплачено от имени:', 'value' : obj.payed_by})
 
         return order
 

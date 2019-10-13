@@ -47,6 +47,7 @@ class SchoolAppForm(models.Model):
     bid = models.DateField()
     accepted = models.CharField(max_length=40)
     payed_by = models.CharField(max_length=240, blank=True, null=True)
+    payed_outline = models.CharField(max_length=10, blank=True, null=True)
     flow = models.ForeignKey(SchoolAppFlow)
     created = models.DateTimeField(auto_now_add=True)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
