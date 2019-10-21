@@ -91,7 +91,7 @@ class ServicesCustomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServicePage
-        fields = ['descr','price','expert','date_cnt','date','title','toss']
+        fields = ['descr','price','expert','date_cnt','date','title','toss','id','short_descr']
 
 class TermsOfServiceCustomSerializer(serializers.ModelSerializer):
 

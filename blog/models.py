@@ -238,6 +238,7 @@ class FormPage(AbstractEmailForm):
 
 class ServicePage(Page):
     descr = RichTextField(blank=True)
+    short_descr = RichTextField(blank=True)
     price = models.PositiveIntegerField(blank=True)
     expert = models.BooleanField(blank=True)
 
@@ -260,12 +261,14 @@ class ServicePage(Page):
     search_fields = Page.search_fields + [ # Inherit search_fields from Page
         index.SearchField('title', partial_match=True, boost=3),
         index.SearchField('descr'),
+        index.SearchField('short_descr'),
         index.FilterField('expert'),
     ]
 
     api_fields = [
         APIField('title'),
         APIField('descr'),
+        APIField('short_descr'),
         APIField('price'),
         APIField('expert'),
         APIField('date_cnt'),
@@ -273,6 +276,7 @@ class ServicePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('descr',classname='full'),
+        FieldPanel('short_descr', classname='full'),
         FieldPanel('price',classname='full'),
         FieldPanel('expert',classname='full'),
         FieldPanel('date_cnt',classname='full'),
@@ -304,5 +308,3 @@ class TermsOfServicePage(Page):
     @property
     def blog_page(self):
         return self.get_parent().specific
-
-
