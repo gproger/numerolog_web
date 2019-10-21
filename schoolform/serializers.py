@@ -117,6 +117,10 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order.append({'name' : 'E-mail:', 'value' : obj.email})
         order.append({'name' : 'Телефон:', 'value' : obj.phone})
         order.append({'name' : 'Стоимость обучения:', 'value' : obj.flow.price})
+        if hasattr(obj,'payed_outline'):
+            if obj.payed_outline > 0:
+                order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
+
 
         return order
 

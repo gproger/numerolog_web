@@ -48,9 +48,9 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
     def post(cls, request, format=None):
         ser = SchoolAppFormCreateSerializer(data=request.data)
         print(request.data)
-        if (ser.is_valid()):
+        if (ser.is_valid(raise_exception=True)):
             c_flow = SchoolAppFlow.objects.last()
-            objs = SchoolAppForm.objects.filter(flow=c_flow,email=request.data.get('email').lower())
+            objs = SchoolAppForm.objects.filter(flow=c_flow,email=request.data.get('email').strip().lower())
             if objs.count() > 0:
                 objs = objs.first()
                 ser = SchoolAppFormCreateSerializer(objs)
@@ -154,7 +154,8 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
         total = 0
         for k in inst.payment.all():
-            total += k.amount
+            if k.status == 'CONFIRMED':
+                total += k.amount
 
         if request.data['amount'] > inst.flow.price*100-total:
             return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)

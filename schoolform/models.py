@@ -47,6 +47,7 @@ class SchoolAppForm(models.Model):
     bid = models.DateField()
     accepted = models.CharField(max_length=40)
     payed_by = models.CharField(max_length=240, blank=True, null=True)
+    payed_outline = models.PositiveIntegerField(default=0, null=True, blank=True)
     flow = models.ForeignKey(SchoolAppFlow)
     created = models.DateTimeField(auto_now_add=True)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
@@ -90,7 +91,8 @@ class SchoolAppForm(models.Model):
 
     def get_payment_status(self):
         for payment in  self.payment.all():
-             MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(payment).save()
+             if payment.status != 'CONFIRMED':
+                 MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(payment).save()
 
     def cancel_payment(self):
 
@@ -105,4 +107,4 @@ class SchoolAppForm(models.Model):
         mail_user(self, "Школа неНумерологии",'emails/create_school_form',context=context)
 
     def __str__(self):
-        return "{} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.last_name, self.first_name)
+        return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
