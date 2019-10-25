@@ -1,0 +1,12 @@
+{% extends "emails/base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+{% blocktrans trimmed with user=user %}
+{{ user_name }}, Вы получили это письмо, так как вы зарегистрировались {{ user_status }}
+в школе неНумерологии Ольги Перцевой.
+{% endblocktrans %}
+<br>
+<br>
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends "emails/base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+{% blocktrans trimmed with user=user %}
+{{ user_name }}, Вы получили это письмо, в виду того, что вам доступен
+сервис оплаты ваших услуг через сайт Ольги Перцевой.
+Для просмотра текущих оплат и баланса вы можете перейти по ссылке:
+<a href="{{ url_account }}">Личный кабинет</a>
+Ваша ссылка для передачи клиенту для оплаты услуг:
+<a href="{{ pay_to }}">Оплата клиентом</a>
+{% endblocktrans %}
+<br>
+<br>
+{% endblock content %}

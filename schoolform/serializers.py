@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SchoolAppForm, SchoolAppFlow
+from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator
 from django_tinkoff_merchant.serializers import PaymentSerializer
 
 class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
@@ -14,6 +14,18 @@ class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
         model = SchoolAppForm
         exclude = ['flow','payment']
 
+
+class SchoolAppCuratorCreateSerializer(serializers.ModelSerializer):
+    bid = serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y'])
+    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+
+    def validate_email(self, value):
+        norm_value = value.lower()
+        return norm_value
+
+    class Meta:
+        model = SchoolAppCurator
+        exclude = ['flow']
 
 class SchoolAppFlowListSerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField()
@@ -117,17 +129,17 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order.append({'name' : 'E-mail:', 'value' : obj.email})
         order.append({'name' : 'Телефон:', 'value' : obj.phone})
         order.append({'name' : 'Стоимость обучения:', 'value' : obj.flow.price})
-        if hasattr(obj,'payed_outline'):
-            if obj.payed_outline > 0:
-                order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
+        #if hasattr(obj,'payed_outline'):
+        #    if obj.payed_outline > 0:
+        #        order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
 
 
 
-        if hasattr(obj,'payed_by'):
-            order.append({'name' : 'Оплачено на карту:', 'value' : obj.payed_outline})
-        if hasattr(obj,'payed_by'):
-            if obj.payed_by != '':
-                order.append({'name' : 'Оплачено от имени:', 'value' : obj.payed_by})
+        #if hasattr(obj,'payed_by'):
+        #    order.append({'name' : 'Оплачено на карту:', 'value' : obj.payed_outline})
+        #if hasattr(obj,'payed_by'):
+        #    if obj.payed_by != '':
+        #        order.append({'name' : 'Оплачено от имени:', 'value' : obj.payed_by})
 
         return order
 
