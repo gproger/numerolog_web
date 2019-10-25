@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
 import datetime
 import random
+from django_tinkoff_merchant.models import Payment
+from django_tinkoff_merchant.services import MerchantAPI
+
 
 class AppUser(models.Model):
 
@@ -12,6 +15,7 @@ class AppUser(models.Model):
     code = models.PositiveIntegerField()
     registered = models.BooleanField(default=False)
     valid = models.BooleanField(default=False)
+    phone = models.CharField(max_length=254, blank=True, null=True)
     code_time = models.DateTimeField(auto_now=False, blank=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
 
@@ -66,6 +70,8 @@ class AppOrder(models.Model):
     consult_at = models.DateTimeField()
     items = JSONField()
     slug = models.SlugField(unique=True, blank=True, null=True)
+    payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
+
 
     def save(self, *args, **kwargs):
         """ Add Slug creating/checking to save method.  """

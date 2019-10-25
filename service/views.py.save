@@ -1,0 +1,41 @@
+from django.shortcuts import render
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import PermissionDenied
+from django.contrib.auth import get_user_model
+from .serializers import ServiceExpertSerializer, ServiceClientSerializer
+from .models import ServiceExpert, ServiceClient
+
+class ServiceExpertListView(generics.ListCreateAPIView):
+#    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    queryset = ServiceExpert.objects.all()
+
+    serializer_class = ServiceExpertSerializer
+
+class ServiceClientListView(generics.ListAPIView):
+#    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+    serializer_class = ServiceClientSerializer
+
+    def get_queryset(self):
+        id = self.kwargs.get('id', None)
+        obj = None
+        if id is None:
+            return ServiceClient.objects.none()
+        try:
+            obj = ServiceExpert.objects.get(id=id)
+        except ServiceExpert.DoesNotExist:
+            return ServiceClient.objects.none()
+        return obj.clients
+
+class ServiceClientCreateView(generics.CreateAPIView):
+    
+    permission_classes = [AllowAny]
+    serializer_class = ServiceClientCreateSerializer
+
+    def get_o
+
+# Create your views here.

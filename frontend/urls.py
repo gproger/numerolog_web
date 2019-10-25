@@ -19,5 +19,8 @@ urls = [
     url(r'^options/',TemplateView.as_view(template_name='index.html')),
     url(r'^forgotten-password/',TemplateView.as_view(template_name='index.html')),
     url(r'^pay/*',TemplateView.as_view(template_name='index.html')),
+    url(r'^serv_pay/*',TemplateView.as_view(template_name='index.html')),
+    url(r'^expert/*',TemplateView.as_view(template_name='index.html')),
+    url(r'^admin/experts/*',TemplateView.as_view(template_name='index.html')),
   
 ]
