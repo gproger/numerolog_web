@@ -77,7 +77,7 @@ class SchoolAppForm(models.Model):
         ]
 
 
-        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, terminal=TinkoffSettings.get_school_terminal()) \
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Оплата обучения в школе неНумерологии Ольги Перцевой',terminal=TinkoffSettings.get_school_terminal()) \
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
