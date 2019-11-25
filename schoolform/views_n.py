@@ -4,12 +4,12 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 
-from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator
+from .models import SchoolAppForm, SchoolAppFlow
 
 from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
 from .serializers import SchoolAppFormCreateSerializer,SchoolAppFormFlowStudentsList
-from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializer, SchoolAppCuratorCreateSerializer
-from .serializers import SchoolPersCuratorSerializer
+from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializer
+from .serializers import SchoolAppFormValidateEmailSerializer
 from django.shortcuts import render
 
 # Create your views here.
@@ -40,6 +40,7 @@ class SchoolAppFormListView(generics.ListAPIView):
         serializer = SchoolAppFormFlowStudentsList(queryset, many=True)
         return Response(serializer.data)
 
+
 class SchoolAppFormCreateView(generics.CreateAPIView):
     serializer_class = SchoolAppFormCreateSerializer
     queryset = SchoolAppForm.objects.all()
@@ -58,24 +59,24 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                 objs = ser.save()
             return Response(ser.data)
 
-class SchoolAppCuratorCreateView(generics.CreateAPIView):
-    serializer_class = SchoolAppCuratorCreateSerializer
-    queryset = SchoolAppCurator.objects.all()
+class SchoolAppFormValidateEmailView(generics.CreateAPIView):
+    serializer_class = SchoolAppFormValidateEmailSerializer
+    queryset = SchoolAppFormValidateEmail.objects.all()
     permission_classes = [AllowAny]
 
     def post(cls, request, format=None):
-        ser = SchoolAppCuratorCreateSerializer(data=request.data)
-        print(request.data)
+        ser = SchoolAppFormValidateEmailSerializer(data=request.data)
         if (ser.is_valid(raise_exception=True)):
-            c_flow = SchoolAppFlow.objects.last()
-            objs = SchoolAppCurator.objects.filter(flow=c_flow,email=request.data.get('email').strip().lower())
+
+            objs = SchoolAppFormValidateEmail.objects.filter(email=request.data.get('email').strip().lower())
+
             if objs.count() > 0:
                 objs = objs.first()
-                ser = SchoolAppCuratorCreateSerializer(objs)
+                ser = SchoolAppFormValidateEmailSerializer(objs)
             else:
                 objs = ser.save()
-            return Response(ser.data)
 
+            return Response(ser.data)
 
 class SchoolAppFlowListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -165,7 +166,7 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
         
         if request.data['amount']  <= 0:
             return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
-        if request.data['amount'] % 100000 != 0:
+        if request.data['amount'] % 500000 != 0:
             return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
         if request.data['amount'] > inst.flow.price*100:
             return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
@@ -184,8 +185,3 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
         print(request.data)
         return super(SchoolAppFormShowUpdateURLView,self).put(request,*args,**kwargs)
-
-class SchoolPersCuratorPayView(generics.CreateAPIView):
-
-    serializer_class = SchoolPersCuratorSerializer
-    permission_classes = [AllowAny]

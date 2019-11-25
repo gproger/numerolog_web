@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm
+from .models import SchoolAppForm, SchoolAppFlow
 from django_tinkoff_merchant.serializers import PaymentSerializer
 
 class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
@@ -14,18 +14,16 @@ class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
         model = SchoolAppForm
         exclude = ['flow','payment']
 
-
-class SchoolAppCuratorCreateSerializer(serializers.ModelSerializer):
-    bid = serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y'])
-    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
-
-    def validate_email(self, value):
+class SchoolAppFormValidateEmailSerializer(serializers.ModelSerializer):
+    
+    def validate_email(self,value):
         norm_value = value.lower()
         return norm_value
 
     class Meta:
-        model = SchoolAppCurator
-        exclude = ['flow']
+        model = SchollAppFormEmail
+        exclude = ['code']
+
 
 class SchoolAppFlowListSerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField()
@@ -81,28 +79,12 @@ class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
     education_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
 
     toss = serializers.SerializerMethodField()
-    cur_toss = serializers.SerializerMethodField()
-    pers_toss = serializers.SerializerMethodField()
-
-
-    def get_cur_toss(self,obj):
-        lis = []
-        for x in obj.cur_toss.all():
-            lis.append({'id': x.id,'title' : x.title})
-        return lis
 
     def get_toss(self,obj):
         lis = []
         for x in obj.toss.all():
             lis.append({'id': x.id,'title' : x.title})
         return lis
-
-    def get_pers_toss(self, obj):
-        lis = []
-        for x in obj.pers_cur_toss.all():
-            lis.append({'id': x.id,'title' : x.title})
-        return lis
-
 
     class Meta:
         model = SchoolAppFlow
@@ -112,8 +94,8 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
     
     amount = serializers.SerializerMethodField()
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
-    bid = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False) 
-    payment = PaymentSerializer(required=False, many = True)
+    bid = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+
 
     def get_amount(self,obj):
         total = 0
@@ -124,7 +106,7 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
 
     class Meta:
         model = SchoolAppForm
-        fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount','payment']
+        fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount']
 
 class SchoolAppFormSerializer(serializers.ModelSerializer):
 
@@ -145,17 +127,10 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order.append({'name' : 'E-mail:', 'value' : obj.email})
         order.append({'name' : 'Телефон:', 'value' : obj.phone})
         order.append({'name' : 'Стоимость обучения:', 'value' : obj.flow.price})
-        #if hasattr(obj,'payed_outline'):
-        #    if obj.payed_outline > 0:
-        #        order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
+        if hasattr(obj,'payed_outline'):
+            if obj.payed_outline > 0:
+                order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
 
-
-
-        #if hasattr(obj,'payed_by'):
-        #    order.append({'name' : 'Оплачено на карту:', 'value' : obj.payed_outline})
-        #if hasattr(obj,'payed_by'):
-        #    if obj.payed_by != '':
-        #        order.append({'name' : 'Оплачено от имени:', 'value' : obj.payed_by})
 
         return order
 
@@ -173,15 +148,3 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         model = SchoolAppForm
         fields = ['order','payment','amount']
 
-
-class SchoolPersCuratorSerializer(serializers.ModelSerializer):
-
-    payment = serializers.SerializerMethodField()
-
-    def get_payment(self, obj):
-        pay = obj.payment.all().first().payment_url
-        return pay
-
-    class Meta:
-        model = SchoolAppPersCuratorForm
-        exclude = ['bid','flow']
