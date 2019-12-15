@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import PostPage
 from .models import ServicePage
+from .models import SchoolPublicPage
 from taggit.models import Tag
 from .models import TermsOfServicePage
 from wagtail.images.models import Image
@@ -98,3 +99,11 @@ class TermsOfServiceCustomSerializer(serializers.ModelSerializer):
     class Meta:
         model = TermsOfServicePage
         fields = ['id','descr','date','title']
+
+
+class SchoolPublicCustomSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SchoolPublicPage
+        fields = ['id','html','date','title']
+

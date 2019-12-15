@@ -3,9 +3,10 @@ from .serializers import PostPageCustomSerializer
 from .serializers import ServicesCustomSerializer
 from .serializers import TermsOfServiceCustomSerializer
 from .serializers import TermsOfServiceCustomShortSerializer
+from .serializers import SchoolPublicCustomSerializer
 from rest_framework import generics
 from rest_framework import permissions
-from .models import PostPage, ServicePage, TermsOfServicePage
+from .models import PostPage, ServicePage, TermsOfServicePage, SchoolPublicPage
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -64,6 +65,24 @@ class TermsOfServiceListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = TermsOfServicePage.objects.all()
 
-    
+
+class SchoolPageView(generics.RetrieveAPIView):
+    serializer_class = SchoolPublicCustomSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        queryset = SchoolPublicPage.objects.all()
+        return queryset
+
+    def get_object(self):
+        try:
+            return SchoolPublicPage.objects.all().last()
+        except SchoolPublicPage.DoesNotExist:
+            raise Http404
+            
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 
 # Create your views here.
