@@ -36,7 +36,7 @@ class SchoolAppFlowListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SchoolAppFlow
-        fields = ['state','created','flow']
+        fields = ['state','created','flow','flow_name','id']
 
 
 class SchoolAppFlowSerializer(serializers.ModelSerializer):
@@ -140,6 +140,7 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
             return order
         order.append({'name' : 'Заказ №', 'value' : obj.id})
         order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow})
+        order.append({'name' : 'Курс обучения:', 'value' : obj.flow.flow_name})
         order.append({'name' : 'Фамилия:', 'value' : obj.last_name})
         order.append({'name' : 'Имя:', 'value' : obj.first_name})
         order.append({'name' : 'E-mail:', 'value' : obj.email})

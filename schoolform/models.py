@@ -18,6 +18,7 @@ class SchoolAppFlow(models.Model):
     )
 
     flow = models.PositiveIntegerField()
+    flow_name = models.CharField(max_length=255, null=True, blank=True)
     state = models.IntegerField(choices=STATES, default=0)
     created = models.DateTimeField(auto_now_add=True)
 #   education price

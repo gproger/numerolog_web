@@ -10,7 +10,7 @@ from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
 from .serializers import SchoolAppFormCreateSerializer,SchoolAppFormFlowStudentsList
 from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializer, SchoolAppCuratorCreateSerializer
 from .serializers import SchoolPersCuratorSerializer
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 
@@ -29,7 +29,7 @@ class SchoolAppFormListView(generics.ListAPIView):
                 return None
         else:
             try:
-                flow_num = SchoolAppFlow.objects.get(flow=flow_num)
+                flow_num = SchoolAppFlow.objects.get(id=flow_num)
             except SchoolAppFlow.DoesNotExist:
                 return None
 
@@ -49,7 +49,11 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
         ser = SchoolAppFormCreateSerializer(data=request.data)
         print(request.data)
         if (ser.is_valid(raise_exception=True)):
-            c_flow = SchoolAppFlow.objects.last()
+            cc_flow = request.data.get('flow_id')
+            c_flow = get_object_or_404(SchoolAppFlow,id=cc_flow)
+            if c_flow.state != 1:
+                raise PermissionDenied({"message":"Запись на этот поток/курс не активна" })
+                 
             objs = SchoolAppForm.objects.filter(flow=c_flow,email=request.data.get('email').strip().lower())
             if objs.count() > 0:
                 objs = objs.first()
@@ -67,7 +71,10 @@ class SchoolAppCuratorCreateView(generics.CreateAPIView):
         ser = SchoolAppCuratorCreateSerializer(data=request.data)
         print(request.data)
         if (ser.is_valid(raise_exception=True)):
-            c_flow = SchoolAppFlow.objects.last()
+            cc_flow = request.data.get('flow_id')
+            c_flow = get_object_or_404(SchoolAppFlow,id=cc_flow)
+            if c_flow.state != 1:
+                raise PermissionDenied({"message":"Запись на этот поток/курс не активна" })
             objs = SchoolAppCurator.objects.filter(flow=c_flow,email=request.data.get('email').strip().lower())
             if objs.count() > 0:
                 objs = objs.first()
@@ -97,7 +104,7 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
         if id is None:
             return SchoolAppFlow.objects.none()
         try:
-            obj = SchoolAppFlow.objects.get(flow=id)
+            obj = SchoolAppFlow.objects.get(pk=id)
         except SchoolAppFlow.DoesNotExist:
             obj = None
 
