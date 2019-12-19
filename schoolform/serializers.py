@@ -12,7 +12,7 @@ class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SchoolAppForm
-        exclude = ['flow','payment']
+        exclude = ['payment']
 
 
 class SchoolAppCuratorCreateSerializer(serializers.ModelSerializer):

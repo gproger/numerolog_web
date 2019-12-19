@@ -174,7 +174,7 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
             return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
         if request.data['amount'] % 100000 != 0:
             return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
-        if request.data['amount'] > inst.flow.price*100:
+        if request.data['amount'] > inst.price*100:
             return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -183,7 +183,7 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
             if k.status == 'CONFIRMED':
                 total += k.amount
 
-        if request.data['amount'] > inst.flow.price*100-total:
+        if request.data['amount'] > inst.price*100-total:
             return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
         
         inst.create_payment(amount=request.data['amount'])

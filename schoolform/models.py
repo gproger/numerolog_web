@@ -57,15 +57,13 @@ class SchoolAppForm(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
+    price = models.PositiveIntegerField(default = 0)
 
     def save(self, *args, **kwargs):
-        c_flow = SchoolAppFlow.objects.all().last()
-        flow_ind = kwargs.pop('flow',None)
-        if flow_ind is not None:
-            c_flow=SchoolAppFlow.objects.get(flow=flow_ind)
 
-        self.flow = c_flow
         new = self.pk is None
+        if new:
+            self.price = self.flow.price
         super(SchoolAppForm, self).save(*args, **kwargs)
         if new:
             self.send_mail_notification()
@@ -73,7 +71,7 @@ class SchoolAppForm(models.Model):
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)
         order_plural="Школа "
-        amount = self.flow.price*100
+        amount = self.price*100
         if 'amount' in kwargs:
             amount = kwargs.get('amount')
 
@@ -133,12 +131,7 @@ class SchoolAppCurator(models.Model):
 
 
     def save(self, *args, **kwargs):
-        c_flow = SchoolAppFlow.objects.all().last()
-        flow_ind = kwargs.pop('flow',None)
-        if flow_ind is not None:
-            c_flow=SchoolAppFlow.objects.get(flow=flow_ind)
 
-        self.flow = c_flow
         new = self.pk is None
         super(SchoolAppCurator, self).save(*args, **kwargs)
         if new:
@@ -186,12 +179,7 @@ class SchoolAppWorker(models.Model):
     curator = models.NullBooleanField()
 
     def save(self, *args, **kwargs):
-        c_flow = SchoolAppWorker.objects.all().last()
-        flow_ind = kwargs.pop('flow',None)
-        if flow_ind is not None:
-            c_flow=SchoolAppFlow.objects.get(flow=flow_ind)
 
-        self.flow = c_flow
         new = self.pk is None
         super(SchoolAppWorker, self).save(*args, **kwargs)
         if new:
@@ -234,13 +222,7 @@ class SchoolAppPersCuratorForm(models.Model):
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        c_flow = SchoolAppFlow.objects.all().last()
-        flow_ind = kwargs.pop('flow',None)
 
-        if flow_ind is not None:
-            c_flow=SchoolAppFlow.objects.get(flow=flow_ind)
-
-        self.flow = c_flow
         new = self.pk is None
         super(SchoolAppPersCuratorForm, self).save(*args, **kwargs)
         if new:
