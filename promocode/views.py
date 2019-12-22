@@ -8,7 +8,11 @@ from .serializers import PromoCodesSerializer
 from .models import PromoCode
 from schoolform.models import SchoolAppFlow
 # Create your views here.
-
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+import json
 
 class PromoCodesListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -35,3 +39,14 @@ class PromoCodesListView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = PromoCodesSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class PromoCodesCreate(LoginRequiredMixin, View):
+
+
+    def post(self, request, *args, **kwargs):
+        print(request)
+        json_data = json.loads(request.body)
+        print(json_data)
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
