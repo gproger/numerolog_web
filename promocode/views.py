@@ -47,21 +47,19 @@ class PromoCodesCreate(LoginRequiredMixin, View):
 
 
     def post(self, request, *args, **kwargs):
-        print(request)
         json_data = json.loads(request.body.decode('utf-8'))
-        print(json_data)
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
 
-        if json_data['form']['codes_cnt'] <= 0:
+        if int(json_data['form']['codes_cnt']) <= 0:
             return JsonResponse({'desc' : 'Некорректное число кодов'}, status=400)
 
-        if json_data['form']['elapsed_count'] <= 0:
+        if int(json_data['form']['elapsed_count']) <= 0:
             return JsonResponse({'desc' : 'Некорректное действия кода'}, status=400)
 
-        flow = get_object_or_404(SchoolAppFlow,json_data['form']['flow'])
+        flow = get_object_or_404(SchoolAppFlow,pk=json_data['form']['flow'])
 
-        for i in range(0,json['form']['codes_cnt']):
+        for i in range(0,int(json_data['form']['codes_cnt'])):
             code = get_random_string(12)
             pr = PromoCode()
             pr.code = code
@@ -73,3 +71,19 @@ class PromoCodesCreate(LoginRequiredMixin, View):
             pr.save()
 
         return JsonResponse({'data' : 'created'}, status=201)
+
+
+class PromoCodesTest(View):
+
+
+    def post(self, request, *args, **kwargs):
+        print(request)
+        json_data = json.loads(request.body.decode('utf-8'))
+
+        flow = get_object_or_404(SchoolAppFlow,pk=json_data['flow'])
+        code = PromoCode.objects.filter(flow=flow,code=json_data['code'])
+
+        if code.count() == 0:
+             return JsonResponse({'code': 'failed'}, status=404)
+        else:
+             return JsonResponse({'code': 'success','discount':code[0].discount,'is_percent':code[0].is_percent}, status=200)
