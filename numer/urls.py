@@ -34,6 +34,7 @@ from comments.urls import urls as wgtail_post_comments_api
 from likes.urls import urls as wgtail_likes_api
 from app.urls import urls as numer_app_api
 from service.urls import urls as numer_service_api
+from promocode.urls import urls as codes_api
 
 from misago.users.forms.auth import AdminAuthenticationForm
 from blog.api import api_router
@@ -77,6 +78,7 @@ urlpatterns = [
     url(r'^', include(wgtail_likes_api)),
     url(r'^', include(tinkoff_urls)),
     url(r'^', include(numer_service_api)),
+    url(r'^', include(codes_api)),
     url(r'^', include(wagtail_urls)),
 
 ]
