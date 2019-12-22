@@ -8,6 +8,11 @@ from django_tinkoff_merchant.models import TinkoffSettings
 from emails.emails import mail_user
 # Create your models here.
 
+class PriceField(models.Model):
+    price = models.PositiveIntegerField(default=0)
+    currency = models.CharField(default='RUB', max_length=7)
+    discount = models.PositiveIntegerField(default=0)
+
 class SchoolAppFlow(models.Model):
     STATES = (
         (0, "created"),
@@ -37,6 +42,8 @@ class SchoolAppFlow(models.Model):
 
     cur_toss = models.ManyToManyField(TermsOfServicePage, null=True, blank=True, related_name='cur_toss+')
     pers_cur_toss = models.ManyToManyField(TermsOfServicePage, null=True, blank=True, related_name='pers_toss+')
+    avail_by_code = models.NullBooleanField(default=False, blank=True, null=True)
+    by_code_hint = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.flow)
@@ -58,6 +65,7 @@ class SchoolAppForm(models.Model):
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
     price = models.PositiveIntegerField(default = 0)
+    price_f = models.OneToOneField(PriceField, null=True, blank=True)
 
     def save(self, *args, **kwargs):
 
