@@ -46,7 +46,7 @@ class PromoCodesCreate(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         print(request)
-        json_data = json.loads(request.body)
+        json_data = json.loads(request.body.decode('utf-8'))
         print(json_data)
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
