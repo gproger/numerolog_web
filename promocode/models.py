@@ -6,8 +6,8 @@ from schoolform.models import SchoolAppFlow, PriceField
 
 class PromoCode(models.Model):
     code = models.CharField(max_length=16)
-    emitter = models.ForeignKey(get_user_model())
-    referal = models.ForeignKey(get_user_model(), blank=True, null=True)
+    emitter = models.ForeignKey(get_user_model(), related_name="selfCodes")
+    referal = models.ForeignKey(get_user_model(), blank=True, null=True, related_name="refCodes")
     discount = models.PositiveIntegerField(default=0)
     is_percent = models.NullBooleanField(default=False)
     elapsed_count = models.PositiveIntegerField(default=1)
