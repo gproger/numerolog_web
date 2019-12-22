@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import PromoCode
 
-class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
+class PromoCodesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PromoCode
