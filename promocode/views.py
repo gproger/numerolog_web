@@ -81,7 +81,7 @@ class PromoCodesTest(View):
         json_data = json.loads(request.body.decode('utf-8'))
 
         flow = get_object_or_404(SchoolAppFlow,pk=json_data['flow'])
-        code = PromoCode.objects.filter(flow=flow,code=json_data['code'])
+        code = PromoCode.objects.filter(flow=flow,code=json_data['code'], elapsed_count__gte=1)
 
         if code.count() == 0:
              return JsonResponse({'code': 'failed'}, status=404)
