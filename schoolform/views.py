@@ -65,7 +65,7 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
 
             if c_flow.avail_by_code:
                 if code.count() <= 0:
-                    PermissionDenied({"message":
+                    raise PermissionDenied({"message":
                                      "Код для записи на курс не корректен" })
 
 
@@ -84,9 +84,9 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                         pr_field.discount = pr_field.price*code_item.discount/100
                     else:
                         pr_field.discount = code_item.discount
-                    objs.price_f = pr_field
                     objs.price = pr_field.price - pr_field.discount
                     pr_field.save()
+                    objs.price_f = pr_field
                     objs.save()
                     code_item.price.add(pr_field)
                     code_item.elapsed_count = code_item.elapsed_count - 1
