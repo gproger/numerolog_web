@@ -80,17 +80,17 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                     code_item = code[0]
                     pr_field = PriceField()
                     pr_field.price = objs.price
-                    if code.is_percent:
-                        pr_field.discount = pr_field.price*code.discount/100
+                    if code_item.is_percent:
+                        pr_field.discount = pr_field.price*code_item.discount/100
                     else:
-                        pr_field.discount = code.discount
+                        pr_field.discount = code_item.discount
                     objs.price_f = pr_field
                     objs.price = pr_field.price - pr_field.discount
                     objs.save()
                     pr_field.save()
-                    code.price.add(pr_field)
-                    code.elapsed_count = code.elapsed_count - 1
-                    code.save()
+                    code_item.price.add(pr_field)
+                    code_item.elapsed_count = code_item.elapsed_count - 1
+                    code_item.save()
 
 
             return Response(ser.data)
