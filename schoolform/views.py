@@ -86,8 +86,8 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                         pr_field.discount = code_item.discount
                     objs.price_f = pr_field
                     objs.price = pr_field.price - pr_field.discount
-                    objs.save()
                     pr_field.save()
+                    objs.save()
                     code_item.price.add(pr_field)
                     code_item.elapsed_count = code_item.elapsed_count - 1
                     code_item.save()
