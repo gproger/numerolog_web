@@ -4,13 +4,14 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 
-from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator
+from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, PriceField
 
 from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
 from .serializers import SchoolAppFormCreateSerializer,SchoolAppFormFlowStudentsList
 from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializer, SchoolAppCuratorCreateSerializer
 from .serializers import SchoolPersCuratorSerializer
 from django.shortcuts import render, get_object_or_404
+from promocode.models import PromoCode
 
 # Create your views here.
 
@@ -50,16 +51,48 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
         print(request.data)
         if (ser.is_valid(raise_exception=True)):
             cc_flow = request.data.get('flow_id')
+            cc_code = request.data.get('code', None)
             c_flow = get_object_or_404(SchoolAppFlow,id=cc_flow)
             if c_flow.state != 1:
                 raise PermissionDenied({"message":"Запись на этот поток/курс не активна" })
-                 
+
+            code = None
+
+            if cc_code is not None:
+                code = PromoCode.objects.filter(flow=c_flow,
+                                                code=cc_code,
+                                                elapsed_count__gte=1)
+
+            if c_flow.avail_by_code:
+                if code.count() <= 0:
+                    PermissionDenied({"message":
+                                     "Код для записи на курс не корректен" })
+
+
+
             objs = SchoolAppForm.objects.filter(flow=c_flow,email=request.data.get('email').strip().lower())
             if objs.count() > 0:
                 objs = objs.first()
                 ser = SchoolAppFormCreateSerializer(objs)
             else:
                 objs = ser.save()
+                if code is not None:
+                    code_item = code[0]
+                    pr_field = PriceField()
+                    pr_field.price = ser.price
+                    if code.is_percent:
+                        pr_field.discount = pr_field.price*code.discount/100
+                    else:
+                        pr_field.discount = code.discount
+                    ser.price_f = pr_field
+                    ser.price = pr_field.price - pr_field.discount
+                    ser.save()
+                    pr_field.save()
+                    code.price.add(pr_field)
+                    code.elapsed_count = code.elapsed_count - 1
+                    code.save()
+                    
+
             return Response(ser.data)
 
 class SchoolAppCuratorCreateView(generics.CreateAPIView):
@@ -143,7 +176,7 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
         if email.lower() != obj.email.lower():
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
-        
+
         return super(SchoolAppFormShowUpdateView,self).get(request,*args,**kwargs)
 
 
@@ -169,7 +202,7 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         inst = self.get_object()
-        
+
         if request.data['amount']  <= 0:
             return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
         if request.data['amount'] % 100000 != 0:
@@ -185,7 +218,7 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
         if request.data['amount'] > inst.price*100-total:
             return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
-        
+
         inst.create_payment(amount=request.data['amount'])
         inst.save()
 

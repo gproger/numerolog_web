@@ -12,4 +12,4 @@ class PromoCode(models.Model):
     is_percent = models.NullBooleanField(default=False)
     elapsed_count = models.PositiveIntegerField(default=1)
     flow = models.ForeignKey(SchoolAppFlow, null=True, blank=True)
-    price = models.OneToOneField(PriceField, null=True, blank=True)
+    price = models.ManyToManyField(PriceField, null=True, blank=True)
