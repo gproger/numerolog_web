@@ -79,7 +79,7 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                 if code is not None:
                     code_item = code[0]
                     pr_field = PriceField()
-                    pr_field.price = ser.price
+                    pr_field.price = objs.price
                     if code.is_percent:
                         pr_field.discount = pr_field.price*code.discount/100
                     else:
