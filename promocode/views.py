@@ -59,8 +59,13 @@ class PromoCodesCreate(LoginRequiredMixin, View):
 
         flow = get_object_or_404(SchoolAppFlow,pk=json_data['form']['flow'])
 
+        print(json_data)
+
         for i in range(0,int(json_data['form']['codes_cnt'])):
             code = get_random_string(12)
+            while PromoCode.objects.filter(flow=flow,code=code).count() > 0:
+                code = get_random_string(12)
+
             pr = PromoCode()
             pr.code = code
             pr.discount = json_data['form']['discount']
