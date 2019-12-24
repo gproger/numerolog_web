@@ -109,10 +109,10 @@ class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
-    
+
     amount = serializers.SerializerMethodField()
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
-    bid = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False) 
+    bid = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
     payment = PaymentSerializer(required=False, many = True)
 
     def get_amount(self,obj):
@@ -145,7 +145,7 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order.append({'name' : 'Имя:', 'value' : obj.first_name})
         order.append({'name' : 'E-mail:', 'value' : obj.email})
         order.append({'name' : 'Телефон:', 'value' : obj.phone})
-        order.append({'name' : 'Стоимость обучения:', 'value' : obj.flow.price})
+        order.append({'name' : 'Стоимость обучения:', 'value' : obj.price})
         #if hasattr(obj,'payed_outline'):
         #    if obj.payed_outline > 0:
         #        order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
