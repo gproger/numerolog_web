@@ -114,6 +114,27 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
     bid = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
     payment = PaymentSerializer(required=False, many = True)
+    price_f = serializers.SerializerMethodField()
+    promocode = serializers.SerializerMethodField()
+
+    def get_price_f(self, obj):
+        if hasattr( obj, 'price_f'):
+            if obj.price_f is not None:
+                return obj.price_f.price
+            else:
+                return obj.price
+        else:
+            return obj.price
+
+    def get_promocode(self, obj):
+        if hasattr( obj, 'price_f'):
+            if obj.price_f is not None:
+                return obj.price_f.promocode_set.all()[0].code
+            else:
+                return ''
+        else:
+            return ''
+
 
     def get_amount(self,obj):
         total = 0
@@ -124,7 +145,7 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
 
     class Meta:
         model = SchoolAppForm
-        fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount','payment']
+        fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount','payment','price','price_f','promocode']
 
 class SchoolAppFormSerializer(serializers.ModelSerializer):
 

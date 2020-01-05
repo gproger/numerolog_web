@@ -1,6 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 
@@ -17,7 +17,7 @@ from promocode.models import PromoCode
 
 
 class SchoolAppFormListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
     serializer_class = SchoolAppFormSerializer
 
     def get_queryset(self):
@@ -118,7 +118,7 @@ class SchoolAppCuratorCreateView(generics.CreateAPIView):
 
 
 class SchoolAppFlowListView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
     serializer_class = SchoolAppFlowListSerializer
 
     def list(self, request):
@@ -127,7 +127,7 @@ class SchoolAppFlowListView(generics.ListCreateAPIView):
         return Response(serializer.data)
 
 class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
     serializer_class = SchoolAppFlowSerializer
 
     def get_object(self):
