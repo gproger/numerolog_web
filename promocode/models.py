@@ -13,3 +13,4 @@ class PromoCode(models.Model):
     elapsed_count = models.PositiveIntegerField(default=1)
     flow = models.ForeignKey(SchoolAppFlow, null=True, blank=True)
     price = models.ManyToManyField(PriceField, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)

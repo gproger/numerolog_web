@@ -13,7 +13,7 @@ def flow_auth(obj):
 @admin.register(PromoCode)
 class PromoCodeAdmin(admin.ModelAdmin):
     list_display = [flow_name, flow_auth, 'code', 'is_percent', 'discount',
-                    'elapsed_count', 'emitter']
+                    'elapsed_count', 'emitter','created_at']
     list_filter = ['emitter', 'is_percent',
                     'flow__flow_name', 'flow__avail_by_code', 'discount',
-                    'elapsed_count']
+                    'elapsed_count','created_at']

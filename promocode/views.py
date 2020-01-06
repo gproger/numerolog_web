@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 
 from .serializers import PromoCodesSerializer
@@ -17,7 +17,7 @@ from django.utils.crypto import get_random_string
 import json
 
 class PromoCodesListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
     serializer_class = PromoCodesSerializer
 
 
@@ -48,7 +48,7 @@ class PromoCodesCreate(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         json_data = json.loads(request.body.decode('utf-8'))
-        if not request.user.is_authenticated:
+        if not request.user.is_staff:
             return HttpResponseForbidden()
 
         if int(json_data['form']['codes_cnt']) <= 0:
