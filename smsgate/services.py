@@ -47,9 +47,9 @@ class SendSMSAPI(object):
         res = smsc.send_sms(phones=auth_obj.phone,message=auth_obj.text)
         if res[1] > "0":
             auth_obj.status = 1
+            auth_obj.save()
         else:
             auth_obj.status = 0
-        auth_obj.save()
         return {'result' : auth_obj.status}
 
     def test_verify_sms_code(self, phone, code):
