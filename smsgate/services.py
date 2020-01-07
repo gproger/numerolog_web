@@ -56,9 +56,11 @@ class SendSMSAPI(object):
         else:
             desc_text = ''
             if res[1][1:] == '7':
-                desc_text = "Неправльный формат номера телефона"
+                desc_text = "Неправильный формат номера телефона"
             if res[1][1:] == '8':
                 desc_text = "Сообщение не может быть доставлено"
+            if res[1][1:] == '6':
+                desc_text = "Сообщение не может быть доставлено(запрещена отправка)"
 
             auth_obj.status = 0
             return {'result' : auth_obj.status, 'desc' : desc_text}
