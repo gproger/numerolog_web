@@ -250,6 +250,8 @@ INSTALLED_APPS = [
     'django_tinkoff_merchant',
     'emails',
     'service',
+    'promocode',
+    'smsgate',
 ]
 
 if DEBUG:
