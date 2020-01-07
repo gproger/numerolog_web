@@ -26,7 +26,7 @@ class SendSMSAPI(object):
 
     def send_verify_sms(self, phone):
         # first - check if sms was sended for this phones
-
+        phone = phone.replace(" ","")
         auth_obj = PhoneAuthSMS.objects.filter(phone=phone)
         if auth_obj.count() != 0:
             # get first object from queryset
@@ -53,7 +53,7 @@ class SendSMSAPI(object):
         return {'result' : auth_obj.status}
 
     def test_verify_sms_code(self, phone, code):
-
+        phone = phone.replace(" ","")
         auth_obj = PhoneAuthSMS.objects.filter(phone=phone)
         if auth_obj.count() == 0:
             return {'desc' : 'SMS not sended', 'result' : -1}
