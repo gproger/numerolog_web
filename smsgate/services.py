@@ -8,6 +8,7 @@ from django.utils.crypto import get_random_string
 from .smsc_api import SMSC
 
 from datetime import datetime
+import random
 
 from django.template import Template, Context
 
@@ -40,9 +41,10 @@ class SendSMSAPI(object):
             auth_obj.phone = phone
 
         auth_obj.code = random.randrange(100000,1000000,1)
-        auth_obj.text = get_auth_phone_text(auth_obj.code)
+        auth_obj.text = self.get_auth_phone_text(auth_obj.code)
         print(auth_obj.text)
-        res = SMSM.send_sms(phones=[auth_obj.phone],message=auth_obj.text)
+        smsc = SMSC()
+        res = smsc.send_sms(phones=[auth_obj.phone],message=auth_obj.text)
         if res[1] > "0":
             auth_obj.status = 1
         else:
@@ -61,5 +63,3 @@ class SendSMSAPI(object):
             return {desc : 'Code OK', result : 1}
         else:
             return {desc : 'Code Fail', result : 0}
-
-        
