@@ -35,7 +35,7 @@ class SendSMSAPI(object):
             dtime = datetime.utcnow()
             dtime = dtime - auth_obj.sended_at
             if dtime.seconds < 300:
-                return {desc : 'Wait few seconds', result : -1}
+                return {'desc' : 'Wait few seconds', 'result' : -1}
         else:
             auth_obj = PhoneAuthSMS()
             auth_obj.phone = phone
@@ -44,22 +44,22 @@ class SendSMSAPI(object):
         auth_obj.text = self.get_auth_phone_text(auth_obj.code)
         print(auth_obj.text)
         smsc = SMSC()
-        res = smsc.send_sms(phones=[auth_obj.phone],message=auth_obj.text)
+        res = smsc.send_sms(phones=auth_obj.phone,message=auth_obj.text)
         if res[1] > "0":
             auth_obj.status = 1
         else:
             auth_obj.status = 0
         auth_obj.save()
-        return {result : auth_obj.status}
+        return {'result' : auth_obj.status}
 
     def test_verify_sms_code(self, phone, code):
 
         auth_obj = PhoneAuthSMS.objects.filter(phone=phone)
         if auth_obj.count() == 0:
-            return {desc : 'SMS not sended', result : -1}
+            return {'desc' : 'SMS not sended', 'result' : -1}
 
         auth_obj = auth_obj.first()
         if int(code) == int(auth_obj.code):
-            return {desc : 'Code OK', result : 1}
+            return {'desc' : 'Code OK', 'result' : 1}
         else:
-            return {desc : 'Code Fail', result : 0}
+            return {'desc' : 'Code Fail', 'result' : 0}
