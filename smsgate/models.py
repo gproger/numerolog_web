@@ -22,7 +22,7 @@ class SendedSMS(models.Model):
 
     def get_time_delta(self):
         now = datetime.datetime.utcnow().replace(tzinfo=utc)
-        return (now - self.created_at).total_seconds()
+        return (now - self.sended_at).total_seconds()
 
 class PhoneAuthSMS(SendedSMS):
     code = models.PositiveIntegerField()
