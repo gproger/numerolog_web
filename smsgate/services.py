@@ -52,9 +52,17 @@ class SendSMSAPI(object):
         if res[1] > "0":
             auth_obj.status = 1
             auth_obj.save()
+            return {'result' : auth_obj.status}
         else:
+            desc_text = ''
+            if res[1][1:] == '7':
+                desc_text = "Неправльный формат номера телефона"
+            if res[1][1:] == '8':
+                desc_text = "Сообщение не может быть доставлено"
+
             auth_obj.status = 0
-        return {'result' : auth_obj.status}
+            return {'result' : auth_obj.status, 'desc' : desc_text}
+
 
     def test_verify_sms_code(self, phone, code):
         phone = phone.replace(" ","")
