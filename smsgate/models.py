@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+import datetime
+from django.utils.timezone import utc
 # Create your models here.
 
 class SMSSettings(models.Model):
@@ -18,6 +20,9 @@ class SendedSMS(models.Model):
     debug_result = models.TextField(verbose_name=_("Debug message result from API"))
     status = models.PositiveSmallIntegerField(default=0)
 
+    def get_time_delta(self):
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        return (now - self.created_at).total_seconds()
 
 class PhoneAuthSMS(SendedSMS):
     code = models.PositiveIntegerField()
