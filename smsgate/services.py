@@ -80,3 +80,33 @@ class SendSMSAPI(object):
             return {'desc' : 'Code OK', 'result' : 1}
         else:
             return {'desc' : 'Code Fail', 'result' : 0}
+
+    def send_sms(self, phone, message):
+        phone = phone.replace(" ","")
+        phone = phone.replace("(","")
+        phone = phone.replace(")","")
+        phone = phone.replace("-","")
+
+        sms = SendedSMS()
+        sms.phone = phone
+        sms.text = message
+
+        smsc = SMSC()
+        res = smsc.send_sms(phones=sms.phone,message=sms.text)
+
+        if res[1] > "0":
+            sms.status = 1
+            sms.save()
+            return {'result' : sms.status}
+        else:
+            desc_text = ''
+            if res[1][1:] == '7':
+                desc_text = "Неправильный формат номера телефона"
+            if res[1][1:] == '8':
+                desc_text = "Сообщение не может быть доставлено"
+            if res[1][1:] == '6':
+                desc_text = "Сообщение не может быть доставлено(запрещена отправка)"
+
+            sms.status = 0
+            sms.save()
+            return {'result' : sms.status, 'desc' : desc_text}
