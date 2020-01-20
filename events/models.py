@@ -118,3 +118,7 @@ class Ticket(models.Model):
 #            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
 #            self.eventticket.save()
             self.send_new_ticket_payurl()
+
+    def check_full_payment(self):
+        print(self)
+        print('full check payment')
