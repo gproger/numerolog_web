@@ -13,6 +13,7 @@ from .serializers import EventTicketTemplateSerializer
 from .serializers import TicketListSerializer
 from .serializers import TicketCreateSerializer
 from .serializers import EventTicketSaleSerializer
+from .serializers import TicketAppFormSerializer
 # Create your views here.
 
 
@@ -148,3 +149,34 @@ class TicketAddView(generics.CreateAPIView):
                 code_item.save()
 
             return Response(ser.data)
+
+
+class TicketShowUpdateView(generics.RetrieveAPIView):
+
+    serializer_class = TicketAppFormSerializer
+    permisiion_classes = [AllowAny]
+
+    def get_object(self):
+
+        id = self.kwargs.get('id', None)
+
+        if id is None:
+            return Ticket.objects.none()
+        try:
+            obj = Ticket.objects.get(pk=id)
+        except Ticket.DoesNotExist:
+            obj = None
+
+        obj.get_payment_status()
+
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        email = request.GET.get('email', None)
+        if email is None:
+             raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
+        if email.lower() != obj.email.lower():
+             raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
+
+        return super(TicketShowUpdateView,self).get(request,*args,**kwargs)
