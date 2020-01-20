@@ -13,13 +13,6 @@ class OfflineEventSerializer(serializers.ModelSerializer):
     address = serializers.CharField(required=False)
     address_url = serializers.URLField(required=False)
     toss = serializers.SerializerMethodField()
-    cur_toss = serializers.SerializerMethodField()
-
-    def get_cur_toss(self,obj):
-        lis = []
-        for x in obj.cur_toss.all():
-            lis.append({'id': x.id,'title' : x.title})
-        return lis
 
     def get_toss(self,obj):
         lis = []
