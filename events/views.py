@@ -180,3 +180,48 @@ class TicketShowUpdateView(generics.RetrieveAPIView):
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
 
         return super(TicketShowUpdateView,self).get(request,*args,**kwargs)
+
+
+class TicketShowUpdateURLView(generics.UpdateAPIView):
+
+    serializer_class = TicketAppFormSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        id = self.kwargs.get('id', None)
+        obj = None
+        if id is None:
+            return Ticket.objects.none()
+        try:
+            obj = Ticket.objects.get(pk=id)
+        except Ticket.DoesNotExist:
+            obj = None
+
+#        obj.create_payment()
+
+        return obj
+
+    def put(self, request, *args, **kwargs):
+        inst = self.get_object()
+
+        if request.data['amount']  <= 0:
+            return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
+        if request.data['amount'] % 10000 != 0:
+            return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
+        if request.data['amount'] > inst.price*100:
+            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
+
+
+        total = 0
+        for k in inst.payment.all():
+            if k.status == 'CONFIRMED':
+                total += k.amount
+
+        if request.data['amount'] > inst.price*100-total:
+            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
+
+        inst.create_payment(amount=request.data['amount'])
+        inst.save()
+
+        print(request.data)
+        return super(TicketShowUpdateURLView,self).put(request,*args,**kwargs)
