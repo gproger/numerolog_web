@@ -9,6 +9,8 @@ class OfflineEventSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'],required=False)
     ticket_sale_start = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'],required=False)
     ticket_sale_stop = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'],required=False)
+    description = serializers.CharField(required=False)
+    address_url = serializers.URLField(required=False)
     toss = serializers.SerializerMethodField()
     cur_toss = serializers.SerializerMethodField()
 
@@ -49,4 +51,3 @@ class TicketCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = '__all__'
-        
