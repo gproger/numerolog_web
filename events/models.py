@@ -65,7 +65,7 @@ class Ticket(models.Model):
         attach = []
         ticket = {
         'filename' : 'ticket.pdf',
-        'pdf' : None
+        'file' : None
         }
         attach.append(ticket)
         mail_user(self, "Билет на встречу о неНумерологии",'emails/ticket',context=context, attach = attach)
