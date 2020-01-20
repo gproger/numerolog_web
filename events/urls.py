@@ -2,6 +2,7 @@ from django.conf.urls import url
 from .views import OfflineEventListView, OfflineEventRUDView
 from .views import EventTicketTemplateListView, EventTicketTemplateRUDView
 from .views import TicketListView, TicketAddView
+from .views import OfflineActiveEventView
 
 
 
