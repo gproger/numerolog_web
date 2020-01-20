@@ -1,0 +1,14 @@
+{% extends "emails/base.txt" %}
+{% load i18n %}
+
+
+{% block content %}
+{% blocktrans trimmed with user=user %}
+{{ user_name }}, Вы получили это письмо, так как вы стали участником
+встречи с Ольги Перцевой, произведя полную оплату.
+{% endblocktrans %}
+
+{% blocktrans trimmed %}
+В приложении к данному письму, вы можете скачать Ваш билет.
+{% endblocktrans %}
+{% endblock content %}

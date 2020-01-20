@@ -117,7 +117,7 @@ class Ticket(models.Model):
         if new:
 #            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
 #            self.eventticket.save()
-            self.send_new_ticket_payurl()
+            self.send_new_ticket_payurl(self)
 
     def get_amount(self,obj):
         total = 0
@@ -131,5 +131,17 @@ class Ticket(models.Model):
     def check_full_payment(self):
         print(self)
         if self.get_amount(self) == self.price:
-            print('Full payment detected')
-        print('full check payment')
+            self.send_ticket_to_email(self)
+
+    def send_ticket_to_email(self):
+        context = {
+            'user_name' : self.first_name + ' ' + self.last_name,
+            "SITE_HOST" : settings.MISAGO_ADDRESS,
+        }
+#        attach = []
+#        ticket = {
+#        'filename' : 'ticket.pdf',
+#        'file' : None
+#        }
+#        attach.append(ticket)
+        mail_user(self, "Билет на встречу о неНумерологии",'emails/ticket_ok',context=context)
