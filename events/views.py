@@ -11,15 +11,16 @@ from .serializers import OfflineEventSerializer
 from .serializers import EventTicketTemplateSerializer
 from .serializers import TicketListSerializer
 from .serializers import TicketCreateSerializer
+from .serializers import EventTicketSaleSerializer
 # Create your views here.
 
 
 class OfflineActiveEventView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
-    serializer_class = OfflineEventSerializer
+    serializer_class = EventTicketSaleSerializer
 
     def get_object(self):
-        return OfflineEvent.objects.all().last()
+        return EventTicketTemplate.objects.all().last()
 
 
 class OfflineEventListView(generics.ListCreateAPIView):

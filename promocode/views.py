@@ -7,6 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 from .serializers import PromoCodesSerializer
 from .models import PromoCode
 from schoolform.models import SchoolAppFlow
+from events.models import EventTicketTemplate
 # Create your views here.
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -87,6 +88,21 @@ class PromoCodesTest(View):
 
         flow = get_object_or_404(SchoolAppFlow,pk=json_data['flow'])
         code = PromoCode.objects.filter(flow=flow,code=json_data['code'], elapsed_count__gte=1)
+
+        if code.count() == 0:
+             return JsonResponse({'code': 'failed'}, status=404)
+        else:
+             return JsonResponse({'code': 'success','discount':code[0].discount,'is_percent':code[0].is_percent}, status=200)
+
+
+class PromoTicketCodesTestTicket(View):
+
+    def post(self, request, *args, **kwargs):
+        print(request)
+        json_data = json.loads(request.body.decode('utf-8'))
+
+        event = get_object_or_404(EventTicketTemplate,pk=json_data['ev_id'])
+        code = PromoCode.objects.filter(evticket=event,code=json_data['code'], elapsed_count__gte=1)
 
         if code.count() == 0:
              return JsonResponse({'code': 'failed'}, status=404)
