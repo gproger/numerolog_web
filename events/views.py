@@ -108,7 +108,7 @@ class TicketAddView(generics.CreateAPIView):
         ser = TicketCreateSerializer(data=request.data)
         print(request.data)
         if (ser.is_valid(raise_exception=True)):
-            cc_event = request.data.get('evtick_id')
+            cc_event = request.data.get('eventticket')
             cc_event = get_object_or_404(EventTicketTemplate,id=cc_event)
             cc_code = request.data.get('code', None)
 
@@ -125,7 +125,7 @@ class TicketAddView(generics.CreateAPIView):
             code = None
 
             if cc_code is not None:
-                code = PromoCode.objects.filter(flow=c_flow,
+                code = PromoCode.objects.filter(evticket=cc_event,
                                                 code=cc_code,
                                                 elapsed_count__gte=1)
 
