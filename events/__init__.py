@@ -1,1 +1,1 @@
-default_app_config = 'events.apps.StreamsConfig'
+default_app_config = 'events.apps.EventsConfig'
