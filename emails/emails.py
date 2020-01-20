@@ -6,7 +6,7 @@ from django.utils.translation import get_language
 #from .utils import get_host_from_address
 
 
-def build_mail(recipient, subject, template, sender=None, context=None):
+def build_mail(recipient, subject, template, sender=None, context=None, attach=None):
     context = context.copy() if context else {}
 
     context.update(
@@ -27,12 +27,15 @@ def build_mail(recipient, subject, template, sender=None, context=None):
         subject, message_plain, to=[recipient.email]
     )
     message.attach_alternative(message_html, "text/html")
+    if attach is not None:
+        for k in attach:
+            message.attach(k.filename,k.file)
 
     return message
 
 
-def mail_user(recipient, subject, template, sender=None, context=None):
-    message = build_mail(recipient, subject, template, sender, context)
+def mail_user(recipient, subject, template, sender=None, context=None, attach=None):
+    message = build_mail(recipient, subject, template, sender, context, attach)
     message.send()
 
 
