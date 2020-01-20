@@ -7,5 +7,4 @@ urls = [
     url(r'^numer/api/crcodes/', PromoCodesCreate.as_view()),
     url(r'^numer/api/tcodes/', PromoCodesTest.as_view()),
     url(r'^numer/api/tickcodes/', PromoTicketCodesTestTicket.as_view()),
-
 ]
