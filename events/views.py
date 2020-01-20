@@ -14,7 +14,7 @@ from .serializers import TicketCreateSerializer
 # Create your views here.
 
 
-class OfflineActiveEventView(generics.RetriveAPIView):
+class OfflineActiveEventView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     serializer_class = OfflineEventSerializer
 
