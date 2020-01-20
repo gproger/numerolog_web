@@ -44,9 +44,9 @@ class EventTicketTemplate(models.Model):
 class Ticket(models.Model):
     eventticket = models.ForeignKey(EventTicketTemplate)
     email = models.EmailField()
-    owner_firstname = models.CharField(max_length=40)
-    owner_secondname = models.CharField(max_length=40)
-    owner_middlename = models.CharField(max_length=40)
+    firstname = models.CharField(max_length=40)
+    secondname = models.CharField(max_length=40)
+    middlename = models.CharField(max_length=40)
     phone = models.CharField(max_length=40)
     count = models.PositiveSmallIntegerField(default = 1)
     price_f = models.OneToOneField(PriceField, null=True, blank=True)
