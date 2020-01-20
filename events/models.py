@@ -68,7 +68,7 @@ class Ticket(models.Model):
         'file' : None
         }
         attach.append(ticket)
-        mail_user(self, "Билет на встречу о неНумерологии",'emails/ticket',context=context, attach = attach)
+        mail_user(self, "Билет на встречу о неНумерологии",'emails/ticket',context=context)
 
 
     def save(self, *args, **kwargs):
