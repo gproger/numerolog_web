@@ -10,12 +10,12 @@ from emails.emails import mail_user
 
 class OfflineEvent(models.Model):
 
-    description = models.TextField()
+    description = models.TextField(null=True)
     name = models.CharField(max_length=250)
-    address = models.TextField()
-    address_url = models.URLField()
-    ticket_sale_start = models.DateTimeField()
-    ticket_sale_stop = models.DateTimeField()
+    address = models.TextField(null=True)
+    address_url = models.URLField(null=True)
+    ticket_sale_start = models.DateTimeField(null=True)
+    ticket_sale_stop = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     toss = models.ManyToManyField(TermsOfServicePage, null=True, blank=True, related_name='oetoss+')
 
