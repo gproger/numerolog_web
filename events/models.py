@@ -8,6 +8,7 @@ import datetime
 from django.utils.timezone import utc
 from emails.emails import mail_user
 from django.conf import settings
+from django_tinkoff_merchant.models import TinkoffSettings
 
 class OfflineEvent(models.Model):
 
@@ -54,6 +55,40 @@ class Ticket(models.Model):
     price = models.PositiveIntegerField(default = 0)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True, related_name='ticket')
+
+
+    def create_payment(self, *args, **kwargs):
+        order_obj = str(self.pk)
+        order_plural="Встреча "
+        amount = self.price*100
+        if 'amount' in kwargs:
+            amount = kwargs.get('amount')
+
+        items = [
+            {'name': 'Участие во встрече с Ольгой Перцевой', 'price': amount, 'quantity': 1},
+        ]
+
+
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Оплата участие во встрече с Ольгой Перцевой',terminal=TinkoffSettings.get_services_terminal()) \
+            .with_receipt(email=self.email,phone=self.phone) \
+            .with_items(items)
+
+        payment = MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).init(payment)
+
+        payment.save()
+
+        self.payment.add(payment)
+        self.save()
+
+
+    def get_payment_status(self):
+        for payment in  self.payment.all():
+             if payment.status != 'CONFIRMED':
+                 MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(payment).save()
+
+    def cancel_payment(self):
+
+        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
 
 
     def send_new_ticket(self):
