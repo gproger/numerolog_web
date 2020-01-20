@@ -91,18 +91,18 @@ class Ticket(models.Model):
         return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
 
 
-    def send_new_ticket(self):
+    def send_new_ticket_payurl(self):
         context = {
             'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/ticket/'+str(self.id),
             'user_name' : self.first_name + ' ' + self.last_name,
             "SITE_HOST" : settings.MISAGO_ADDRESS,
         }
-        attach = []
-        ticket = {
-        'filename' : 'ticket.pdf',
-        'file' : None
-        }
-        attach.append(ticket)
+#        attach = []
+#        ticket = {
+#        'filename' : 'ticket.pdf',
+#        'file' : None
+#        }
+#        attach.append(ticket)
         mail_user(self, "Билет на встречу о неНумерологии",'emails/ticket',context=context)
 
 
@@ -115,6 +115,6 @@ class Ticket(models.Model):
         super(Ticket, self).save(*args, **kwargs)
 
         if new:
-            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
-            self.eventticket.save()
-            self.send_new_ticket()
+#            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
+#            self.eventticket.save()
+            self.send_new_ticket_payurl()
