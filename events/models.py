@@ -7,6 +7,7 @@ from django_tinkoff_merchant.services import MerchantAPI
 import datetime
 from django.utils.timezone import utc
 from emails.emails import mail_user
+from django.conf import settings
 
 class OfflineEvent(models.Model):
 
@@ -57,7 +58,7 @@ class Ticket(models.Model):
 
     def send_new_ticket(self):
         context = {
-            'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(self.id),
+            'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/ticket/'+str(self.id),
             'user_name' : self.first_name + ' ' + self.last_name,
             "SITE_HOST" : settings.MISAGO_ADDRESS,
         }

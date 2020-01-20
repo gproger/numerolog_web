@@ -1,0 +1,16 @@
+{% extends "emails/base.txt" %}
+{% load i18n %}
+
+
+{% block content %}
+{% blocktrans trimmed with user=user %}
+{{ user_name }}, Вы получили это письмо, так как вы зарегистрировались участником
+встречи с Ольги Перцевой.
+{% endblocktrans %}
+
+{% blocktrans trimmed %}
+Для оплаты участия во встрече, проверки статуса оплаты, либо внесения оплаты, вы можете
+перейти по следующей ссылке:
+{{ url_pay }}
+{% endblocktrans %}
+{% endblock content %}
