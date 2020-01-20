@@ -130,6 +130,6 @@ class Ticket(models.Model):
 
     def check_full_payment(self):
         print(self)
-        if self.get_amount() == self.price:
+        if self.get_amount(self) == self.price:
             print('Full payment detected')
         print('full check payment')
