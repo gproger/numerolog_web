@@ -17,7 +17,7 @@ urls = [
     url(r'^numer/api/events/(?P<event>[0-9]+)/tickets', TicketListView.as_view()),
     url(r'^numer/api/events/ticket/$', TicketAddView.as_view()),
     url(r'^numer/api/ticket/(?P<id>[0-9]+)/$', TicketShowUpdateView.as_view()),
-    url(r'^numer/api/schoolurl/(?P<id>[0-9]+)/$', TicketShowUpdateURLView.as_view()),
+    url(r'^numer/api/ticketurl/(?P<id>[0-9]+)/$', TicketShowUpdateURLView.as_view()),
     url(r'^numer/api/actevents', OfflineActiveEventView.as_view()),
 
 ]
