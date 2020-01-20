@@ -49,6 +49,9 @@ class TicketCreateSerializer(serializers.ModelSerializer):
 class EventTicketSaleSerializer(serializers.ModelSerializer):
 
     toss = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+
+
 
     def get_toss(self,obj):
         lis = []
@@ -56,7 +59,10 @@ class EventTicketSaleSerializer(serializers.ModelSerializer):
             lis.append({'id': x.id,'title' : x.title})
         return lis
 
+    def get_description(self,obj):
+        return obj.event.description
+
 
     class Meta:
         model = EventTicketTemplate
-        fields = ['toss','price','id']
+        fields = ['toss','price','id','description']
