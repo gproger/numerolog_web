@@ -14,6 +14,13 @@ from .serializers import TicketCreateSerializer
 # Create your views here.
 
 
+class OfflineActiveEventView(generics.RetriveAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = OfflineEventSerializer
+
+    def get_object(self):
+        return OfflineEvent.objects.all().last()
+
 
 class OfflineEventListView(generics.ListCreateAPIView):
     permission_classes = [IsAdminUser]
