@@ -8,6 +8,9 @@ from django.contrib.auth import get_user_model
 from .models import OfflineEvent, EventTicketTemplate, Ticket
 
 from .serializers import OfflineEventSerializer
+from .serializers import EventTicketTemplateSerializer
+from .serializers import TicketListSerializer
+from .serializers import TicketCreateSerializer
 # Create your views here.
 
 
