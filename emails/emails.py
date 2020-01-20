@@ -29,7 +29,7 @@ def build_mail(recipient, subject, template, sender=None, context=None, attach=N
     message.attach_alternative(message_html, "text/html")
     if attach is not None:
         for k in attach:
-            message.attach(k.filename,k.file)
+            message.attach(k['filename'],k['file'])
 
     return message
 

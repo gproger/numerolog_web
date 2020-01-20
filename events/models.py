@@ -61,7 +61,13 @@ class Ticket(models.Model):
             'user_name' : self.first_name + ' ' + self.last_name,
             "SITE_HOST" : settings.MISAGO_ADDRESS,
         }
-        mail_user(self, "Билет на встречу о неНумерологии",'emails/ticket',context=context)
+        attach = []
+        ticket = {
+        'filename' : 'ticket.pdf',
+        'pdf' : None
+        }
+        attach.append(ticket)
+        mail_user(self, "Билет на встречу о неНумерологии",'emails/ticket',context=context, attach = attach)
 
 
     def save(self, *args, **kwargs):
