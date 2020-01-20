@@ -119,6 +119,17 @@ class Ticket(models.Model):
 #            self.eventticket.save()
             self.send_new_ticket_payurl()
 
+    def get_amount(self,obj):
+        total = 0
+        if not hasattr(obj,'payment'):
+            return 0
+        for k in obj.payment.all():
+            if k.status == 'CONFIRMED':
+                total += k.amount
+        return total/100
+
     def check_full_payment(self):
         print(self)
+        if self.get_amount() == self.price:
+            print('Full payment detected')
         print('full check payment')
