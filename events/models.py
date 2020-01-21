@@ -103,7 +103,7 @@ class Ticket(models.Model):
 #        'file' : None
 #        }
 #        attach.append(ticket)
-        mail_user(self, "Билет на встречу о неНумерологии",'emails/ticket',context=context)
+        mail_user(self, "Оплата и проверка оплаты встречи с Ольгой Перцевой",'emails/ticket',context=context)
 
 
     def save(self, *args, **kwargs):
@@ -131,6 +131,8 @@ class Ticket(models.Model):
     def check_full_payment(self):
         print(self)
         if self.get_amount(self) == self.price:
+            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
+            self.eventticket.save()
             self.send_ticket_to_email(self)
 
     def send_ticket_to_email(self):
@@ -144,4 +146,4 @@ class Ticket(models.Model):
 #        'file' : None
 #        }
 #        attach.append(ticket)
-        mail_user(self, "Билет на встречу о неНумерологии",'emails/ticket_ok',context=context)
+        mail_user(self, "Билет на встречу с Ольгой Перцевой",'emails/ticket_ok',context=context)
