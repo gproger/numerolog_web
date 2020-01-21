@@ -15,25 +15,31 @@ def resend_payment_url(modeladmin, request, qs):
 
 def refund_payments(modeladmin, request, qs):
     for p in qs:
-        for paym in p.payment:
-            MerchantAPI.cancel(paym)
+        for paym in p.payment.all():
+            MerchantAPI().cancel(paym)
+            paym.save()
+
+def status_payments(modeladmin, request, qs):
+    for p in qs:
+        for paym in p.payment.all():
+            MerchantAPI().status(paym)
             paym.save()
 
 
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
 resend_ticket.short_description = 'Выслать билет'
 refund_payments.short_description = 'Отменить платеж(и)'
+status_payments.short_description = 'Проверить платеж(и)'
 
-@admin.register(Payment)
+@admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ['id', 'get_amount_rub', 'phone','email','first_name',
         'middle_name', 'last_name']
-    list_filter = ['status', 'success']
     search_fields = ['id', 'phone','email']
-    actions = [resend_payment_url,resend_ticket,refund_payments]
+    actions = [resend_payment_url,resend_ticket,status_payments,refund_payments]
 
     def get_amount_rub(self, obj):
-        return obj.get_amount()/100
+        return obj.get_amount(obj)
 
     get_amount_rub.short_description = 'Сумма (руб)'
 

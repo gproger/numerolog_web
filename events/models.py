@@ -147,17 +147,14 @@ class Ticket(models.Model):
          'place' : self.eventticket.event.address,
          'first_name' : self.first_name,
          'middle_name' : self.middle_name,
-         'last_name' : self.last_name
+         'last_name' : self.last_name,
+         'price' : self.price,
         }
-        cont = Context({ ticket : tick} )
+        cont = Context({ 'ticket' : tick} )
 
 
         html = templ.render(cont)
 
-        print(html)
-
-        return
-        
         html = HTML(string=html)
         result = html.write_pdf()
 
