@@ -108,3 +108,66 @@ class PromoTicketCodesTestTicket(View):
              return JsonResponse({'code': 'failed'}, status=404)
         else:
              return JsonResponse({'code': 'success','discount':code[0].discount,'is_percent':code[0].is_percent}, status=200)
+
+
+class PromoTicketCodesListView(generics.ListAPIView):
+    permission_classes = [IsAdminUser]
+    serializer_class = PromoCodesSerializer
+
+
+    def get_queryset(self):
+        query_params = self.request.query_params
+        event = query_params.get('event', None)
+        if event == None:
+            try:
+                event = EventTicketTemplate.objects.all().last()
+            except EventTicketTemplate.DoesNotExist:
+                return None
+        else:
+            try:
+                event = EventTicketTemplate.objects.get(id=event)
+            except EventTicketTemplate.DoesNotExist:
+                return None
+
+        return PromoCode.objects.all().filter(evticket=event)
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = PromoCodesSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+
+class PromoTicketCodesCreate(LoginRequiredMixin, View):
+
+
+    def post(self, request, *args, **kwargs):
+        json_data = json.loads(request.body.decode('utf-8'))
+        if not request.user.is_staff:
+            return HttpResponseForbidden()
+
+        if int(json_data['form']['codes_cnt']) <= 0:
+            return JsonResponse({'desc' : 'Некорректное число кодов'}, status=400)
+
+        if int(json_data['form']['elapsed_count']) <= 0:
+            return JsonResponse({'desc' : 'Некорректное действия кода'}, status=400)
+
+        event = get_object_or_404(EventTicketTemplate,pk=json_data['form']['event'])
+
+        print(json_data)
+
+        for i in range(0,int(json_data['form']['codes_cnt'])):
+            code = get_random_string(12)
+            while PromoCode.objects.filter(evticket=event,code=code).count() > 0:
+                code = get_random_string(12)
+
+            pr = PromoCode()
+            pr.code = code
+            pr.discount = json_data['form']['discount']
+            pr.is_percent = json_data['form']['is_percent']
+            pr.evticket = event
+            pr.emitter = request.user
+            pr.elapsed_count = json_data['form']['elapsed_count']
+            pr.save()
+
+        return JsonResponse({'data' : 'created'}, status=201)
