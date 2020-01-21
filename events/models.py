@@ -69,11 +69,11 @@ class Ticket(models.Model):
             amount = kwargs.get('amount')
 
         items = [
-            {'name': 'Участие во встрече с Ольгой Перцевой', 'price': amount, 'quantity': 1},
+            {'name': 'Встрече с Ольгой Перцевой', 'price': amount, 'quantity': 1},
         ]
 
 
-        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Оплата участие во встрече с Ольгой Перцевой',terminal=TinkoffSettings.get_services_terminal()) \
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Встреча с Ольгой Перцевой',terminal=TinkoffSettings.get_services_terminal()) \
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
@@ -121,7 +121,7 @@ class Ticket(models.Model):
         if new:
 #            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
 #            self.eventticket.save()
-            self.send_new_ticket_payurl(self)
+            self.send_new_ticket_payurl()
 
     def get_amount(self,obj):
         total = 0
@@ -137,7 +137,7 @@ class Ticket(models.Model):
         if self.get_amount(self) == self.price:
             self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
             self.eventticket.save()
-            self.send_ticket_to_email(self)
+            self.send_ticket_to_email()
 
     def send_ticket_to_email(self):
         templ = Template(self.eventticket.template)

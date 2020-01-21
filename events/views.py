@@ -210,6 +210,8 @@ class TicketShowUpdateURLView(generics.UpdateAPIView):
             return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
         if request.data['amount'] > inst.price*100:
             return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
+        if request.data['amount'] != inst.price*100:
+            return Response({"amount" : "Некорректное значение, необходимо оплатить всю сумму разом"},status=status.HTTP_400_BAD_REQUEST)
 
 
         total = 0
