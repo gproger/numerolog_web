@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 
 from .serializers import PromoCodesSerializer
+from .serializers import PromoCodesTicketSerializer
 from .models import PromoCode
 from schoolform.models import SchoolAppFlow
 from events.models import EventTicketTemplate
@@ -112,7 +113,7 @@ class PromoTicketCodesTestTicket(View):
 
 class PromoTicketCodesListView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
-    serializer_class = PromoCodesSerializer
+    serializer_class = PromoCodesTicketSerializer
 
 
     def get_queryset(self):
