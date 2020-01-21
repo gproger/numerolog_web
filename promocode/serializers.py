@@ -11,7 +11,7 @@ class PromoCodesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PromoCode
-        exclude = 'evticket'
+        exclude = ['evticket']
 
 
 class PromoCodesTicketSerializer(serializers.ModelSerializer):
