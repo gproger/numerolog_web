@@ -24,7 +24,7 @@ class OfflineEventSerializer(serializers.ModelSerializer):
             res += p.ticket_cnt
         return res
 
-    def tickets_sale(self, obj):
+    def get_tickets_sale(self, obj):
         evTicks = EventTicketTemplate.objects.filter(event=obj)
         res = 0
         for p in evTicks:
