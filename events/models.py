@@ -9,6 +9,10 @@ from django.utils.timezone import utc
 from emails.emails import mail_user
 from django.conf import settings
 from django_tinkoff_merchant.models import TinkoffSettings
+from django.template.loader import render_to_string
+from django.template import Template
+from django.template import Context
+from weasyprint import HTML
 
 class OfflineEvent(models.Model):
 
@@ -136,14 +140,35 @@ class Ticket(models.Model):
             self.send_ticket_to_email(self)
 
     def send_ticket_to_email(self):
+        templ = Template(self.eventticket.template)
+        tick = {
+         'id' : self.id,
+         'name' : self.eventticket.event.name,
+         'place' : self.eventticket.event.address,
+         'first_name' : self.first_name,
+         'middle_name' : self.middle_name,
+         'last_name' : self.last_name
+        }
+        cont = Context({ ticket : tick} )
+
+
+        html = templ.render(cont)
+
+        print(html)
+
+        return
+        
+        html = HTML(string=html)
+        result = html.write_pdf()
+
         context = {
             'user_name' : self.first_name + ' ' + self.last_name,
             "SITE_HOST" : settings.MISAGO_ADDRESS,
         }
-#        attach = []
-#        ticket = {
-#        'filename' : 'ticket.pdf',
-#        'file' : None
-#        }
-#        attach.append(ticket)
-        mail_user(self, "Билет на встречу с Ольгой Перцевой",'emails/ticket_ok',context=context)
+        attach = []
+        ticket = {
+        'filename' : 'ticket.pdf',
+        'file' : result
+        }
+        attach.append(ticket)
+        mail_user(self, "Билет на встречу с Ольгой Перцевой",'emails/ticket_ok',context=context, attach=attach)
