@@ -35,6 +35,10 @@ class EventTicketTemplateSerializer(serializers.ModelSerializer):
 class TicketListSerializer(serializers.ModelSerializer):
 
     payment = PaymentSerializer(required=False, many = True)
+    amount = serializers.SerializerMethodField()
+
+    def get_amount(self, obj):
+        return obj.get_amount()
 
     class Meta:
         model = Ticket
