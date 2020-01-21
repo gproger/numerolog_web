@@ -8,7 +8,8 @@ def flow_name(obj):
         return '{}'.format(obj.flow.flow_name)
 
 def flow_auth(obj):
-    return '{}'.format(obj.flow.avail_by_code)
+    if obj.flow is not None:
+        return '{}'.format(obj.flow.avail_by_code)
 
 def event_tick(obj):
     if obj.evticket is not None:
