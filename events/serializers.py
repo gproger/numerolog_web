@@ -38,7 +38,7 @@ class TicketListSerializer(serializers.ModelSerializer):
     amount = serializers.SerializerMethodField()
 
     def get_amount(self, obj):
-        return obj.get_amount()
+        return obj.get_amount(obj)
 
     class Meta:
         model = Ticket
