@@ -12,3 +12,16 @@ class PromoCodesSerializer(serializers.ModelSerializer):
     class Meta:
         model = PromoCode
         fields = '__all__'
+
+
+class PromoCodesTicketSerializer(serializers.ModelSerializer):
+
+    event = serializers.SerializerMethodField()
+
+
+    def get_event(self, obj):
+        return '{} {}'.format(obj.event.id, obj.event.name)
+
+    class Meta:
+        model = PromoCode
+        fields = '__all__'
