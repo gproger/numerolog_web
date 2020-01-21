@@ -14,6 +14,24 @@ class OfflineEventSerializer(serializers.ModelSerializer):
     address_url = serializers.URLField(required=False)
     toss = serializers.SerializerMethodField()
 
+    tickets = serializers.SerializerMethodField()
+    tickets_sale = serializers.SerializerMethodField()
+
+    def get_tickets(self, obj):
+        evTicks = EventTicketTemplate.objects.filter(event=obj)
+        res = 0
+        for p in evTicks:
+            res += p.ticket_cnt
+        return res
+
+    def tickets_sale(self, obj):
+        evTicks = EventTicketTemplate.objects.filter(event=obj)
+        res = 0
+        for p in evTicks:
+            res += p.solded_cnt
+        return res
+
+
     def get_toss(self,obj):
         lis = []
         for x in obj.toss.all():
