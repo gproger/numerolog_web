@@ -134,7 +134,7 @@ class PromoTicketCodesListView(generics.ListAPIView):
 
     def list(self, request):
         queryset = self.get_queryset()
-        serializer = PromoCodesSerializer(queryset, many=True)
+        serializer = PromoCodesTicketSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
