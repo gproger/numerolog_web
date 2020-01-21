@@ -11,7 +11,7 @@ class PromoCodesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PromoCode
-        fields = '__all__'
+        exclude = 'evticket'
 
 
 class PromoCodesTicketSerializer(serializers.ModelSerializer):
@@ -24,4 +24,4 @@ class PromoCodesTicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PromoCode
-        fields = '__all__'
+        exclude = ['flow']
