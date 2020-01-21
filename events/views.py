@@ -84,7 +84,7 @@ class TicketListView(generics.ListAPIView):
 
     def get_queryset(self):
         query_params = self.request.query_params
-        event_num = query_params.get('event', None)
+        event_num = self.kwargs.get('event', None)
         if event_num == None:
                 return None
         else:
