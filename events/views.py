@@ -79,7 +79,7 @@ class EventTicketTemplateRUDView(generics.RetrieveUpdateDestroyAPIView):
 
 class TicketListView(generics.ListAPIView):
 
-    permission_classes = [AllowAny]
+    permission_classes = [IsAdminUser]
     serializer_class = TicketListSerializer
 
     def get_queryset(self):
