@@ -36,9 +36,20 @@ class TicketListSerializer(serializers.ModelSerializer):
 
     payment = PaymentSerializer(required=False, many = True)
     amount = serializers.SerializerMethodField()
+    promocode = serialiers.SerializerMethodField()
+
 
     def get_amount(self, obj):
         return obj.get_amount(obj)
+
+    def get_promocode(self, obj):
+        if hasattr( obj, 'price_f'):
+            if obj.price_f is not None:
+                return obj.price_f.promocode_set.all()[0].code
+            else:
+                return ''
+        else:
+            return ''
 
     class Meta:
         model = Ticket
