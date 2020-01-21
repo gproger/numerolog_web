@@ -36,7 +36,7 @@ class TicketListSerializer(serializers.ModelSerializer):
 
     payment = PaymentSerializer(required=False, many = True)
     amount = serializers.SerializerMethodField()
-    promocode = serialiers.SerializerMethodField()
+    promocode = serializers.SerializerMethodField()
 
 
     def get_amount(self, obj):
