@@ -16,11 +16,11 @@ class PromoCodesSerializer(serializers.ModelSerializer):
 
 class PromoCodesTicketSerializer(serializers.ModelSerializer):
 
-    event = serializers.SerializerMethodField()
+    evticket = serializers.SerializerMethodField()
 
 
-    def get_event(self, obj):
-        return '{} {}'.format(obj.event.id, obj.event.name)
+    def get_evticket(self, obj):
+        return '{} {}'.format(obj.evticket.id, obj.evticket.name)
 
     class Meta:
         model = PromoCode
