@@ -97,7 +97,7 @@ class TicketListView(generics.ListAPIView):
 
         return Ticket.objects.all().filter(eventticket__event=event_num)
 
-    def list(self, request):
+    def list(self, request, event):
         queryset = self.get_queryset()
         serializer = TicketListSerializer(queryset, many=True)
         return Response(serializer.data)
