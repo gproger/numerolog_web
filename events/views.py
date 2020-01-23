@@ -7,6 +7,8 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render, get_object_or_404
 
 from .models import OfflineEvent, EventTicketTemplate, Ticket
+from promocode.models import PromoCode
+from schoolform.models import PriceField
 
 from .serializers import OfflineEventSerializer
 from .serializers import EventTicketTemplateSerializer

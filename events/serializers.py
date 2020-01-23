@@ -55,7 +55,7 @@ class TicketListSerializer(serializers.ModelSerializer):
     payment = PaymentSerializer(required=False, many = True)
     amount = serializers.SerializerMethodField()
     promocode = serializers.SerializerMethodField()
-
+    price_f = serializers.SerializerMethodField()
 
     def get_amount(self, obj):
         return obj.get_amount(obj)
@@ -64,6 +64,15 @@ class TicketListSerializer(serializers.ModelSerializer):
         if hasattr( obj, 'price_f'):
             if obj.price_f is not None:
                 return obj.price_f.promocode_set.all()[0].code
+            else:
+                return ''
+        else:
+            return ''
+
+    def get_price_f(self, obj):
+        if hasattr( obj, 'price_f'):
+            if obj.price_f is not None:
+                return obj.price_f.price
             else:
                 return ''
         else:
