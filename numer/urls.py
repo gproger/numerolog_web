@@ -103,5 +103,5 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # If you replace those handlers with custom ones, make sure you decorate them
 # with shared_403_exception_handler or shared_404_exception_handler
 # decorators that are defined in misago.views.errorpages module!
-handler403 = 'misago.core.errorpages.permission_denied'
-handler404 = 'misago.core.errorpages.page_not_found'
+# handler403 = 'misago.core.errorpages.permission_denied'
+# handler404 = 'misago.core.errorpages.page_not_found'
