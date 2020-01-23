@@ -257,10 +257,6 @@ INSTALLED_APPS = [
     'events',
 ]
 
-if DEBUG:
-    INSTALLED_APPS+= ('corsheaders',)
-    CORS_ORIGIN_ALLOW_ALL = DEBUG
-
 
 INTERNAL_IPS = [
     '127.0.0.1'
@@ -436,9 +432,6 @@ REST_FRAMEWORK = {
 # correct value, or what value is correct in case you've didn't.
 
 MISAGO_ADDRESS = 'https://new.nenumerolog.ru'
-
-if DEBUG:
-	MISAGO_ADDRESS = 'https://new.nenumerolog.ru'
 
 
 # PostgreSQL text search configuration to use in searches
