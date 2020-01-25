@@ -1,9 +1,10 @@
-from events.models import Ticket
+
 from emails.emails import mail_user
 from django.template.loader import render_to_string
 from django.template import Template
 from django.template import Context
 from weasyprint import HTML
+from events.models import Ticket
 
 from myproject.celery import app
 from django.conf import settings
