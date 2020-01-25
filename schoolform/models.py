@@ -95,7 +95,7 @@ class SchoolAppForm(models.Model):
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
-        payment = MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).init(payment)
+        payment = MerchantAPI().init(payment)
 
         payment.save()
 
@@ -106,11 +106,11 @@ class SchoolAppForm(models.Model):
     def get_payment_status(self):
         for payment in  self.payment.all():
              if payment.status != 'CONFIRMED':
-                 MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(payment).save()
+                 MerchantAPI().status(payment).save()
 
     def cancel_payment(self):
 
-        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
+        return MerchantAPI().cancel(self.payment)
 
     def send_mail_notification(self):
         send_task('schoolform.send_school_form_pay_url',
@@ -224,7 +224,7 @@ class SchoolAppPersCuratorForm(models.Model):
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
-        payment = MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).init(payment)
+        payment = MerchantAPI().init(payment)
 
         payment.save()
 
@@ -235,11 +235,11 @@ class SchoolAppPersCuratorForm(models.Model):
     def get_payment_status(self):
         for payment in  self.payment.all():
              if payment.status != 'CONFIRMED':
-                 MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(payment).save()
+                 MerchantAPI().status(payment).save()
 
     def cancel_payment(self):
 
-        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
+        return MerchantAPI().cancel(self.payment)
 
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)

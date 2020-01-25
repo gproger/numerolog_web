@@ -75,7 +75,7 @@ class Ticket(models.Model):
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
-        payment = MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).init(payment)
+        payment = MerchantAPI().init(payment)
 
         payment.save()
 
@@ -86,11 +86,11 @@ class Ticket(models.Model):
     def get_payment_status(self):
         for payment in  self.payment.all():
              if payment.status != 'CONFIRMED':
-                 MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).status(payment).save()
+                 MerchantAPI().status(payment).save()
 
     def cancel_payment(self):
 
-        return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
+        return MerchantAPI().cancel(self.payment)
 
 
 
