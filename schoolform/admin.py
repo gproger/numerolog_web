@@ -76,8 +76,10 @@ class PayedListFilter(admin.SimpleListFilter):
         # to decide how to filter the queryset.
         if self.value():
             return queryset.filter(payed_amount=F('price'))
-        else
-            return queryset.filter(~Q(payed_amount=F('price'))S
+        else:
+            return queryset.filter(~Q(payed_amount=F('price')))
+
+
 @admin.register(SchoolAppForm)
 class SchoolAppFormAdmin(admin.ModelAdmin):
     list_display = ['id', 'email','phone','first_name',
