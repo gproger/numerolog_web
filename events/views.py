@@ -42,15 +42,9 @@ class OfflineEventRUDView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         id = self.kwargs.get('id', None)
-        obj = None
-        if id is None:
-            return OfflineEvent.objects.none()
-        try:
-            obj = OfflineEvent.objects.get(pk=id)
-        except OfflineEvent.DoesNotExist:
-            obj = None
 
-        return obj
+        return get_object_or_404(OfflineEvent,pk=id)
+
 
 class EventTicketTemplateListView(generics.ListCreateAPIView):
     permission_classes = [IsAdminUser]
@@ -68,16 +62,8 @@ class EventTicketTemplateRUDView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         id = self.kwargs.get('id', None)
-        obj = None
-        if id is None:
-            return EventTicketTemplate.objects.none()
-        try:
-            obj = EventTicketTemplate.objects.get(pk=id)
-        except EventTicketTemplate.DoesNotExist:
-            obj = None
 
-        return obj
-
+        return get_object_or_404(EventTicketTemplate,pk=id)
 
 class TicketListView(generics.ListAPIView):
 
@@ -182,17 +168,8 @@ class TicketShowUpdateURLView(generics.UpdateAPIView):
 
     def get_object(self):
         id = self.kwargs.get('id', None)
-        obj = None
-        if id is None:
-            return Ticket.objects.none()
-        try:
-            obj = Ticket.objects.get(pk=id)
-        except Ticket.DoesNotExist:
-            obj = None
 
-#        obj.create_payment()
-
-        return obj
+        return get_object_or_404(Ticket,pk=id)
 
     def put(self, request, *args, **kwargs):
         inst = self.get_object()
