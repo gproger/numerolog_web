@@ -1,1 +1,1 @@
-default_app_config = 'events.apps.SchoolformConfig'
+default_app_config = 'schoolform.apps.SchoolformConfig'
