@@ -84,6 +84,13 @@ class TicketListSerializer(serializers.ModelSerializer):
 
 class TicketCreateSerializer(serializers.ModelSerializer):
 
+    def validate_phone(self, value):
+        value = value.replace(" ","")
+        value = value.replace("(","")
+        value = value.replace(")","")
+        value = value.replace("-","")
+        return value
+
     class Meta:
         model = Ticket
         fields = '__all__'
