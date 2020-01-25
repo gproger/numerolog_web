@@ -20,7 +20,8 @@ def send_new_ticket_payurl(ticket_id):
     }
 
     mail_user(ticket, "Оплата и проверка оплаты встречи с Ольгой Перцевой",'emails/ticket',context=context)
-
+    ticket.pay_url_sended = True
+    ticket.save()
 
 @app.task
 def send_ticket_to_email(ticket_id):
@@ -57,3 +58,5 @@ def send_ticket_to_email(ticket_id):
     }
     attach.append(tick)
     mail_user(ticket, "Билет на встречу с Ольгой Перцевой",'emails/ticket_ok',context=context, attach=attach)
+    ticket.ticket_sended = True
+    ticket.save()

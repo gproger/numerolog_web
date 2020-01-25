@@ -56,7 +56,8 @@ class Ticket(models.Model):
     price = models.PositiveIntegerField(default = 0)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True, related_name='ticket')
-
+    ticket_sended = models.NullBooleanField(default=False)
+    pay_url_sended = models.NullBooleanField(default=False)
 
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)
