@@ -10,6 +10,13 @@ class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
         norm_value = value.lower()
         return norm_value
 
+    def validate_phone(self, value):
+        value = value.replace(" ","")
+        value = value.replace("(","")
+        value = value.replace(")","")
+        value = value.replace("-","")
+        return value
+
     class Meta:
         model = SchoolAppForm
         exclude = ['payment']
