@@ -5,4 +5,4 @@ class SchoolformConfig(AppConfig):
     name = 'schoolform'
 
     def ready(self):
-        import events.signals
+        import schoolform.signals
