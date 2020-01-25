@@ -162,7 +162,7 @@ class TicketShowUpdateView(generics.RetrieveAPIView):
 
         id = self.kwargs.get('id', None)
 
-        return get_object_or_404(Ticket,id)
+        return get_object_or_404(Ticket,pk=id)
 
     def get(self, request, *args, **kwargs):
         obj = self.get_object()
