@@ -113,7 +113,7 @@ class SchoolAppForm(models.Model):
         return MerchantAPI().cancel(self.payment)
 
     def send_mail_notification(self):
-        send_task('schoolform.send_school_form_pay_url',
+        send_task('schoolform.tasks.send_school_form_pay_url',
                 kwargs={"form_id": self.pk})
 
 
@@ -144,7 +144,7 @@ class SchoolAppCurator(models.Model):
             self.send_mail_notification()
 
     def send_mail_notification(self):
-        send_task('schoolform.send_school_curator_registered',
+        send_task('schoolform.tasks.send_school_curator_registered',
                 kwargs={"form_id": self.pk})
 
     def __str__(self):
