@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db.models import F, Q
+from django_tinkoff_merchant.services import MerchantAPI
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator
 from schoolform.tasks import send_school_form_pay_url
 
