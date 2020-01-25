@@ -6,13 +6,10 @@ from django_tinkoff_merchant.models import Payment
 from django_tinkoff_merchant.services import MerchantAPI
 import datetime
 from django.utils.timezone import utc
-from emails.emails import mail_user
-from django.conf import settings
+
+
 from django_tinkoff_merchant.models import TinkoffSettings
-from django.template.loader import render_to_string
-from django.template import Template
-from django.template import Context
-from weasyprint import HTML
+from events.tasks import send_new_ticket_payurl, send_ticket_to_email
 
 class OfflineEvent(models.Model):
 
@@ -95,19 +92,6 @@ class Ticket(models.Model):
         return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
 
 
-    def send_new_ticket_payurl(self):
-        context = {
-            'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/ticket/'+str(self.id),
-            'user_name' : self.first_name + ' ' + self.last_name,
-            "SITE_HOST" : settings.MISAGO_ADDRESS,
-        }
-#        attach = []
-#        ticket = {
-#        'filename' : 'ticket.pdf',
-#        'file' : None
-#        }
-#        attach.append(ticket)
-        mail_user(self, "Оплата и проверка оплаты встречи с Ольгой Перцевой",'emails/ticket',context=context)
 
 
     def save(self, *args, **kwargs):
@@ -121,7 +105,10 @@ class Ticket(models.Model):
         if new:
 #            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
 #            self.eventticket.save()
-            self.send_new_ticket_payurl()
+            if self.price > 0:
+                send_new_ticket_payurl.delay(self.pk, retry_jitter=True,ignore_result=True)
+            else:
+                send_ticket_to_email.delay(self.pk, retry_jitter=True,ignore_result=True)
 
     def get_amount(self,obj):
         total = 0
@@ -133,39 +120,7 @@ class Ticket(models.Model):
         return total/100
 
     def check_full_payment(self):
-        print(self)
         if self.get_amount(self) == self.price:
             self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
             self.eventticket.save()
-            self.send_ticket_to_email()
-
-    def send_ticket_to_email(self):
-        templ = Template(self.eventticket.template)
-        tick = {
-         'id' : self.id,
-         'name' : self.eventticket.event.name,
-         'place' : self.eventticket.event.address,
-         'first_name' : self.first_name,
-         'middle_name' : self.middle_name,
-         'last_name' : self.last_name,
-         'price' : self.price,
-        }
-        cont = Context({ 'ticket' : tick} )
-
-
-        html = templ.render(cont)
-
-        html = HTML(string=html)
-        result = html.write_pdf()
-
-        context = {
-            'user_name' : self.first_name + ' ' + self.last_name,
-            "SITE_HOST" : settings.MISAGO_ADDRESS,
-        }
-        attach = []
-        ticket = {
-        'filename' : 'ticket.pdf',
-        'file' : result
-        }
-        attach.append(ticket)
-        mail_user(self, "Билет на встречу с Ольгой Перцевой",'emails/ticket_ok',context=context, attach=attach)
+            send_ticket_to_email.delay(self.pk, retry_jitter=True,ignore_result=True)
