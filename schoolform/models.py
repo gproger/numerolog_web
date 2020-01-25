@@ -114,7 +114,7 @@ class SchoolAppForm(models.Model):
 
     def send_mail_notification(self):
         send_task('schoolform.send_school_form_pay_url',
-                kwargs={"form_id": self.pk, "retry_jitter": True,"ignore_result": True})
+                kwargs={"form_id": self.pk})
 
 
     def __str__(self):
@@ -145,7 +145,7 @@ class SchoolAppCurator(models.Model):
 
     def send_mail_notification(self):
         send_task('schoolform.send_school_curator_registered',
-                kwargs={"form_id": self.pk, "retry_jitter": True,"ignore_result": True})
+                kwargs={"form_id": self.pk})
 
     def __str__(self):
         if self.curator and not self.expert:

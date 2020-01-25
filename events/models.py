@@ -107,11 +107,9 @@ class Ticket(models.Model):
 #            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
 #            self.eventticket.save()
             if self.price > 0:
-                send_task('events.tasks.send_new_ticket_payurl',
-                        kwargs={"ticket_id": self.pk, "retry_jitter": True,"ignore_result": True})
+                send_task('events.tasks.send_new_ticket_payurl',kwargs={"ticket_id": self.pk})
             else:
-                send_task('events.tasks.send_ticket_to_email',
-                        kwargs={"ticket_id": self.pk, "retry_jitter": True,"ignore_result": True})
+                send_task('events.tasks.send_ticket_to_email',kwargs={"ticket_id": self.pk})
 
     def get_amount(self,obj):
         total = 0
@@ -126,5 +124,4 @@ class Ticket(models.Model):
         if self.get_amount(self) == self.price:
             self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
             self.eventticket.save()
-            send_task('events.tasks.send_ticket_to_email',
-                        kwargs={"ticket_id": self.pk, "retry_jitter": True,"ignore_result": True})
+            send_task('events.tasks.send_ticket_to_email',kwargs={"ticket_id": self.pk})
