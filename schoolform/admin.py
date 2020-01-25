@@ -41,7 +41,10 @@ class SchoolAppFlowAdmin(admin.ModelAdmin):
     list_filter = ['state']
 
 def payed(obj):
-    return obj.payed_amount==obj.price
+    value = 'Да'
+    if obj.payed_amount != obj.price:
+        value='Нет'
+    return value 
 
 payed.short_description = 'Полностью оплачено'
 
