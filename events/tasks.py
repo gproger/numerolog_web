@@ -1,4 +1,4 @@
-from .models import Ticket
+from events.models import Ticket
 from emails.emails import mail_user
 from django.template.loader import render_to_string
 from django.template import Template
