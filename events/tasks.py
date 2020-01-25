@@ -7,11 +7,11 @@ from weasyprint import HTML
 
 from numer.celery import app
 from django.conf import settings
-
+from events.models import Ticket
 
 @app.task
 def send_new_ticket_payurl(ticket_id):
-    ticket = events.models.Ticket.object.get(pk=ticket_id)
+    ticket = Ticket.object.get(pk=ticket_id)
     context = {
         'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/ticket/'+str(ticket.id),
         'user_name' : ticket.first_name + ' ' + ticket.last_name,
@@ -28,7 +28,7 @@ def send_new_ticket_payurl(ticket_id):
 
 @app.task
 def send_ticket_to_email(ticket_id):
-    ticket = events.models.Ticket.object.get(pk=ticket_id)
+    ticket = Ticket.object.get(pk=ticket_id)
     templ = Template(ticket.eventticket.template)
     tick = {
      'id' : ticket.id,
