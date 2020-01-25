@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.db.models import F
+from django.db.models import F, Q
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator
 
 
@@ -45,10 +45,43 @@ def payed(obj):
 
 payed.short_description = 'Полностью оплачено'
 
+class PayedListFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = _('Полностью оплачено')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'payed'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            (True, 'Да'),
+            (False, 'Нет'),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        if self.value():
+            return queryset.filter(payed_amount=F('price'))
+        else
+            return queryset.filter(~Q(payed_amount=F('price'))S
 @admin.register(SchoolAppForm)
 class SchoolAppFormAdmin(admin.ModelAdmin):
     list_display = ['id', 'email','phone','first_name',
         'middle_name', 'last_name','instagramm','bid',flow_name,'pay_url_sended','payed_amount','price','payed']
-    list_filter = ['flow__flow_name',payed]
+    list_filter = ['flow__flow_name',PayedListFilter]
 
 # Register your models here.
