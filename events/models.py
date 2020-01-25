@@ -108,11 +108,11 @@ class Ticket(models.Model):
 #            self.eventticket.save()
             if self.price > 0:
                 send_task('events.send_new_ticket_payurl',args=[self.pk,True,True],
-                    kwargs={"kwarg1": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
+                        kwargs={"kwarg1": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
             else:
                 send_task('events.send_ticket_to_email',
-                    args=[self.pk,True,True],
-                    kwargs={"kwarg1": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
+                        args=[self.pk,True,True],
+                        kwargs={"kwarg1": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
 
     def get_amount(self,obj):
         total = 0
@@ -127,6 +127,6 @@ class Ticket(models.Model):
         if self.get_amount(self) == self.price:
             self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
             self.eventticket.save()
-                send_task('events.send_ticket_to_email',
-                    args=[self.pk,True,True],
-                    kwargs={"kwarg1": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
+            send_task('events.send_ticket_to_email',
+                        args=[self.pk,True,True],
+                        kwargs={"kwarg1": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
