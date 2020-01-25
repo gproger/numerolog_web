@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.db.models import F
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator
 
-admin.site.register(SchoolAppForm)
 
 def flow_name(obj):
     return obj.flow.flow_name
@@ -41,5 +40,10 @@ class SchoolAppFlowAdmin(admin.ModelAdmin):
     list_display = ['id','flow','flow_name','state','price',registered, no_pay,pre_pay, full_pay,curators]
     list_filter = ['state']
 
+@admin.register(SchoolAppForm)
+class SchoolAppFormAdmin(admin.ModelAdmin):
+    list_display = ['id', 'email','phone','first_name',
+        'middle_name', 'last_name','instagramm','bid',flow_name,'pay_url_sended','payed_amount','price']
+    list_filter = ['flow__flow_name']
 
 # Register your models here.
