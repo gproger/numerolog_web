@@ -114,8 +114,7 @@ class SchoolAppForm(models.Model):
 
     def send_mail_notification(self):
         send_task('schoolform.send_school_form_pay_url',
-                args=[self.pk,True,True],
-                kwargs={"form_id": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
+                kwargs={"form_id": self.pk, "retry_jitter": True,"ignore_result": True})
 
 
     def __str__(self):
@@ -146,8 +145,7 @@ class SchoolAppCurator(models.Model):
 
     def send_mail_notification(self):
         send_task('schoolform.send_school_curator_registered',
-                args=[self.pk,True,True],
-                kwargs={"form_id": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
+                kwargs={"form_id": self.pk, "retry_jitter": True,"ignore_result": True})
 
     def __str__(self):
         if self.curator and not self.expert:
@@ -183,21 +181,7 @@ class SchoolAppWorker(models.Model):
 
 
     def send_mail_notification(self):
-        current_status = ''
-        if self.curator:
-            if self.expert:
-                current_status = 'экспертом и куратором'
-            else:
-                current_status = 'куратором'
-        elif self.expert:
-            current_status = 'экспертом'
-
-        context = {
-            'user_name' : self.first_name + ' ' + self.last_name,
-            'user_status' : current_status,
-            "SITE_HOST" : settings.MISAGO_ADDRESS,
-        }
-        mail_user(self, "Школа неНумерологии",'emails/expert_school_form',context=context)
+        print('asdf')
 
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
