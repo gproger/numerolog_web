@@ -4,8 +4,8 @@ from django_tinkoff_merchant.signals import payment_update
 
 def payment_check_callback(sender, **kwargs):
     payment = kwargs.get('payment',None)
-    if payment.schoolappform.count() != 0:
-        schoolappform = payment.schoolappform.first()
+    if payment.schoolappform_set.count() != 0:
+        schoolappform = payment.schoolappform_set.first()
         schoolappform.check_full_payment()
 
 
