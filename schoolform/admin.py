@@ -2,7 +2,6 @@ from django.contrib import admin
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator
 
 admin.site.register(SchoolAppForm)
-admin.site.register(SchoolAppFlow)
 
 def flow_name(obj):
     return obj.flow.flow_name
