@@ -40,10 +40,15 @@ class SchoolAppFlowAdmin(admin.ModelAdmin):
     list_display = ['id','flow','flow_name','state','price',registered, no_pay,pre_pay, full_pay,curators]
     list_filter = ['state']
 
+def payed(obj):
+    return obj.payed_amount==obj.price
+
+payed.short_description = 'Полностью оплачено'
+
 @admin.register(SchoolAppForm)
 class SchoolAppFormAdmin(admin.ModelAdmin):
     list_display = ['id', 'email','phone','first_name',
-        'middle_name', 'last_name','instagramm','bid',flow_name,'pay_url_sended','payed_amount','price']
-    list_filter = ['flow__flow_name']
+        'middle_name', 'last_name','instagramm','bid',flow_name,'pay_url_sended','payed_amount','price','payed']
+    list_filter = ['flow__flow_name','payed']
 
 # Register your models here.
