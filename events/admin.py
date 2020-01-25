@@ -34,9 +34,10 @@ status_payments.short_description = 'Проверить платеж(и)'
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ['id', 'get_amount_rub', 'phone','email','first_name',
+    list_display = ['id', 'price','get_amount_rub', 'phone','email','first_name',
         'middle_name', 'last_name']
     search_fields = ['id', 'phone','email']
+    list_filter = ['price']
     actions = [resend_payment_url,resend_ticket,status_payments,refund_payments]
 
     def get_amount_rub(self, obj):
