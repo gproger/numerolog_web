@@ -6,10 +6,10 @@ from django_tinkoff_merchant.models import Payment
 from django_tinkoff_merchant.services import MerchantAPI
 import datetime
 from django.utils.timezone import utc
+from celery.execute import send_task
 
 
 from django_tinkoff_merchant.models import TinkoffSettings
-from events.tasks import send_new_ticket_payurl, send_ticket_to_email
 
 class OfflineEvent(models.Model):
 
@@ -106,9 +106,9 @@ class Ticket(models.Model):
 #            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
 #            self.eventticket.save()
             if self.price > 0:
-                send_new_ticket_payurl.delay(self.pk, retry_jitter=True,ignore_result=True)
+                send_task('events.send_new_ticket_payurl',kwargs={ticket_id : self.pk, retry_jitter=True,ignore_result=True})
             else:
-                send_ticket_to_email.delay(self.pk, retry_jitter=True,ignore_result=True)
+                send_task('events.send_ticket_to_email',kwargs={ticket_id : self.pk, retry_jitter=True,ignore_result=True})
 
     def get_amount(self,obj):
         total = 0
@@ -123,4 +123,4 @@ class Ticket(models.Model):
         if self.get_amount(self) == self.price:
             self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
             self.eventticket.save()
-            send_ticket_to_email.delay(self.pk, retry_jitter=True,ignore_result=True)
+            send_task('events.send_ticket_to_email',kwargs={ticket_id : self.pk, retry_jitter=True,ignore_result=True})
