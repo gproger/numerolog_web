@@ -162,16 +162,7 @@ class TicketShowUpdateView(generics.RetrieveAPIView):
 
         id = self.kwargs.get('id', None)
 
-        if id is None:
-            return Ticket.objects.none()
-        try:
-            obj = Ticket.objects.get(pk=id)
-        except Ticket.DoesNotExist:
-            return Ticket.objects.none()
-
-        obj.get_payment_status()
-
-        return obj
+        return get_object_or_404(Ticket,id)
 
     def get(self, request, *args, **kwargs):
         obj = self.get_object()
