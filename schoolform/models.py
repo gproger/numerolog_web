@@ -69,6 +69,7 @@ class SchoolAppForm(models.Model):
     price = models.PositiveIntegerField(default = 0)
     price_f = models.OneToOneField(PriceField, null=True, blank=True)
     pay_url_sended = models.NullBooleanField(default=False)
+    payed_amount = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
 
@@ -116,6 +117,15 @@ class SchoolAppForm(models.Model):
         send_task('schoolform.tasks.send_school_form_pay_url',
                 kwargs={"form_id": self.pk})
 
+
+    def check_full_payment(self):
+        count = 0
+        for payment in self.payment.all():
+             if payment.status == 'CONFIRMED':
+                 count = count + payment.amount
+        count /= 100
+        self.payed_amount = count
+        self.save()
 
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
