@@ -10,10 +10,6 @@ from celery.execute import send_task
 
 
 from django_tinkoff_merchant.models import TinkoffSettings
-<<<<<<< HEAD
-=======
-from .signals import send_ticket_pdf, send_ticket_pay_email
->>>>>>> 25ae0fe4bc9f81f8490e2b2e1f46b5ce19da6fd3
 
 class OfflineEvent(models.Model):
 
@@ -110,15 +106,9 @@ class Ticket(models.Model):
 #            self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
 #            self.eventticket.save()
             if self.price > 0:
-<<<<<<< HEAD
-                send_task('events.send_new_ticket_payurl',kwargs={ticket_id : self.pk, retry_jitter=True,ignore_result=True})
+                send_task('events.send_new_ticket_payurl',kwargs={ticket_id : self.pk, retry_jitter : True,ignore_result : True})
             else:
-                send_task('events.send_ticket_to_email',kwargs={ticket_id : self.pk, retry_jitter=True,ignore_result=True})
-=======
-                send_ticket_pay_email.send(self.__class__,tick_id=self.pk)
-            else:
-                send_ticket_pdf.send(self.__class__,tick_id=self.pk)
->>>>>>> 25ae0fe4bc9f81f8490e2b2e1f46b5ce19da6fd3
+                send_task('events.send_ticket_to_email',kwargs={ticket_id : self.pk, retry_jitter : True,ignore_result : True})
 
     def get_amount(self,obj):
         total = 0
@@ -133,8 +123,4 @@ class Ticket(models.Model):
         if self.get_amount(self) == self.price:
             self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
             self.eventticket.save()
-<<<<<<< HEAD
-            send_task('events.send_ticket_to_email',kwargs={ticket_id : self.pk, retry_jitter=True,ignore_result=True})
-=======
-            send_ticket_pdf.send(self.__class__,tick_id=self.pk)
->>>>>>> 25ae0fe4bc9f81f8490e2b2e1f46b5ce19da6fd3
+            send_task('events.send_ticket_to_email',kwargs={ticket_id : self.pk, retry_jitter : True,ignore_result : True})
