@@ -167,7 +167,7 @@ class TicketShowUpdateView(generics.RetrieveAPIView):
         try:
             obj = Ticket.objects.get(pk=id)
         except Ticket.DoesNotExist:
-            obj = None
+            return Ticket.objects.none()
 
         obj.get_payment_status()
 
