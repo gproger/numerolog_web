@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db.models import F, Q
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator
-
+from schoolform.tasks import send_school_form_pay_url
 
 def flow_name(obj):
     return obj.flow.flow_name
@@ -44,7 +44,7 @@ def payed(obj):
     value = 'Да'
     if obj.payed_amount != obj.price:
         value='Нет'
-    return value 
+    return value
 
 payed.short_description = 'Полностью оплачено'
 
@@ -83,10 +83,34 @@ class PayedListFilter(admin.SimpleListFilter):
             return queryset.filter(~Q(payed_amount=F('price')))
 
 
+
+def resend_payment_url(modeladmin, request, qs):
+    for p in qs:
+        send_school_form_pay_url.delay(p.pk)
+
+def refund_payments(modeladmin, request, qs):
+    for p in qs:
+        for paym in p.payment.all():
+            MerchantAPI().cancel(paym)
+            paym.save()
+
+def status_payments(modeladmin, request, qs):
+    for p in qs:
+        for paym in p.payment.all():
+            if paym.status != 'CONFIRMED':
+                MerchantAPI().status(paym)
+                paym.save()
+
+
+resend_payment_url.short_description = 'Выслать письмо для оплаты'
+refund_payments.short_description = 'Отменить платеж(и)'
+status_payments.short_description = 'Проверить платеж(и)'
+
 @admin.register(SchoolAppForm)
 class SchoolAppFormAdmin(admin.ModelAdmin):
     list_display = ['id', 'email','phone','first_name',
         'middle_name', 'last_name','instagramm','bid',flow_name,'pay_url_sended','payed_amount','price',payed]
     list_filter = ['flow__flow_name',PayedListFilter]
+    actions = [ resend_payment_url, status_payments, refund_payments]
 
 # Register your models here.

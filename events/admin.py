@@ -23,8 +23,9 @@ def refund_payments(modeladmin, request, qs):
 def status_payments(modeladmin, request, qs):
     for p in qs:
         for paym in p.payment.all():
-            MerchantAPI().status(paym)
-            paym.save()
+            if paym.status != 'CONFIRMED':
+                MerchantAPI().status(paym)
+                paym.save()
 
 
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
