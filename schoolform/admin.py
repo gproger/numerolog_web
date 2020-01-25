@@ -15,6 +15,16 @@ class SchoolAppCuratorAdmin(admin.ModelAdmin):
     list_filter = ['curator','expert','flow__flow_name']
 
 
+def registered(obj):
+    return obj.schoolappform_set.count
+
+def curators(obj):
+    return obj.schoolappcurator_set.count
+
+@admin.register(SchoolAppFlow)
+class SchoolAppFlowAdmin(admin.ModelAdmin):
+    list_display = ['id','flow','flow_name','state','price',registered, curators]
+
 
 
 # Register your models here.
