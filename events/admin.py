@@ -1,17 +1,18 @@
 from django.contrib import admin
 from .models import *
 from django_tinkoff_merchant.services import MerchantAPI
+from events.tasks import send_new_ticket_payurl, send_ticket_to_email
 
 admin.site.register(OfflineEvent)
 admin.site.register(EventTicketTemplate)
 
 def resend_ticket(modeladmin, request, qs):
     for p in qs:
-        p.send_ticket_to_email()
+        send_ticket_to_email.delay(p.pk)
 
 def resend_payment_url(modeladmin, request, qs):
     for p in qs:
-        p.send_new_ticket_payurl()
+        send_new_ticket_payurl.delay(p.pk)
 
 def refund_payments(modeladmin, request, qs):
     for p in qs:
