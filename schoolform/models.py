@@ -113,7 +113,9 @@ class SchoolAppForm(models.Model):
         return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
 
     def send_mail_notification(self):
-        send_task('schoolform.send_school_form_pay_url',kwargs={form_id : self.pk, retry_jitter : True,ignore_result : True})
+        send_task('schoolform.send_school_form_pay_url',
+                args=[self.pk,True,True],
+                kwargs={"form_id": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
 
 
     def __str__(self):
@@ -143,7 +145,9 @@ class SchoolAppCurator(models.Model):
             self.send_mail_notification()
 
     def send_mail_notification(self):
-        send_task('schoolform.send_school_curator_registered',kwargs={form_id : self.pk, retry_jitter : True,ignore_result : True})
+        send_task('schoolform.send_school_curator_registered',
+                args=[self.pk,True,True],
+                kwargs={"form_id": "ticket_id", "kwarg2": "retry_jitter","kwarg2": "ignore_result"})
 
     def __str__(self):
         if self.curator and not self.expert:
