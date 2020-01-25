@@ -11,25 +11,23 @@ from events.models import Ticket
 
 @app.task
 def send_new_ticket_payurl(ticket_id):
-    ticket = Ticket.object.get(pk=ticket_id)
+    ticket = Ticket.objects.get(pk=ticket_id)
+
     context = {
         'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/ticket/'+str(ticket.id),
         'user_name' : ticket.first_name + ' ' + ticket.last_name,
         "SITE_HOST" : settings.MISAGO_ADDRESS,
     }
-#        attach = []
-#        ticket = {
-#        'filename' : 'ticket.pdf',
-#        'file' : None
-#        }
-#        attach.append(ticket)
-    mail_user(self, "Оплата и проверка оплаты встречи с Ольгой Перцевой",'emails/ticket',context=context)
+
+    mail_user(ticket, "Оплата и проверка оплаты встречи с Ольгой Перцевой",'emails/ticket',context=context)
 
 
 @app.task
 def send_ticket_to_email(ticket_id):
-    ticket = Ticket.object.get(pk=ticket_id)
+    ticket = Ticket.objects.get(pk=ticket_id)
+
     templ = Template(ticket.eventticket.template)
+
     tick = {
      'id' : ticket.id,
      'name' : ticket.eventticket.event.name,
@@ -39,6 +37,7 @@ def send_ticket_to_email(ticket_id):
      'last_name' : ticket.last_name,
      'price' : ticket.price,
     }
+
     cont = Context({ 'ticket' : tick} )
 
 
@@ -52,9 +51,9 @@ def send_ticket_to_email(ticket_id):
         "SITE_HOST" : settings.MISAGO_ADDRESS,
     }
     attach = []
-    ticket = {
+    tick = {
     'filename' : 'ticket.pdf',
     'file' : result
     }
-    attach.append(ticket)
-    mail_user(self, "Билет на встречу с Ольгой Перцевой",'emails/ticket_ok',context=context, attach=attach)
+    attach.append(tick)
+    mail_user(ticket, "Билет на встречу с Ольгой Перцевой",'emails/ticket_ok',context=context, attach=attach)
