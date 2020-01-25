@@ -6,6 +6,8 @@ from django.conf import settings
 
 from django_tinkoff_merchant.models import TinkoffSettings
 from emails.emails import mail_user
+
+from celery.execute import send_task
 # Create your models here.
 
 class PriceField(models.Model):
@@ -66,6 +68,7 @@ class SchoolAppForm(models.Model):
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
     price = models.PositiveIntegerField(default = 0)
     price_f = models.OneToOneField(PriceField, null=True, blank=True)
+    pay_url_sended = models.NullBooleanField(default=False)
 
     def save(self, *args, **kwargs):
 
@@ -110,12 +113,8 @@ class SchoolAppForm(models.Model):
         return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
 
     def send_mail_notification(self):
-        context = {
-            'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(self.id),
-            'user_name' : self.first_name + ' ' + self.last_name,
-            "SITE_HOST" : settings.MISAGO_ADDRESS,
-        }
-        mail_user(self, "Школа неНумерологии",'emails/create_school_form',context=context)
+        send_task('schoolform.send_school_form_pay_url',kwargs={form_id : self.pk, retry_jitter : True,ignore_result : True})
+
 
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
@@ -136,8 +135,6 @@ class SchoolAppCurator(models.Model):
     curator = models.NullBooleanField()
     expert = models.NullBooleanField()
 
-
-
     def save(self, *args, **kwargs):
 
         new = self.pk is None
@@ -146,21 +143,7 @@ class SchoolAppCurator(models.Model):
             self.send_mail_notification()
 
     def send_mail_notification(self):
-        current_status = ''
-        if self.curator:
-            if self.expert:
-                current_status = 'экспертом и куратором'
-            else:
-                current_status = 'куратором'
-        elif self.expert:
-            current_status = 'экспертом'
-
-        context = {
-            'user_name' : self.first_name + ' ' + self.last_name,
-            'user_status' : current_status,
-            "SITE_HOST" : settings.MISAGO_ADDRESS,
-        }
-        mail_user(self, "Школа неНумерологии",'emails/expert_school_form',context=context)
+        send_task('schoolform.send_school_curator_registered',kwargs={form_id : self.pk, retry_jitter : True,ignore_result : True})
 
     def __str__(self):
         if self.curator and not self.expert:
@@ -171,8 +154,9 @@ class SchoolAppCurator(models.Model):
             return "Эксперт и куратор {} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
 
 
+#### NOT USED MODEL!!!!
 class SchoolAppWorker(models.Model):
-
+#### NOT USED MODEL!!!!
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     first_name = models.CharField(max_length=40)
@@ -268,14 +252,6 @@ class SchoolAppPersCuratorForm(models.Model):
     def cancel_payment(self):
 
         return MerchantAPI(terminal_key=settings.TERMINAL_KEY, secret_key=settings.TERMINAL_SECRET_KEY).cancel(self.payment)
-
-    def send_mail_notification(self):
-        context = {
-            'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(self.id),
-            'user_name' : self.first_name + ' ' + self.last_name,
-            "SITE_HOST" : settings.MISAGO_ADDRESS,
-        }
-        mail_user(self, "Школа неНумерологии",'emails/create_school_form',context=context)
 
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
