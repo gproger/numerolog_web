@@ -48,7 +48,6 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
 
     def post(cls, request, format=None):
         ser = SchoolAppFormCreateSerializer(data=request.data)
-        print(request.data)
         if (ser.is_valid(raise_exception=True)):
             cc_flow = request.data.get('flow_id')
             cc_code = request.data.get('code', None)
@@ -102,7 +101,6 @@ class SchoolAppCuratorCreateView(generics.CreateAPIView):
 
     def post(cls, request, format=None):
         ser = SchoolAppCuratorCreateSerializer(data=request.data)
-        print(request.data)
         if (ser.is_valid(raise_exception=True)):
             cc_flow = request.data.get('flow_id')
             c_flow = get_object_or_404(SchoolAppFlow,id=cc_flow)
@@ -132,16 +130,8 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         id = self.kwargs.get('id', None)
-        obj = None
-        print(id)
-        if id is None:
-            return SchoolAppFlow.objects.none()
-        try:
-            obj = SchoolAppFlow.objects.get(pk=id)
-        except SchoolAppFlow.DoesNotExist:
-            obj = None
 
-        return obj
+        return get_object_or_404(SchoolAppFlow,pk=id)
 
 class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializer
@@ -204,7 +194,6 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
         inst.create_payment(amount=request.data['amount'])
         inst.save()
 
-        print(request.data)
         return super(SchoolAppFormShowUpdateURLView,self).put(request,*args,**kwargs)
 
 class SchoolPersCuratorPayView(generics.CreateAPIView):
