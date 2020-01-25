@@ -187,18 +187,8 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
     def get_object(self):
         id = self.kwargs.get('id', None)
-        print(self.request)
-        obj = None
-        if id is None:
-            return SchoolAppForm.objects.none()
-        try:
-            obj = SchoolAppForm.objects.get(pk=id)
-        except SchoolAppForm.DoesNotExist:
-            obj = None
 
-#        obj.create_payment()
-
-        return obj
+        return get_object_or_404(SchoolAppForm,pk=id)
 
     def put(self, request, *args, **kwargs):
         inst = self.get_object()
