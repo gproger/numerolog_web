@@ -48,7 +48,7 @@ payed.short_description = 'Полностью оплачено'
 class PayedListFilter(admin.SimpleListFilter):
     # Human-readable title which will be displayed in the
     # right admin sidebar just above the filter options.
-    title = _('Полностью оплачено')
+    title = 'Полностью оплачено'
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = 'payed'
