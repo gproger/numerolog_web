@@ -113,5 +113,7 @@ class SchoolAppFormAdmin(admin.ModelAdmin):
         'middle_name', 'last_name','instagramm','bid',flow_name,'pay_url_sended','payed_amount','price',payed]
     list_filter = ['flow__flow_name',PayedListFilter]
     actions = [ resend_payment_url, status_payments, refund_payments]
+    search_fields = ['id', 'phone','email','first_name','middle_name','last_name']
+
 
 # Register your models here.

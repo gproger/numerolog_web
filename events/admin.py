@@ -37,7 +37,7 @@ status_payments.short_description = 'Проверить платеж(и)'
 class TicketAdmin(admin.ModelAdmin):
     list_display = ['id', 'price','get_amount_rub', 'phone','email','first_name',
         'middle_name', 'last_name','ticket_sended','pay_url_sended']
-    search_fields = ['id', 'phone','email']
+    search_fields = ['id', 'phone','email','first_name','middle_name','last_name']
     list_filter = ['price','ticket_sended','pay_url_sended']
     actions = [resend_payment_url,resend_ticket,status_payments,refund_payments]
 
