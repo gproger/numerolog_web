@@ -116,7 +116,7 @@ class Ticket(models.Model):
         if not hasattr(obj,'payment'):
             return 0
         for k in obj.payment.all():
-            if k.status == 'CONFIRMED':
+            if k.is_paid():
                 total += k.amount
         return total/100
 
