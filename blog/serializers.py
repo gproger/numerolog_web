@@ -88,11 +88,20 @@ class TermsOfServiceCustomShortSerializer(serializers.ModelSerializer):
 
 class ServicesCustomSerializer(serializers.ModelSerializer):
     toss = TermsOfServiceCustomShortSerializer(many=True, read_only=True)
+    order = serializers.SerializerMethodField()
 
+    def get_order(self, obj):
+        return {
+            'kids_cnt' : obj.kids_cnt,
+            'adult_cnt' : obj.adult_cnt,
+            'comp_parent' : obj.comp_parent,
+            'impr_chld' : obj.impr_chld,
+            'price' : obj.price,
+        }
 
     class Meta:
         model = ServicePage
-        fields = ['descr','price','expert','date_cnt','date','title','toss','id','short_descr']
+        fields = ['descr','price','expert','date_cnt','date','title','toss','id','short_descr','order']
 
 class TermsOfServiceCustomSerializer(serializers.ModelSerializer):
 
@@ -106,4 +115,3 @@ class SchoolPublicCustomSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolPublicPage
         fields = ['id','html','date','title']
-

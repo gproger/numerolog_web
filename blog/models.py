@@ -255,7 +255,11 @@ class ServicePage(Page):
 	)
 
 
-
+    kids_cnt = models.SmallIntegerField(blank=True, default = 0, verbose_name="Детей в разборе")
+    adult_cnt = models.SmallIntegerField(blank=True, default = 0, verbose_name="Взрослых в разборе")
+    kids_cnt = models.SmallIntegerField(blank=True, default = 0, verbose_name="Детей в разборе")
+    comp_parent = models.NullBooleanField(blank=True, default=False, verbose_name="Совместимость родителей")
+    impr_chld = models.NullBooleanField(blank=True, default=False, verbose_name="Влияние на ребёнка")
 
 
     search_fields = Page.search_fields + [ # Inherit search_fields from Page
