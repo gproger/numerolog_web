@@ -26,6 +26,7 @@ def status_payments(modeladmin, request, qs):
             if paym.status != 'CONFIRMED':
                 MerchantAPI().status(paym)
                 paym.save()
+                p.check_full_payment()
 
 
 resend_payment_url.short_description = 'Выслать письмо для оплаты'

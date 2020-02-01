@@ -121,6 +121,9 @@ class Ticket(models.Model):
         return total/100
 
     def check_full_payment(self):
+        if self.ticket_sended:
+            return
+
         if self.get_amount(self) == self.price:
             self.eventticket.solded_cnt = self.eventticket.solded_cnt + 1
             self.eventticket.save()
