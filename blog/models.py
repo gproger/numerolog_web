@@ -255,7 +255,6 @@ class ServicePage(Page):
 	)
 
 
-    kids_cnt = models.SmallIntegerField(blank=True, default = 0, verbose_name="Детей в разборе")
     adult_cnt = models.SmallIntegerField(blank=True, default = 0, verbose_name="Взрослых в разборе")
     kids_cnt = models.SmallIntegerField(blank=True, default = 0, verbose_name="Детей в разборе")
     comp_parent = models.NullBooleanField(blank=True, default=False, verbose_name="Совместимость родителей")
@@ -285,6 +284,10 @@ class ServicePage(Page):
         FieldPanel('expert',classname='full'),
         FieldPanel('date_cnt',classname='full'),
         FieldPanel('toss', widget=forms.CheckboxSelectMultiple),
+        FieldPanel('adult_cnt',classname='full'),
+        FieldPanel('kids_cnt',classname='full'),
+        FieldPanel('comp_parent',classname='full'),
+        FieldPanel('impr_chld',classname='full'),
     ]
 
     settings_panels = Page.settings_panels + [
