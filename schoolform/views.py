@@ -158,7 +158,7 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
         if email.lower() != obj.email.lower():
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
-
+        
         return super(SchoolAppFormShowUpdateView,self).get(request,*args,**kwargs)
 
 

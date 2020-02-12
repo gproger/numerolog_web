@@ -19,6 +19,7 @@ class Payment(models.Model):
         'PaymentURL': 'payment_url',
         'Message': 'message',
         'Details': 'details',
+        'Amount' : 'amount',
     }
 
     amount = models.IntegerField(verbose_name='The amount in cents', editable=False)
