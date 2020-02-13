@@ -154,6 +154,15 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
         model = SchoolAppForm
         fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount','payment','price','price_f','promocode']
 
+class SchoolPersCuratorSerializer(serializers.ModelSerializer):
+
+    payment = PaymentSerializer(required=False, many = True)
+
+    class Meta:
+        model = SchoolAppPersCuratorForm
+        exclude = ['bid','flow']
+
+
 class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     order = serializers.SerializerMethodField(required=False)
@@ -161,6 +170,10 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
     payment = PaymentSerializer(required=False, many = True)
 
     amount = serializers.SerializerMethodField()
+
+    cform = SchoolPersCuratorSerializer(required=False, many=False, read_only=True, source="get_curator_form")
+
+    curator = serializers.SerializerMethodField(required=False)
 
     def get_order(self,obj):
         order = []
@@ -197,20 +210,17 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
                 total += k.amount
         return total/100
 
+    def get_pers_cur(self,obj):
+        if obj.amount != obj.payed_amount:
+            return {}
+        lis = []
+        for x in obj.flow.pers_cur_toss.all():
+            lis.append({'id': x.id,'title' : x.title})
+        return {'price':obj.flow.pers_cur_price,'flow':obj.flow,'id':obj.id,'toss':lis}
+
 
     class Meta:
         model = SchoolAppForm
-        fields = ['order','payment','amount']
+        fields = ['order','payment','amount','cform','curator']
 
 
-class SchoolPersCuratorSerializer(serializers.ModelSerializer):
-
-    payment = serializers.SerializerMethodField()
-
-    def get_payment(self, obj):
-        pay = obj.payment.all().first().payment_url
-        return pay
-
-    class Meta:
-        model = SchoolAppPersCuratorForm
-        exclude = ['bid','flow']
