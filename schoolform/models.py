@@ -48,7 +48,7 @@ class SchoolAppFlow(models.Model):
     by_code_hint = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return str(str(self.flow) + ' ' + self.flow_name)
+        return str(self.flow) + ' ' + str(self.flow_name)
 
 class SchoolAppPersCuratorForm(models.Model):
 
