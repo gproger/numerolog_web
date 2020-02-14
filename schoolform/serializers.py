@@ -211,7 +211,7 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         return total/100
 
     def get_curator(self,obj):
-        if obj.amount != obj.payed_amount:
+        if obj.price != obj.payed_amount:
             return {}
         lis = []
         for x in obj.flow.pers_cur_toss.all():
