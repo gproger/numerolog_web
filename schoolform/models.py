@@ -104,6 +104,16 @@ class SchoolAppPersCuratorForm(models.Model):
 
         return MerchantAPI().cancel(self.payment)
 
+    def is_payed(self):
+        total = 0
+        for payment in self.payment.all():
+            if payment.is_paid():
+                total += payment.amount
+        if total == self.flow.pers_cur_price*100:
+            return True
+        else:
+            return False
+
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
 

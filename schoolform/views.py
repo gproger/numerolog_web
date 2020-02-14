@@ -3,8 +3,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
+from django.views import View
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 
-from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, PriceField
+from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, PriceField, SchoolAppPersCuratorForm
+from blog.models import TermsOfServicePage
 
 from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
 from .serializers import SchoolAppFormCreateSerializer,SchoolAppFormFlowStudentsList
@@ -12,6 +15,11 @@ from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializ
 from .serializers import SchoolPersCuratorSerializer
 from django.shortcuts import render, get_object_or_404
 from promocode.models import PromoCode
+from django_tinkoff_merchant.serializers import PaymentSerializer
+import json
+
+from django.http import JsonResponse
+
 
 # Create your views here.
 
@@ -200,3 +208,54 @@ class SchoolPersCuratorPayView(generics.CreateAPIView):
 
     serializer_class = SchoolPersCuratorSerializer
     permission_classes = [AllowAny]
+
+
+class SchoolApplyPersCurator(View):
+    def post(self, request, *args, **kwargs):
+
+        json_data = json.loads(request.body.decode('utf-8'))
+        flow = get_object_or_404(SchoolAppFlow,id=json_data['flow_id'])
+        form = get_object_or_404(SchoolAppForm,id=json_data['form_id'])
+        if flow != form.flow:
+            return HttpResponseForbidden()
+
+        cur = SchoolAppPersCuratorForm()
+        cur.first_name = form.first_name
+        cur.last_name = form.last_name
+        cur.phone = form.phone
+        cur.bid = form.bid
+        cur.middle_name = form.middle_name
+        cur.email = form.email
+        cur.flow = flow
+        test_c = True
+        for term in json_data['accepted_toss']:
+            tobj = get_object_or_404(TermsOfServicePage,id=term)
+            if tobj not in flow.pers_cur_toss.all():
+                test_c = False
+
+        if not test_c:
+            return HttpResponseBadRequest
+
+        cur.save()
+        
+        for term in json_data['accepted_toss']:
+            tobj = get_object_or_404(TermsOfServicePage,id=term)
+            cur.accepted_toss.add(tobj)
+
+        cur.save()
+        paym = cur.payment.last()
+        serializer = PaymentSerializer(paym)
+        return JsonResponse(serializer.data)
+
+
+class SchoolApplyPersCuratorGetPayURL(View):
+    def get(self, request, *args, **kwargs):
+        
+        id = self.kwargs.get('id', None)
+        print(id)
+        pform = get_object_or_404(SchoolAppPersCuratorForm,pk=id)
+        pform.create_payment()
+        paym = pform.payment.last()
+        serializer = PaymentSerializer(paym)
+        return JsonResponse(serializer.data)
+        

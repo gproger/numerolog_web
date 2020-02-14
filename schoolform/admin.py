@@ -1,11 +1,13 @@
 from django.contrib import admin
 from django.db.models import F, Q
 from django_tinkoff_merchant.services import MerchantAPI
-from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator
+from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm
 from schoolform.tasks import send_school_form_pay_url
 
 def flow_name(obj):
     return obj.flow.flow_name
+
+admin.site.register(SchoolAppPersCuratorForm)
 
 @admin.register(SchoolAppCurator)
 class SchoolAppCuratorAdmin(admin.ModelAdmin):

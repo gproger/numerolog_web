@@ -157,6 +157,11 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
 class SchoolPersCuratorSerializer(serializers.ModelSerializer):
 
     payment = PaymentSerializer(required=False, many = True)
+    payed = serializers.SerializerMethodField(required=False)
+
+    def get_payed(self,obj):
+        return obj.is_payed()
+
 
     class Meta:
         model = SchoolAppPersCuratorForm
