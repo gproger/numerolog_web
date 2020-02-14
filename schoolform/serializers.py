@@ -206,8 +206,10 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         if not hasattr(obj,'payment'):
             return 0
         for k in obj.payment.all():
-            if k.status == 'CONFIRMED':
+            if k.status == 'CONFIRMED' or k.status == 'AUTHORIZED':
                 total += k.amount
+        if obj.payed_amount > total/100:
+            total = obj.payed_amount
         return total/100
 
     def get_curator(self,obj):
