@@ -50,6 +50,64 @@ class SchoolAppFlow(models.Model):
     def __str__(self):
         return str(self.flow) + ' ' + str(self.flow_name)
 
+class SchoolAppPersCuratorForm(models.Model):
+
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=40)
+    last_name = models.CharField(max_length=40)
+    middle_name = models.CharField(max_length=40)
+    bid = models.DateField(null=True)
+    accepted = models.CharField(max_length=40)
+    flow = models.ForeignKey(SchoolAppFlow)
+    created = models.DateTimeField(auto_now_add=True)
+    accepted_toss = models.ManyToManyField(TermsOfServicePage)
+    payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+
+        new = self.pk is None
+        super(SchoolAppPersCuratorForm, self).save(*args, **kwargs)
+        if new:
+            self.create_payment()
+
+    def create_payment(self, *args, **kwargs):
+        order_obj = str(self.pk)
+        order_plural="Школа "
+        amount = self.flow.pers_cur_price*100
+        if 'amount' in kwargs:
+            amount = kwargs.get('amount')
+
+        items = [
+            {'name': 'Услуга персонального куратора  в школе неНумерологии', 'price': amount, 'quantity': 1},
+        ]
+
+
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Услуга персонального куратора  в школе неНумерологии Ольги Перцевой',terminal=TinkoffSettings.get_school_terminal()) \
+            .with_receipt(email=self.email,phone=self.phone) \
+            .with_items(items)
+
+        payment = MerchantAPI().init(payment)
+
+        payment.save()
+
+        self.payment.add(payment)
+        self.save()
+
+
+    def get_payment_status(self):
+        for payment in  self.payment.all():
+             if payment.status != 'CONFIRMED':
+                 MerchantAPI().status(payment).save()
+
+    def cancel_payment(self):
+
+        return MerchantAPI().cancel(self.payment)
+
+    def __str__(self):
+        return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
+
+
 class SchoolAppForm(models.Model):
 
     email = models.EmailField()
@@ -127,6 +185,12 @@ class SchoolAppForm(models.Model):
         self.payed_amount = count
         self.save()
 
+    def get_curator_form(self):
+        forms = SchoolAppPersCuratorForm.objects.filter(flow=self.flow,email=self.email)
+        if form.count() != 0:
+            return form.first()
+        return None
+
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
 
@@ -197,59 +261,3 @@ class SchoolAppWorker(models.Model):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
 
 
-class SchoolAppPersCuratorForm(models.Model):
-
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
-    middle_name = models.CharField(max_length=40)
-    bid = models.DateField(null=True)
-    accepted = models.CharField(max_length=40)
-    flow = models.ForeignKey(SchoolAppFlow)
-    created = models.DateTimeField(auto_now_add=True)
-    accepted_toss = models.ManyToManyField(TermsOfServicePage)
-    payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-
-        new = self.pk is None
-        super(SchoolAppPersCuratorForm, self).save(*args, **kwargs)
-        if new:
-            self.create_payment()
-
-    def create_payment(self, *args, **kwargs):
-        order_obj = str(self.pk)
-        order_plural="Школа "
-        amount = self.flow.pers_cur_price*100
-        if 'amount' in kwargs:
-            amount = kwargs.get('amount')
-
-        items = [
-            {'name': 'Услуга персонального куратора  в школе неНумерологии', 'price': amount, 'quantity': 1},
-        ]
-
-
-        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Услуга персонального куратора  в школе неНумерологии Ольги Перцевой',terminal=TinkoffSettings.get_school_terminal()) \
-            .with_receipt(email=self.email,phone=self.phone) \
-            .with_items(items)
-
-        payment = MerchantAPI().init(payment)
-
-        payment.save()
-
-        self.payment.add(payment)
-        self.save()
-
-
-    def get_payment_status(self):
-        for payment in  self.payment.all():
-             if payment.status != 'CONFIRMED':
-                 MerchantAPI().status(payment).save()
-
-    def cancel_payment(self):
-
-        return MerchantAPI().cancel(self.payment)
-
-    def __str__(self):
-        return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
