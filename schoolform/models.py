@@ -187,8 +187,8 @@ class SchoolAppForm(models.Model):
 
     def get_curator_form(self):
         forms = SchoolAppPersCuratorForm.objects.filter(flow=self.flow,email=self.email)
-        if form.count() != 0:
-            return form.first()
+        if forms.count() != 0:
+            return forms.first()
         return None
 
     def __str__(self):
@@ -259,5 +259,3 @@ class SchoolAppWorker(models.Model):
 
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
-
-
