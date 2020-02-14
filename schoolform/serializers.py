@@ -210,7 +210,7 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
                 total += k.amount
         return total/100
 
-    def get_pers_cur(self,obj):
+    def get_curator(self,obj):
         if obj.amount != obj.payed_amount:
             return {}
         lis = []
@@ -222,5 +222,3 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolAppForm
         fields = ['order','payment','amount','cform','curator']
-
-
