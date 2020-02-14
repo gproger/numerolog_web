@@ -209,7 +209,7 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
             if k.status == 'CONFIRMED' or k.status == 'AUTHORIZED':
                 total += k.amount
         if obj.payed_amount > total/100:
-            total = obj.payed_amount
+            total = obj.payed_amount*100
         return total/100
 
     def get_curator(self,obj):
