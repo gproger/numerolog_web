@@ -216,7 +216,7 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         lis = []
         for x in obj.flow.pers_cur_toss.all():
             lis.append({'id': x.id,'title' : x.title})
-        return {'price':obj.flow.pers_cur_price,'flow':obj.flow,'id':obj.id,'toss':lis}
+        return {'price':obj.flow.pers_cur_price,'flow':obj.flow.id,'id':obj.id,'toss':lis}
 
 
     class Meta:
