@@ -133,6 +133,7 @@ class TicketAppFormSerializer(serializers.ModelSerializer):
         order.append({'name' : 'Встреча:', 'value' : obj.eventticket.event.name})
         order.append({'name' : 'Фамилия:', 'value' : obj.last_name})
         order.append({'name' : 'Имя:', 'value' : obj.first_name})
+        order.append({'name' : 'Отчество:', 'value' : obj.middle_name})
         order.append({'name' : 'E-mail:', 'value' : obj.email})
         order.append({'name' : 'Телефон:', 'value' : obj.phone})
         order.append({'name' : 'Стоимость участия:', 'value' : obj.price})
