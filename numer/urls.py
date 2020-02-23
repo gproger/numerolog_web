@@ -71,6 +71,7 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^pages/', include(wagtail_urls)),
     url(r'^api/v2/',api_router.urls),
+    url(r'^', include(smsgate_api)),
     url(r'^', include(numer_app_api)),
     url(r'^', include(numer_favs_api)),
     url(r'^', include(numer_school_form_api)),
@@ -82,7 +83,6 @@ urlpatterns = [
     url(r'^', include(numer_service_api)),
     url(r'^', include(codes_api)),
     url(r'^', include(events_api)),
-    url(r'^', include(smsgate_api)),
     url(r'^', include(wagtail_urls)),
 
 ]
