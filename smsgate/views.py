@@ -21,7 +21,8 @@ class SMSVerifyPhone(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body.decode())
         phone = data.get('phone',None)
-
+        print(data)
+        
         if phone is None:
             return JsonResponse({'desc' : 'Не указан номер телефона'}, status=400)
 
