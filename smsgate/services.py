@@ -76,7 +76,7 @@ class SendSMSAPI(object):
 
         auth_obj = auth_obj.first()
         if int(code) == int(auth_obj.code):
-            return {'desc' : 'Code OK', 'result' : 1}
+            return {'desc' : 'Code OK', 'result' : 1, 'phone' : phone}
         else:
             return {'desc' : 'Code Fail', 'result' : 0}
 
