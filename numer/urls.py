@@ -82,7 +82,7 @@ urlpatterns = [
     url(r'^', include(numer_service_api)),
     url(r'^', include(codes_api)),
     url(r'^', include(events_api)),
-    url(r'/numer/api/',include(smsgate_api)),
+    url(r'^',include(smsgate_api)),
     url(r'^', include(wagtail_urls)),
 
 ]
