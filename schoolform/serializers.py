@@ -186,14 +186,14 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order = []
         if not hasattr(obj,'id'):
             return order
-        order.append({'name' : 'Заказ №', 'value' : obj.id})
-        order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow})
-        order.append({'name' : 'Курс обучения:', 'value' : obj.flow.flow_name})
-        order.append({'name' : 'Фамилия:', 'value' : obj.last_name})
-        order.append({'name' : 'Имя:', 'value' : obj.first_name})
-        order.append({'name' : 'E-mail:', 'value' : obj.email})
-        order.append({'name' : 'Телефон:', 'value' : obj.phone})
-        order.append({'name' : 'Стоимость обучения:', 'value' : obj.price})
+        order.append({'name' : 'Заказ №', 'value' : obj.id, 'type' : 'id'})
+        order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow, 'type' : 'flow_id'})
+        order.append({'name' : 'Курс обучения:', 'value' : obj.flow.flow_name, 'type' : 'flow_name'})
+        order.append({'name' : 'Фамилия:', 'value' : obj.last_name, 'type' : 'last_name'})
+        order.append({'name' : 'Имя:', 'value' : obj.first_name, 'type' : 'first_name'})
+        order.append({'name' : 'E-mail:', 'value' : obj.email, 'type' : 'email'})
+        order.append({'name' : 'Телефон:', 'value' : obj.phone, 'type' : 'phone'})
+        order.append({'name' : 'Стоимость обучения:', 'value' : obj.price, 'type' : 'price'})
         #if hasattr(obj,'payed_outline'):
         #    if obj.payed_outline > 0:
         #        order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
