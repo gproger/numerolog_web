@@ -68,3 +68,5 @@ class SMSTestCode(View):
 
         if res['result'] == -1:
             return JsonResponse({'desc' : 'На данный номер не высылалось сообщений'}, status=400)
+
+        return JsonResponse(res, status=200)

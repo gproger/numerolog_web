@@ -36,6 +36,7 @@ from app.urls import urls as numer_app_api
 from service.urls import urls as numer_service_api
 from promocode.urls import urls as codes_api
 from events.urls import urls as events_api
+from smsgate.urls import urls as smsgate_api
 
 from misago.users.forms.auth import AdminAuthenticationForm
 from blog.api import api_router
@@ -81,6 +82,7 @@ urlpatterns = [
     url(r'^', include(numer_service_api)),
     url(r'^', include(codes_api)),
     url(r'^', include(events_api)),
+    url(r'/numer/api/',include(smsgate_api)),
     url(r'^', include(wagtail_urls)),
 
 ]
