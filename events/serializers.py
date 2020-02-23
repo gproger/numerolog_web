@@ -125,6 +125,8 @@ class TicketAppFormSerializer(serializers.ModelSerializer):
 
     amount = serializers.SerializerMethodField()
 
+    phone_valid = serializers.BooleanField(required=False)
+
     def get_order(self,obj):
         order = []
         if not hasattr(obj,'id'):
@@ -163,4 +165,4 @@ class TicketAppFormSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ['order','payment','amount']
+        fields = ['order','payment','amount','phone_valid']
