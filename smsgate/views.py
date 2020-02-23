@@ -8,9 +8,6 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Payment
-from .services import MerchantAPI
-from .signals import payment_update
 import logging
 
 from .services import SendSMSAPI
