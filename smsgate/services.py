@@ -25,7 +25,7 @@ class SendSMSAPI(object):
         c = Context({"code" : code})
         return t.render(c)
 
-    def send_verify_sms(self, phone):
+    def send_verify_sms(self, phone, info):
         # first - check if sms was sended for this phones
         phone = get_phone(phone)
 
@@ -40,6 +40,9 @@ class SendSMSAPI(object):
         else:
             auth_obj = PhoneAuthSMS()
             auth_obj.phone = phone
+            if info is not None:
+                auth_obj.type = info.type
+                auth_obj.t_id = info.id
 
         auth_obj.code = random.randrange(100000,1000000,1)
         auth_obj.text = self.get_auth_phone_text(auth_obj.code)
@@ -66,13 +69,18 @@ class SendSMSAPI(object):
     def test_verify_sms_code(self, phone, code):
 
         phone = get_phone(phone)
-        
+
         auth_obj = PhoneAuthSMS.objects.filter(phone=phone)
         if auth_obj.count() == 0:
             return {'desc' : 'SMS not sended', 'result' : -1}
 
         auth_obj = auth_obj.first()
         if int(code) == int(auth_obj.code):
+            if auth_obj.type == 'school':
+                s_obj = SchoolAppForm.objects.get(pk=auth_obj.t_id)
+                s_obj.phone = phone
+                s_obj.phone_valid = True
+                s_obj.save()
             return {'desc' : 'Code OK', 'result' : 1, 'phone' : phone}
         else:
             return {'desc' : 'Code Fail', 'result' : 0}

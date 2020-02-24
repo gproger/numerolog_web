@@ -26,7 +26,8 @@ class SendedSMS(models.Model):
 
 class PhoneAuthSMS(SendedSMS):
     code = models.PositiveIntegerField()
-
+    type = models.CharField(max_length=200,blank=True)
+    t_id = models.PositiveIntegerField()
 
 class NotifySMS(SendedSMS):
     pass
