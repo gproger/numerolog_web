@@ -61,7 +61,7 @@ class SMSTestCode(View):
         if info is None:
             return JsonResponse({'desc' : 'Нет информации о верифицируемом объекте'}, status=400)
 
-        type = info.get('info', None)
+        type = info.get('type', None)
 
         if type is None:
             return JsonResponse({'desc' : 'Нет информации о типе верифицируемом объекте'}, status=400)
