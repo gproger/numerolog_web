@@ -56,6 +56,15 @@ class SMSTestCode(View):
         phone = data.get('phone',None)
         phone = get_phone(phone)
         code = data.get('code',None)
+        info = data.get('info',None)
+
+        if info is None:
+            return JsonResponse({'desc' : 'Нет информации о верифицируемом объекте'}, status=400)
+
+        type = info.get('info', None)
+
+        if type is None:
+            return JsonResponse({'desc' : 'Нет информации о типе верифицируемом объекте'}, status=400)
 
         if phone is None:
             return JsonResponse({'desc' : 'Не указан номер телефона'}, status=400)
@@ -66,7 +75,7 @@ class SMSTestCode(View):
 
         sms = SendSMSAPI()
 
-        res = sms.test_verify_sms_code(phone,code)
+        res = sms.test_verify_sms_code(phone,code,type)
 
         if res['result'] == -1:
             return JsonResponse({'desc' : 'На данный номер не высылалось сообщений'}, status=400)

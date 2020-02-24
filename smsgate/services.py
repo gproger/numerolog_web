@@ -77,11 +77,11 @@ class SendSMSAPI(object):
             return {'result' : auth_obj.status, 'desc' : desc_text}
 
 
-    def test_verify_sms_code(self, phone, code):
+    def test_verify_sms_code(self, phone, code, type):
 
         phone = get_phone(phone)
 
-        auth_obj = PhoneAuthSMS.objects.filter(phone=phone)
+        auth_obj = PhoneAuthSMS.objects.filter(phone=phone, type=type)
         if auth_obj.count() == 0:
             return {'desc' : 'SMS not sended', 'result' : -1}
 
