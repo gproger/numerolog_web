@@ -87,16 +87,17 @@ class SendSMSAPI(object):
 
         auth_obj = auth_obj.first()
         if int(code) == int(auth_obj.code):
-            if auth_obj.type == 'school':
-                s_obj = SchoolAppForm.objects.get(pk=auth_obj.t_id)
-                s_obj.phone = phone
-                s_obj.phone_valid = True
-                s_obj.save()
-            if auth_obj.type == 'ticket':
-                t_obj = Ticket.objects.get(pk=auth_obj.t_id)
-                t_obj.phone = phone
-                t_obj.phone_valid = True
-                t_obj.save()
+            if auth_obj.t_id != 0:
+                if auth_obj.type == 'school':
+                    s_obj = SchoolAppForm.objects.get(pk=auth_obj.t_id)
+                    s_obj.phone = phone
+                    s_obj.phone_valid = True
+                    s_obj.save()
+                if auth_obj.type == 'ticket':
+                    t_obj = Ticket.objects.get(pk=auth_obj.t_id)
+                    t_obj.phone = phone
+                    t_obj.phone_valid = True
+                    t_obj.save()
             return {'desc' : 'Code OK', 'result' : 1, 'phone' : phone}
         else:
             return {'desc' : 'Code Fail', 'result' : 0}
