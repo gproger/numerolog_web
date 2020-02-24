@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
+from utils.phone import get_phone
 
 import logging
 
@@ -21,8 +22,9 @@ class SMSVerifyPhone(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body.decode())
         phone = data.get('phone',None)
+        phone = get_phone(phone)
         print(data)
-        
+
         if phone is None:
             return JsonResponse({'desc' : 'Не указан номер телефона'}, status=400)
 
@@ -51,6 +53,7 @@ class SMSTestCode(View):
 
         data = json.loads(request.body.decode())
         phone = data.get('phone',None)
+        phone = get_phone(phone)
         code = data.get('code',None)
 
         if phone is None:

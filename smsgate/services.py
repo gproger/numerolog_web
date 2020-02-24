@@ -6,6 +6,7 @@ from .models import NotifySMS
 from .models import PhoneAuthSMS
 from django.utils.crypto import get_random_string
 from .smsc_api import SMSC
+from utils.phone import get_phone
 
 from datetime import datetime
 import random
@@ -26,10 +27,7 @@ class SendSMSAPI(object):
 
     def send_verify_sms(self, phone):
         # first - check if sms was sended for this phones
-        phone = phone.replace(" ","")
-        phone = phone.replace("(","")
-        phone = phone.replace(")","")
-        phone = phone.replace("-","")
+        phone = get_phone(phone)
 
         auth_obj = PhoneAuthSMS.objects.filter(phone=phone)
         if auth_obj.count() != 0:
@@ -66,10 +64,9 @@ class SendSMSAPI(object):
 
 
     def test_verify_sms_code(self, phone, code):
-        phone = phone.replace(" ","")
-        phone = phone.replace("(","")
-        phone = phone.replace(")","")
-        phone = phone.replace("-","")
+
+        phone = get_phone(phone)
+        
         auth_obj = PhoneAuthSMS.objects.filter(phone=phone)
         if auth_obj.count() == 0:
             return {'desc' : 'SMS not sended', 'result' : -1}
@@ -81,10 +78,7 @@ class SendSMSAPI(object):
             return {'desc' : 'Code Fail', 'result' : 0}
 
     def send_sms(self, phone, message):
-        phone = phone.replace(" ","")
-        phone = phone.replace("(","")
-        phone = phone.replace(")","")
-        phone = phone.replace("-","")
+        phone = get_phone(phone)
 
         sms = SendedSMS()
         sms.phone = phone
