@@ -9,6 +9,7 @@ from .smsc_api import SMSC
 from utils.phone import get_phone
 
 from datetime import datetime
+from schoolform.models import SchoolAppForm
 import random
 
 from django.template import Template, Context
@@ -41,8 +42,8 @@ class SendSMSAPI(object):
             auth_obj = PhoneAuthSMS()
             auth_obj.phone = phone
             if info is not None:
-                auth_obj.type = info.type
-                auth_obj.t_id = info.id
+                auth_obj.type = info['type']
+                auth_obj.t_id = info['id']
 
         auth_obj.code = random.randrange(100000,1000000,1)
         auth_obj.text = self.get_auth_phone_text(auth_obj.code)
