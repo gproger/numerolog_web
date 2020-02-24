@@ -10,6 +10,7 @@ from utils.phone import get_phone
 
 from datetime import datetime
 from schoolform.models import SchoolAppForm
+from events.models import Ticket
 import random
 
 from django.template import Template, Context
@@ -29,8 +30,17 @@ class SendSMSAPI(object):
     def send_verify_sms(self, phone, info):
         # first - check if sms was sended for this phones
         phone = get_phone(phone)
+        type = info.get('type',None)
+        t_id = info.get('id',None)
+        if type is None:
+            return {'desc' : 'Incorrect request, type absent', 'result' : -4, 'error':'request'}
 
-        auth_obj = PhoneAuthSMS.objects.filter(phone=phone)
+        if t_id is None:
+            return {'desc' : 'Incorrect request, t_id absent', 'result' : -5, 'error':'request'}
+
+
+        auth_obj = PhoneAuthSMS.objects.filter(phone=phone,type=type)
+
         if auth_obj.count() != 0:
             # get first object from queryset
             auth_obj = auth_obj.first()
@@ -41,13 +51,13 @@ class SendSMSAPI(object):
         else:
             auth_obj = PhoneAuthSMS()
             auth_obj.phone = phone
-            if info is not None:
-                auth_obj.type = info['type']
-                auth_obj.t_id = info['id']
+
 
         auth_obj.code = random.randrange(100000,1000000,1)
         auth_obj.text = self.get_auth_phone_text(auth_obj.code)
-        print(auth_obj.text)
+        auth_obj.type = type
+        auth_obj.t_id = t_id
+
         smsc = SMSC()
         res = smsc.send_sms(phones=auth_obj.phone,message=auth_obj.text)
         if res[1] > "0":
@@ -82,6 +92,11 @@ class SendSMSAPI(object):
                 s_obj.phone = phone
                 s_obj.phone_valid = True
                 s_obj.save()
+            if auth_obj.type == 'ticket':
+                t_obj = Ticket.objects.get(pk=auth_obj.t_id)
+                t_obj.phone = phone
+                t_obj.phone_valid = True
+                t_obj.save()
             return {'desc' : 'Code OK', 'result' : 1, 'phone' : phone}
         else:
             return {'desc' : 'Code Fail', 'result' : 0}
