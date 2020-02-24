@@ -90,7 +90,7 @@ class SendSMSAPI(object):
             if auth_obj.t_id != 0:
                 if auth_obj.type == 'school':
                     s_obj = SchoolAppForm.objects.get(pk=auth_obj.t_id)
-                    if s_obj.phone_valid is not True
+                    if s_obj.phone_valid is not True:
                         s_obj.phone = phone
                         s_obj.phone_valid = True
                         s_obj.save()
