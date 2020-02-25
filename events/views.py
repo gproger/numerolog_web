@@ -95,7 +95,6 @@ class TicketAddView(generics.CreateAPIView):
 
     def post(cls, request, format=None):
         ser = TicketCreateSerializer(data=request.data)
-        print(request.data)
         if (ser.is_valid(raise_exception=True)):
             cc_event = request.data.get('eventticket')
             cc_event = get_object_or_404(EventTicketTemplate,id=cc_event)
@@ -131,10 +130,10 @@ class TicketAddView(generics.CreateAPIView):
                 objs.price = pr_field.price - pr_field.discount
                 pr_field.save()
                 objs.price_f = pr_field
-                objs.save()
+                objs.update()
                 code_item.price.add(pr_field)
                 code_item.elapsed_count = code_item.elapsed_count - 1
-                code_item.save()
+                code_item.update()
 
             return Response(ser.data)
 
@@ -195,5 +194,4 @@ class TicketShowUpdateURLView(generics.UpdateAPIView):
         inst.create_payment(amount=request.data['amount'])
         inst.save()
 
-        print(request.data)
         return super(TicketShowUpdateURLView,self).put(request,*args,**kwargs)
