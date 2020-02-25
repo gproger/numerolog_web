@@ -130,11 +130,10 @@ class TicketAddView(generics.CreateAPIView):
                 objs.price = pr_field.price - pr_field.discount
                 pr_field.save()
                 objs.price_f = pr_field
-                objs.update()
                 code_item.price.add(pr_field)
                 code_item.elapsed_count = code_item.elapsed_count - 1
-                code_item.update()
-
+                code_item.save()
+                objs.save()
             return Response(ser.data)
 
 
