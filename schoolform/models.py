@@ -10,6 +10,9 @@ from emails.emails import mail_user
 from celery.execute import send_task
 # Create your models here.
 
+PERS_CURATOR_DESC = 'Услуга персонального куратора в школе неНумерологии Ольги Перцевой'
+SCHOOL_PAYMENT_DESC = 'Оплата обучения в школе неНумерологии Ольги Перцевой'
+
 class PriceField(models.Model):
     price = models.PositiveIntegerField(default=0)
     currency = models.CharField(default='RUB', max_length=7)
@@ -83,7 +86,7 @@ class SchoolAppPersCuratorForm(models.Model):
         ]
 
 
-        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Услуга персонального куратора  в школе неНумерологии Ольги Перцевой',terminal=TinkoffSettings.get_school_terminal()) \
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description=PERS_CURATOR_DESC,terminal=TinkoffSettings.get_school_terminal()) \
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
@@ -161,7 +164,7 @@ class SchoolAppForm(models.Model):
         ]
 
 
-        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Оплата обучения в школе неНумерологии Ольги Перцевой',terminal=TinkoffSettings.get_school_terminal()) \
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description=SCHOOL_PAYMENT_DESC,terminal=TinkoffSettings.get_school_terminal()) \
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
@@ -204,6 +207,20 @@ class SchoolAppForm(models.Model):
 
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
+
+    @classmethod
+    def get_registered_from_date(cls, date):
+        payments = Payment.objects.filter(terminal=TinkoffSettings.get_school_terminal(),date_updated__gte=date)
+        objs = {}
+        for p in payments:
+            if p.description != SCHOOL_PAYMENT_DESC:
+                continue
+            if p.is_paid():
+                obj = cls.objects.get(pk=p.order_obj)
+                amount = obj.payed_amount*100 - p.amount
+                if amount == 0:
+                    objs.append(obj)
+        return objs                                             
 
 
 class SchoolAppCurator(models.Model):

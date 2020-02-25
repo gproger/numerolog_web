@@ -19,7 +19,7 @@ from django_tinkoff_merchant.serializers import PaymentSerializer
 import json
 
 from django.http import JsonResponse
-
+from datetime import datetime
 
 # Create your views here.
 
@@ -259,3 +259,11 @@ class SchoolApplyPersCuratorGetPayURL(View):
         serializer = PaymentSerializer(paym)
         return JsonResponse(serializer.data)
         
+
+class SchoolAppFromFilterByPayDate(View):
+    def get(self, request, *args, **kwargs):
+        date = self.kwargs.get('date', None)
+	dtime = datetime.fromisoformat(date)	
+	objs = SchoolAppForm.get_registered_from_date(dtime)
+        print(objs)
+	
