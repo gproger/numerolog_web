@@ -68,7 +68,6 @@ class PayedListFilter(admin.SimpleListFilter):
         in the right sidebar.
         """
         return (
-            (None, 'Неважно'),
             (True, 'Да'),
             (False, 'Нет'),
         )
