@@ -19,7 +19,7 @@ from django_tinkoff_merchant.serializers import PaymentSerializer
 import json
 
 from django.http import JsonResponse
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Create your views here.
 
@@ -264,6 +264,7 @@ class SchoolAppFromFilterByPayDate(View):
     def get(self, request, *args, **kwargs):
         date = self.kwargs.get('date', None)
         dtime = datetime.strptime("24-8-2019 15:00:00","%d-%m-%Y %H:%M:%S")
-        objs = SchoolAppForm.get_registered_from_date(dtime)
+        dt = datetime.strptime("24-8-2017 15:00:00","%d-%m-%Y %H:%M:%S").replace(tzinfo=timezone.utc)
+        objs = SchoolAppForm.get_registered_from_date(dt)
         print(objs)
 	
