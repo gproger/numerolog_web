@@ -5,7 +5,7 @@ from .models import Payment
 class PaymentSerializer(serializers.ModelSerializer):
 
     date_created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'],required=False)
-    date_updated = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'],required=False)
+    date_updated = serializers.DateTimeField(required=False)
 
 
     class Meta:
