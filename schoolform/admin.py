@@ -68,6 +68,7 @@ class PayedListFilter(admin.SimpleListFilter):
         in the right sidebar.
         """
         return (
+            (None, 'Неважно'),
             (True, 'Да'),
             (False, 'Нет'),
         )
@@ -80,6 +81,9 @@ class PayedListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value (either '80s' or '90s')
         # to decide how to filter the queryset.
+        if self.value() is None:
+            return queryset
+
         if self.value():
             return queryset.filter(payed_amount=F('price'))
         else:
@@ -105,16 +109,23 @@ def status_payments(modeladmin, request, qs):
                 paym.save()
 
 
+def recalc_payments(modeladmin, request, qs):
+    for p in qs:
+        p.check_full_payment()
+
+
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
 refund_payments.short_description = 'Отменить платеж(и)'
 status_payments.short_description = 'Проверить платеж(и)'
+recalc_payments.short_description = 'Перепроверить оплату'
+
 
 @admin.register(SchoolAppForm)
 class SchoolAppFormAdmin(admin.ModelAdmin):
     list_display = ['id', 'email','phone','first_name',
         'middle_name', 'last_name','instagramm','bid',flow_name,'pay_url_sended','payed_amount','price',payed]
     list_filter = ['flow__flow_name',PayedListFilter]
-    actions = [ resend_payment_url, status_payments, refund_payments]
+    actions = [ resend_payment_url, status_payments, recalc_payments, refund_payments]
     search_fields = ['id', 'phone','email','first_name','middle_name','last_name']
 
 
