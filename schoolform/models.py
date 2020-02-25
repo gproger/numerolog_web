@@ -216,7 +216,11 @@ class SchoolAppForm(models.Model):
             if p.description != SCHOOL_PAYMENT_DESC:
                 continue
             if p.is_paid():
-                obj = cls.objects.get(pk=p.order_obj)
+                try:
+                    obj = SchoolAppForm.objects.get(pk=p.order_obj)
+                except SchoolAppForm.DoesNotExist:
+                    continue
+
                 amount = obj.payed_amount*100 - p.amount
                 if amount == 0:
                     objs.append(obj)

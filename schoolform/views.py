@@ -263,7 +263,7 @@ class SchoolApplyPersCuratorGetPayURL(View):
 class SchoolAppFromFilterByPayDate(View):
     def get(self, request, *args, **kwargs):
         date = self.kwargs.get('date', None)
-	dtime = datetime.fromisoformat(date)	
+ 	dtime = datetime.strptime("24-8-2019 15:00:00","%d-%m-%Y %H:%M:%S")
 	objs = SchoolAppForm.get_registered_from_date(dtime)
         print(objs)
 	
