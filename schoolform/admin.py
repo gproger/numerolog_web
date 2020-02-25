@@ -84,7 +84,7 @@ class PayedListFilter(admin.SimpleListFilter):
         if self.value() is None:
             return queryset
 
-        if self.value():
+        if self.value() == 'True':
             return queryset.filter(payed_amount=F('price'))
         else:
             return queryset.filter(~Q(payed_amount=F('price')))
