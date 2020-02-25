@@ -211,7 +211,7 @@ class SchoolAppForm(models.Model):
     @classmethod
     def get_registered_from_date(cls, date):
         payments = Payment.objects.filter(terminal=TinkoffSettings.get_school_terminal(),date_updated__gte=date)
-        objs = {}
+        objs = []
         for p in payments:
             if p.description != SCHOOL_PAYMENT_DESC:
                 continue
