@@ -190,7 +190,7 @@ class SchoolAppForm(models.Model):
     def check_full_payment(self):
         count = 0
         for payment in self.payment.all():
-             if payment.status == 'CONFIRMED':
+             if payment.is_paid():
                  count = count + payment.amount
         count /= 100
         self.payed_amount = count
