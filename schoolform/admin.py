@@ -70,6 +70,7 @@ class PayedListFilter(admin.SimpleListFilter):
         return (
             (True, 'Да'),
             (False, 'Нет'),
+            ('NotFull', 'Не полная оплата')
         )
 
     def queryset(self, request, queryset):
@@ -85,8 +86,10 @@ class PayedListFilter(admin.SimpleListFilter):
 
         if self.value() == 'True':
             return queryset.filter(payed_amount=F('price'))
-        else:
+        elif self.value() == 'False':
             return queryset.filter(~Q(payed_amount=F('price')))
+        elif self.value() == 'NotFull':
+            return queryset.filter(~Q(payed_amount=F('price'))).filter(payed_amount__gt=0)
 
 
 
