@@ -83,8 +83,8 @@ class ServiceClientCreateView(generics.CreateAPIView):
         print(request.data)
         if (ser.is_valid(raise_exception=True)):
             amount = int(request.data.get('amount'))
-            if amount % 500 != 0:
-                return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
+#            if amount % 500 != 0:
+#                return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
             obj = ser.save()
             obj.create_payment(amount)
             return Response(ser.data)

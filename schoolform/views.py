@@ -185,8 +185,8 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
         if request.data['amount']  <= 0:
             return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
-        if request.data['amount'] % 100000 != 0:
-            return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
+#        if request.data['amount'] % 100000 != 0:
+#            return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
         if request.data['amount'] > inst.price*100:
             return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
 
