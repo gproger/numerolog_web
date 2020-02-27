@@ -40,4 +40,20 @@ def send_school_curator_registered(form_id):
         "SITE_HOST" : settings.MISAGO_ADDRESS,
     }
     mail_user(form, "Школа неНумерологии",'emails/expert_school_form',context=context)
-    
+
+@app.task
+def send_school_from_pay_notify(form_id):
+    form = SchoolAppForm.objects.get(pk=form_id)
+
+    context = {
+        'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(form.id),
+        'user_name' : form.first_name + ' ' + form.last_name,
+        'flow_num' : form.flow.flow,
+        'flow_name' : form.flow.flow_name,
+        'recr_end' : form.flow.recruitment_stop,
+        'price' : form.price,
+        'amount' : form.payed_amount,
+        "SITE_HOST" : settings.MISAGO_ADDRESS,
+    }
+
+    mail_user(form, "Школа неНумерологии",'emails/notify_pay_mail',context=context)

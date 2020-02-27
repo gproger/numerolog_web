@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import F, Q
 from django_tinkoff_merchant.services import MerchantAPI
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm
-from schoolform.tasks import send_school_form_pay_url
+from schoolform.tasks import send_school_form_pay_url, send_school_from_pay_notify
 
 def flow_name(obj):
     return obj.flow.flow_name
@@ -116,7 +116,12 @@ def recalc_payments(modeladmin, request, qs):
         p.check_full_payment()
 
 
+def send_pay_notify_url(modeladmin, request, qs):
+    for p in qs:
+        send_school_from_pay_notify(p.pk)
+
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
+send_pay_notify_url.short_description = 'Выслать уведомление о оплате'
 refund_payments.short_description = 'Отменить платеж(и)'
 status_payments.short_description = 'Проверить платеж(и)'
 recalc_payments.short_description = 'Перепроверить оплату'
