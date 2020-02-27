@@ -9,6 +9,8 @@ from numer.celery import app
 from django.conf import settings
 from schoolform.models import SchoolAppForm, SchoolAppCurator
 
+DEFAULT_SENDER = 'neNumerolog'
+
 @app.task
 def send_school_form_pay_url(form_id):
     form = SchoolAppForm.objects.get(pk=form_id)
@@ -18,7 +20,8 @@ def send_school_form_pay_url(form_id):
         'user_name' : form.first_name + ' ' + form.last_name,
         "SITE_HOST" : settings.MISAGO_ADDRESS,
     }
-    mail_user(form, "Школа неНумерологии",'emails/create_school_form',context=context)
+    mail_user(form, "Школа неНумерологии",'emails/create_school_form',
+        context=context, sender=DEFAULT_SENDER)
     form.pay_url_sended = True
     form.save()
 
@@ -39,7 +42,8 @@ def send_school_curator_registered(form_id):
         'user_status' : current_status,
         "SITE_HOST" : settings.MISAGO_ADDRESS,
     }
-    mail_user(form, "Школа неНумерологии",'emails/expert_school_form',context=context)
+    mail_user(form, "Школа неНумерологии",'emails/expert_school_form',
+        context=context, sender=DEFAULT_SENDER)
 
 @app.task
 def send_school_from_pay_notify(form_id):
@@ -56,4 +60,5 @@ def send_school_from_pay_notify(form_id):
         "SITE_HOST" : settings.MISAGO_ADDRESS,
     }
 
-    mail_user(form, "Школа неНумерологии",'emails/notify_pay_mail',context=context)
+    mail_user(form, "Школа неНумерологии",'emails/notify_pay_mail',
+        context=context, sender=DEFAULT_SENDER)
