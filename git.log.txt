@@ -1,0 +1,921 @@
+commit 79789b2a21d98274549e5b5457b7d0d31580b2f2
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Tue Dec 24 14:20:17 2019 +0700
+
+    correct price displaying
+
+commit 96d4f9a103ff53ded0b57230957c01c59cf3ae8e
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Tue Dec 24 14:10:52 2019 +0700
+
+    added raise permission denied
+
+commit 0eb2ed2dea6d27de5bd86adf140178d5b123176c
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Tue Dec 24 14:03:24 2019 +0700
+
+    PriceField save place changed
+
+commit bf050827d0f82cb9c6574a131d40abda0e756df9
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Tue Dec 24 14:01:17 2019 +0700
+
+    changes for save PromoCode object
+
+commit 172a7259d41f102d6e6e61d902216e25cdac3422
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Tue Dec 24 13:59:29 2019 +0700
+
+    fixed error ser.data
+
+commit b8f37b01f2b4bee370a94e5597efcdbb40743891
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Tue Dec 24 13:57:52 2019 +0700
+
+    fixed error
+
+commit 8a5e6f088299322cab33e45f7ee8ba829f534fd4
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Tue Dec 24 13:53:40 2019 +0700
+
+    added promocode to SchooolAppForm
+
+commit aeb84d255ad39a1bf517d536f3c51d756f5ee9c3
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Mon Dec 23 20:22:49 2019 +0700
+
+    correct promocode test on server sied
+
+commit 22d0a24dadb517dc3755df213f263e74e6865bdb
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Dec 22 18:49:47 2019 +0000
+
+    added test promocode
+
+commit f53eaee83763fcf0a1da4944d9330aa67d4f6cde
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Mon Dec 23 00:51:29 2019 +0700
+
+    added create promocodes
+
+commit b488d5d95c65225f27cf08ad70d1dea8769aefce
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Dec 22 17:41:07 2019 +0000
+
+    codes fixing
+
+commit f4fcda4b2545986767bc6ac76e2595ee537a20d1
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Dec 22 23:06:58 2019 +0700
+
+    added create promocodes url
+
+commit 7890dc7bf93bfe9460a3de775865cf30530809d4
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Dec 22 22:55:41 2019 +0700
+
+    changed flow field data in serializer for PromoCodes
+
+commit dd3a4c1d826d49a213f18a29f86f4d25b1c58ece
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Dec 22 15:52:25 2019 +0000
+
+    fixed copy/paste error
+
+commit 6a63d45daf8e11ab3e3bf84c4cc2528d64204b7e
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Dec 22 22:46:59 2019 +0700
+
+    many changes with small api
+
+commit ad3d329f816cb05ca9acf585b60b11f218770ac0
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Dec 22 15:30:26 2019 +0000
+
+    changes for correct db migration
+
+commit f149ee93b398fc483ced37c8448b5843d9827f62
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Dec 22 21:23:58 2019 +0700
+
+    added promocodes and change models
+
+commit 906495a9ee64b448ec394588054b5903c0176238
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Dec 22 01:09:25 2019 +0000
+
+    start adding promocode
+
+commit 94268e325ad80becd30a44d1b32e5b34c8d0d515
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Dec 19 19:04:48 2019 +0000
+
+    we transfer price to each form item
+
+commit 660b5ae293f100ab78606e76846b46d8c5244a85
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Dec 19 18:32:08 2019 +0000
+
+    flow changes. now we add flow_name field
+
+commit b4e457f8bf592392e85f7044400c72236cb7c91f
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Dec 15 06:09:58 2019 +0000
+
+    added school public page
+
+commit da52ffcd2ef6e8e849bcfcb5589c43dd96469b3c
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Dec 14 15:26:42 2019 +0000
+
+    added missed migration
+
+commit 702d353a80e865dc68873927cce660b7379ea7d5
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Nov 25 02:13:01 2019 +0000
+
+    fixes with curators
+
+commit a6e7e91f56bf9fc354a026f03fe6c0b211b50654
+Merge: 5701d4f af3b1c1
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Oct 25 04:05:21 2019 +0000
+
+    merge
+
+commit 5701d4f723cc15a4aad93f1bff6cf78d5d15b4c8
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Oct 25 04:02:58 2019 +0000
+
+    prepare to merge
+
+commit af3b1c186b254fa57bb2a05a585b6132167ee19a
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Oct 25 04:00:02 2019 +0000
+
+    prepare to prod
+
+commit fcb32584cdeeb961028eed2225fd82c508b64237
+Merge: ce20f02 723b130
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Oct 21 21:16:18 2019 +0000
+
+    End merging
+
+commit ce20f029f18b90db0b7b014f425e504613103f74
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Oct 21 20:06:51 2019 +0000
+
+    save bug fixing
+
+commit 723b1308bda40b78d90ada30c744e928e09fd794
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 13 15:22:51 2019 +1000
+
+    add ShortDescription to ServicesModel
+    add ShortDescription to Serializer
+
+commit 8ef86557d86cf8b2b497e2528abeddab29627bc9
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Oct 13 04:10:14 2019 +0000
+
+    added serialization models
+
+commit 5ececca8d75fc0cdcda16aaab606d9c6f4822654
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Tue Oct 8 21:45:47 2019 +0000
+
+    fixed mail send on save form for registered users. added email check on get form
+
+commit a28abac28449033a1cfcc21bda1ae7b1d6026eeb
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Oct 7 12:00:01 2019 +0000
+
+    fixed view.py
+
+commit 33769dcbd5d852d59f41e09ce3326fed47db6d64
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Oct 7 11:54:50 2019 +0000
+
+    added send of email on form create
+
+commit 70412c834beaf23da0ef274e19a7af9e805e3640
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Oct 7 11:53:55 2019 +0000
+
+    Added check if user with email exists
+
+commit de5e9df8ac5079351922f4653b4e3cfe2b477e93
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Oct 7 05:31:19 2019 +0000
+
+    emails
+
+commit 5007c89116ba770f9bebb9ec645c409925c395e0
+Merge: 61bd835 fcf0e67
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 21:11:15 2019 +0300
+
+    Merge branch 'master' of numerolog.privatebot.info:/home/greg/git_rep/web
+
+commit 61bd83598b48b79a1d929120a31d518233582970
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 21:11:07 2019 +0300
+
+    added sent from address
+
+commit fcf0e673173ef74ff37ce76d617cabc36ef55761
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 21:10:00 2019 +0300
+
+    added sent from address
+
+commit f830769b19e0deacecdc49f1ac3f6a13b8732625
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 21:07:05 2019 +0300
+
+    changed header
+
+commit 6a8403637d75c78a2b3566f2da13ac411646b24c
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 20:03:21 2019 +0300
+
+    fixed user_name in mail template
+
+commit ecf7db554f4ea65b1e51afab77bb0aa4e8293126
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 19:58:46 2019 +0300
+
+    fixed for debug address
+
+commit add5b0b7829382dd48a13c0332db5115c69211a9
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 19:56:11 2019 +0300
+
+    fixed naming and templates for mail
+
+commit eb619a546f6caf8ccdbf670c5cf89b1714421cf9
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 19:54:28 2019 +0300
+
+    fix int to str
+
+commit d3ed6a350bf9af602df2979e1490fca09d5e2f35
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 19:53:08 2019 +0300
+
+    syntax fix
+
+commit 5bad1f5da5c411098488923cc2ff92263dc298f5
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 19:52:18 2019 +0300
+
+    added user_mail for create new school form
+
+commit c1b2bc690534aa9d65aecb0f32901074b8197542
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 19:23:43 2019 +0300
+
+    added url to templates
+
+commit 0d35a28f3e909753f63bebaafe4f6f32cdb643ae
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Oct 6 14:58:48 2019 +0000
+
+    messages sended with dummy shit information
+
+commit 93b1f55b4570bf77710ce5a998e675faec09164f
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Oct 6 17:25:06 2019 +0300
+
+    start creating self maded email engine with links
+
+commit 5ba4c2786565f84b99ea61f17cd922cb4d5b615a
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Oct 5 18:08:03 2019 +0000
+
+    addition adn fixes for djanto-admin correct display
+
+commit baa9c7ee9fec5213ceb229200521e9c2ecf97432
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Oct 5 11:16:40 2019 +0000
+
+    fixed views
+
+commit ef89f68475d9c52838c3424bf2b41eae39e05016
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Oct 5 11:02:12 2019 +0000
+
+    added fix bug of notification
+
+commit 371811a5c05c7f5aefc167ec1b57d6d75930f26c
+Merge: f825a5b 2f695a5
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Oct 5 10:06:23 2019 +0000
+
+    Merge branch 'master' of /home/greg/git_rep/web
+
+commit f825a5b5893d844bad101b1e0ae60cefea950b0d
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Oct 5 10:06:17 2019 +0000
+
+    added missing merges
+
+commit 2f695a5df1ecd3724adefdbbe4d188d1bb401205
+Merge: ffc822f 9994418
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Oct 5 10:02:09 2019 +0000
+
+    merge success
+
+commit ffc822fc94bd7e27e20394341f0c3ac83cde7a85
+Author: prod <prod@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Oct 5 10:01:11 2019 +0000
+
+    added refresh status
+
+commit 99944186a0079858314a31451b03f508e590e474
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Oct 5 09:49:18 2019 +0000
+
+    added multipay for school
+
+commit d6ab88ca15e796ed345fea611ab4fd75a3b69669
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Oct 3 21:28:26 2019 +0000
+
+    fixed
+
+commit 06ce03945c9fcaa8b39af75f3448f329700fd85b
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Oct 3 20:37:41 2019 +0000
+
+    removed tinkoff config from settings
+
+commit 8cd72d9f61bcd6ba046e482879af2821332bd4bd
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Oct 3 20:32:33 2019 +0000
+
+    fixed url path
+
+commit 58bb9acb0fa99d79c1242f176d8207e265f954ae
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Oct 3 20:31:45 2019 +0000
+
+    fixes
+
+commit fa25cd055f07b52a77d1198a97d6a6c82a5f178b
+Author: Катюня <user@iMac-user.lan>
+Date:   Thu Oct 3 23:26:05 2019 +0300
+
+    added selector needed terminal
+
+commit 236186213856ae3d98a1ecf365bab9999061bc96
+Author: Катюня <user@iMac-user.lan>
+Date:   Thu Oct 3 23:24:58 2019 +0300
+
+    added methods for get Needed terminal type
+
+commit 670f8fe3ec1bb34b9e8a08d25ddf662592c35c9a
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Oct 3 19:53:40 2019 +0000
+
+    added tinkoff settings model
+
+commit a83514cc2f6e63a1e886583ff233600c0c47aa27
+Author: Катюня <user@iMac-user.lan>
+Date:   Thu Oct 3 22:42:36 2019 +0300
+
+    added TinkoffTerminalSettings
+
+commit beb0cbe013ee96783981456131172811d549419a
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Oct 3 19:25:44 2019 +0000
+
+    added emails
+
+commit ae74787d22a3cf51c0bd4c707709de83badaf84a
+Merge: 8b0f677 35725f5
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Oct 3 19:03:40 2019 +0000
+
+    Merge branch 'master' of /home/greg/git_rep/web
+
+commit 8b0f6777fe1ef5e781a4cb64cf35c0e3c6e700f3
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Oct 3 19:03:36 2019 +0000
+
+    changes in school form serializer
+
+commit 35725f5baa986511c1b335a0989cb7515205ff6a
+Author: Катюня <user@iMac-user.lan>
+Date:   Thu Oct 3 22:01:55 2019 +0300
+
+    fixed register user create AppSchoolForm
+
+commit d6158fd03916524fc0bbee3349afea6d06069d6e
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Tue Oct 1 13:10:48 2019 +0000
+
+    added merches
+
+commit e651ff73d02eb5eed3d834c9ab008ae637d424a4
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Tue Oct 1 06:17:19 2019 +0000
+
+    added payment serializer
+
+commit 18829cf77bbbe7836245d613d833953639f6528f
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Sep 30 13:21:47 2019 +0000
+
+    done payed with callback
+
+commit 3f6685d058f9ecd1636a7f29772a86cb725be17c
+Author: greg <lamgren@gmail.com>
+Date:   Mon Sep 30 15:36:30 2019 +0300
+
+    fixed naming
+
+commit 062e2b061c58b3c1ad4e97998ef4284ee9148770
+Author: greg <lamgren@gmail.com>
+Date:   Mon Sep 30 15:21:32 2019 +0300
+
+    added success,notify,fail url for tinkoff
+
+commit 0de9680ba05468d69d92b95d963d8a4dd3437df4
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Sep 30 12:08:38 2019 +0000
+
+    added schoolfrom
+
+commit a7b3ecc50a125ff2fe59718a90524e1b2ac58c8c
+Author: greg <lamgren@gmail.com>
+Date:   Mon Sep 30 14:48:31 2019 +0300
+
+    schoolAppForm added payment
+
+commit 2696c050a7f022cd8acc0a1bc290b7e5ad69756d
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Sep 30 05:17:49 2019 +0000
+
+    started payment gate with tinkoff bank
+
+commit 5c1325f9f0de69ddc69becfa033cdd57e046ebb8
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Sep 29 14:45:07 2019 +0000
+
+    added tinkoff payment gate
+
+commit d12ec3d3e6b3ab479cdd0a7a2adff7992efbcafd
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Sep 29 11:58:21 2019 +0000
+
+    missed school urls for frontend
+
+commit 9beee91d1d2d45f06d4fd134f803f777da4883b5
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Sep 29 11:55:40 2019 +0000
+
+    missed file
+
+commit 16d0153ce7f8a379b07af17fcfd0c746a2774a3f
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Tue Sep 24 21:22:50 2019 +0000
+
+    changed serialization fields
+
+commit 92c82be05c7365824c38d8c3f1f4f06b77fc3ef6
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Tue Sep 24 20:33:20 2019 +0000
+
+    serializer with toss
+
+commit 1bc7484327cb732adb5923bc507267b549379fe9
+Author: Катюня <user@iMac-user.lan>
+Date:   Tue Sep 24 23:14:47 2019 +0300
+
+    fixed serializer
+
+commit d8a068e48639bf0f41ff28c8440b3fc3088debc8
+Author: Катюня <user@iMac-user.lan>
+Date:   Tue Sep 24 23:12:31 2019 +0300
+
+    added short serializer
+
+commit a80b7bd24b333826381b44b82a9e0a1b9234731a
+Author: Катюня <user@iMac-user.lan>
+Date:   Tue Sep 24 23:08:37 2019 +0300
+
+    added recuirtment flows filter listview
+
+commit 8518e7372d36195f6158b3f56a4f7f608a55927e
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Tue Sep 24 10:20:41 2019 +0000
+
+    added terms of service
+
+commit a0c135f360af4fd1b82ba6fa3120bcb3827fe2fe
+Author: greg <lamgren@gmail.com>
+Date:   Tue Sep 24 13:14:47 2019 +0300
+
+    added terms of service serializer
+
+commit 7ff289c2db4527fd081137aeba70d56cfb37749e
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Tue Sep 24 10:11:41 2019 +0000
+
+    fixed school flow serializer
+
+commit a01b00ceaba341488104e63c5d09e63a9beafdc3
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Sep 23 20:22:42 2019 +0000
+
+    Flow description add choices with available status
+
+commit 175ef534b9fa92c73216884388b7602f5aa56d99
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Sep 23 11:43:32 2019 +0000
+
+    fixes in object retrive
+
+commit 40cf65e2e48b963f6cbb149ea6f7c873dbb7cff6
+Author: greg <lamgren@gmail.com>
+Date:   Mon Sep 23 14:27:37 2019 +0300
+
+    Fix queryset for RetriveUpdateView
+
+commit 5e9a92c5fca72296ab267e4bd653c8062798c0b9
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Sep 23 11:19:33 2019 +0000
+
+    syntax fixes
+
+commit 5400f48873d89804fbe48b1f213f77362f33c327
+Author: greg <lamgren@gmail.com>
+Date:   Mon Sep 23 14:02:41 2019 +0300
+
+    added school Flow Fields
+
+commit 4954485fb1ad4b64463d10cf592f07d659000724
+Author: Катюня <user@iMac-user.lan>
+Date:   Mon Sep 23 00:28:01 2019 +0300
+
+    added forgotten password url for frontend
+
+commit 31448b39e634cd8b989d3bd6ae23936dedc4dc7d
+Author: Катюня <user@iMac-user.lan>
+Date:   Sun Sep 22 18:32:58 2019 +0300
+
+    fixed urls
+
+commit 8b732089d72112943d01196cc0e4b14c83f36857
+Merge: cc05339 29cdda2
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Sep 22 15:30:42 2019 +0000
+
+    merged
+
+commit cc05339b7c7717d55b287c45f8cddf87c786d38f
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Sep 22 15:29:07 2019 +0000
+
+    changes
+
+commit 29cdda258253ec6db2ec1d9c85ff4642e6727319
+Author: Катюня <user@iMac-user.lan>
+Date:   Sun Sep 22 18:28:08 2019 +0300
+
+    added DEBUG address
+
+commit eac4aba5640ce1177f3b3baf685da901f6b4dbc6
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Aug 24 20:14:51 2019 +0000
+
+    favorits post now worked
+
+commit 921f15e40b380930358ecf5e22ae2f2bcd63a819
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Aug 24 19:23:39 2019 +0000
+
+    favs fixes
+
+commit 403492518226921972bc7ade665ce714f9c210b9
+Author: Катюня <user@iMac-user.lan>
+Date:   Sat Aug 24 22:15:23 2019 +0300
+
+    start of favs post
+
+commit 0c1b607c88b9534ac32c396d8037d578173c53a8
+Merge: 617993a 25c2963
+Author: Катюня <user@iMac-user.lan>
+Date:   Fri Aug 23 21:03:46 2019 +0300
+
+    Merge branch 'master' of numerolog.privatebot.info:/home/greg/git_rep/web
+
+commit 617993aff8f72790d13322ad8e0aa98d6bf3e9da
+Author: Катюня <user@iMac-user.lan>
+Date:   Fri Aug 23 21:03:36 2019 +0300
+
+    prepare local merge
+
+commit 25c2963e835b50960449b4f7f51e5b40ef784c93
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Aug 23 14:26:22 2019 +0000
+
+    fixed urls.py and views.py for terms api
+
+commit ab1c414fcabfa0d1ed3e286b579b57af194a7d42
+Merge: f1012aa fd52f60
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Aug 23 14:03:45 2019 +0000
+
+    Merge branch 'master' of /home/greg/git_rep/web
+
+commit fd52f60ffe47ed426ef00f78ef2ab16ce81e66c8
+Author: greg <lamgren@gmail.com>
+Date:   Fri Aug 23 17:02:29 2019 +0300
+
+    fixed incorrect model for terms view
+
+commit f1012aaae3aa1a159104272894114f2c01b42d06
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Aug 23 13:58:02 2019 +0000
+
+    added tos to servicepage model
+
+commit 6b0ad5b9632caef63bdcad6b09d130bbe6cae837
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Aug 23 09:16:44 2019 +0000
+
+    added serializer for tags name fields
+
+commit b2daac5dc5387ca1eae6e8cfbb5f13cac3619ef5
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Wed Aug 21 22:09:59 2019 +0000
+
+    fixed incorrect RetrieveAPIView, and PageModel panels
+
+commit 6970063f907d8b0cc5384286ad0698f9927f305d
+Author: Катюня <user@iMac-user.lan>
+Date:   Thu Aug 22 01:06:57 2019 +0300
+
+    added TermsOfService page model with REST API
+
+commit 6b169ec269843474f6cd7e326a859982ea7ada12
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Wed Aug 21 20:46:23 2019 +0000
+
+    fixed incorrect queryset
+
+commit 43046e7c74bb399c13702ad734f7fdce2ec8c24f
+Author: Катюня <user@iMac-user.lan>
+Date:   Wed Aug 21 23:43:17 2019 +0300
+
+    now only published services are showed
+
+commit c593420eddbf66bb9ed58caf204a4d611ca05cf9
+Merge: 3b5ddd6 08ace6d
+Author: Катюня <user@iMac-user.lan>
+Date:   Wed Aug 21 23:42:25 2019 +0300
+
+    Merge remote-tracking branch 'refs/remotes/origin/master'
+
+commit 3b5ddd6078c9f340a6aa29445b4887cc04932114
+Author: Катюня <user@iMac-user.lan>
+Date:   Wed Aug 21 23:42:11 2019 +0300
+
+    added services custom API
+
+commit 08ace6d498f1deb9a9fb9256b3b1b53a4602dc61
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Wed Aug 21 20:41:28 2019 +0000
+
+    fixed serializers
+
+commit 95ba181c48c56c233418f59d51552a6f63ce2fbb
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Tue Aug 20 20:04:54 2019 +0000
+
+    fixes
+
+commit d55330b7b6b042b067a29dd9f400162fe104a648
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Aug 19 22:49:43 2019 +0000
+
+    Remove some debug output
+
+commit 3671438e665753439655a1c455137951e93771f1
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Aug 19 20:07:34 2019 +0000
+
+    fixes on dev
+
+commit 775662590bf78875bc88c5116647f9ab8792318d
+Author: Катюня <user@iMac-user.lan>
+Date:   Mon Aug 19 02:17:23 2019 +0300
+
+    added liked interface
+
+commit acd027fb83254ac6e01c496e78a8ba435d9dc44c
+Author: Катюня <user@iMac-user.lan>
+Date:   Mon Aug 19 00:45:08 2019 +0300
+
+    in blog added comments correct ordering, and reply posting
+
+commit 49d5b60a6eabb93dda1d9504947ad3cf95877ff1
+Author: Катюня <user@iMac-user.lan>
+Date:   Sun Aug 18 20:21:31 2019 +0300
+
+    return diff time on comment and reply time
+
+commit 8668b2d5bd165af2ef19df4cf96b5e29acafefcc
+Author: Катюня <user@iMac-user.lan>
+Date:   Sun Aug 18 11:17:20 2019 +0300
+
+    added comments api(not full). Need add post methods
+
+commit 08941d161e44b404e30af22a62511b13e1ba61c9
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Aug 15 22:29:16 2019 +0000
+
+    added real or username in postpage request. needed added filter and search options
+
+commit 5430cd9cbc37e9b4eb8ab5d1656b50dd174f0cae
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Aug 15 22:12:19 2019 +0000
+
+    added custom serializer, need add user serializer and filter/search
+
+commit f0c5d1b9fa7b818beba550cd4a897c449438f6d9
+Author: greg <lamgren@gmail.com>
+Date:   Thu Aug 15 17:58:17 2019 +0300
+
+    Added comments and likes for blogPage
+
+commit 64b6b9ffc7b08981bbcdf1d9bf121c4c25360120
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Aug 15 08:22:14 2019 +0000
+
+    added empty comments and likes engine
+
+commit 93f261af924f454040e80ea4439a2c3a56d05e47
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Aug 11 20:52:13 2019 +0000
+
+    added some serializer, and view for school flow
+
+commit 3ea4bfd2eb8b1b825cdeea36e42b6321f641e420
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Thu Aug 8 17:00:40 2019 +0000
+
+    fixed - now forms are saved
+
+commit b82e88fc7843a2fa15ac27573dd37efad6e1f39c
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Wed Aug 7 21:06:48 2019 +0000
+
+    added school application forms
+
+commit a80d309270ab5bb30c15e5869dac929e937c511d
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Aug 4 15:56:43 2019 +0300
+
+    added robokassa app to the project settings
+
+commit bd25bfeaa94e27dbd208bab52be65dffb053c39b
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Aug 4 15:54:41 2019 +0300
+
+    added test robokassa login-password
+
+commit afe23ae7c0c717040983c2b64b908b96c29eff7e
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Aug 4 15:44:30 2019 +0300
+
+    added check validation appuser
+
+commit 005f842e7d5ddb87292cc29199965ece9c8e4a42
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Sun Aug 4 02:39:35 2019 +0300
+
+    added status to payment model,
+    added timediff methods on application AppUser model
+
+commit 36d25a3111b97dcc069bfe8bdcc0ae88458e8b76
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Fri Aug 2 14:42:31 2019 +0300
+
+    added django_robokassa
+
+commit 5bec599b09bf7640f00cddba909c9b49d3486f64
+Merge: bff87ee 1cecccb
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Aug 2 08:10:12 2019 +0000
+
+    Merge branch 'master' of /home/greg/git_rep/web
+
+commit bff87eeaae6a756783b08ef4559492ba81ede1cc
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Aug 2 08:10:01 2019 +0000
+
+    added empty payment app for payments
+
+commit 1cecccbd0fc9b76cbd3bf590e0c9c365c251ee50
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Fri Aug 2 11:04:32 2019 +0300
+
+    fixed order of favorits
+
+commit 8b044d682c56485557e1b24f2dbeba3128bbda47
+Merge: 7f94bb8 213a9bd
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Fri Aug 2 11:01:40 2019 +0300
+
+    Merge remote-tracking branch 'refs/remotes/origin/master'
+
+commit 213a9bde7d993a65a0559d21d358bcd25705e518
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Fri Aug 2 07:55:30 2019 +0000
+
+    favorits fixes
+
+commit 7f94bb8d03ad81a9006882e4006cdca2a1e9947e
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Fri Aug 2 10:54:28 2019 +0300
+
+    syntax fixes
+
+commit 95f34cdbc83190899b898e851391a07acfcb4c1e
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Thu Aug 1 12:28:34 2019 +0300
+
+    fixed error - both fields setted 'fields and exclude' for django rest framework serializer
+
+commit fe598ac1d34fdcbe51406373734d5e0013d0761c
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Thu Aug 1 12:27:30 2019 +0300
+
+    exclude user field from model serializer favorits
+
+commit dec14c999a8015cb0f08035d5eabd4de2a878ee0
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Thu Aug 1 12:24:29 2019 +0300
+
+    fixed missing url
+
+commit 14a2611b5e6de9b9024ac34b28d7adbc216ea896
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Thu Aug 1 12:22:07 2019 +0300
+
+    added favorites to admin django view
+
+commit 219f02dafa35db187ab2193c4655160b62eea6da
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Thu Aug 1 12:18:32 2019 +0300
+
+    added favorits
+
+commit a6dfac5288c900aa3d72054cfc1c0c3dccc885b3
+Author: Gregory Vasiliev <lamgren@gmail.com>
+Date:   Thu Aug 1 00:17:08 2019 +0300
+
+    changes in models:
+    added slug field for application, added serializer, url for get work
+    list for expert
+
+commit 770fe64fff0bde5f983956e4d3afed6376c7431d
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Wed Jul 31 20:53:46 2019 +0000
+
+    added app
+
+commit 3c148482db25559bd4f2ddd968c2a0c7bbca2508
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Jul 22 07:35:24 2019 +0000
+
+    added requirements.txt
+
+commit 03fffdda8e298dcf1f29c72b014bcb5a4e7568a2
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sun Jul 21 17:09:31 2019 +0000
+
+    changes before change models
+
+commit 60630bdf39f2eb9d8206cc138f3a54f1dfdf3c9c
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Sat Jul 13 15:02:29 2019 +0000
+
+    pre start
+
+commit b3753fa2f234dcc8bf5c0e628ab90454ccf7a7c3
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Wed Feb 13 08:05:24 2019 +0000
+
+    added blog and forum with one main page
+
+commit 7404b192cee1833a6b348a42d3765b98132ae64c
+Author: Gregory <greg@134-0-116-46.ovz.vps.regruhosting.ru>
+Date:   Mon Feb 11 18:59:08 2019 +0000
+
+    first commit
