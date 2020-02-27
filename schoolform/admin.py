@@ -118,7 +118,7 @@ def recalc_payments(modeladmin, request, qs):
 
 def send_pay_notify_url(modeladmin, request, qs):
     for p in qs:
-        send_school_from_pay_notify(p.pk)
+        send_school_from_pay_notify.delay(p.pk)
 
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
 send_pay_notify_url.short_description = 'Выслать уведомление о оплате'
