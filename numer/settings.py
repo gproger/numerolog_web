@@ -159,7 +159,7 @@ EMAIL_HOST_PASSWORD = '_Rfhfcbr43'
 
 # Default email address to use for various automated correspondence from the site manager(s).
 
-DEFAULT_FROM_EMAIL = 'Numerolog <%s>' % EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'neNumerolog <%s>' % EMAIL_HOST_USER
 
 
 # Application definition
