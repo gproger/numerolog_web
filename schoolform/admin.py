@@ -121,7 +121,7 @@ def send_pay_notify_url(modeladmin, request, qs):
         send_school_from_pay_notify.delay(p.pk)
 
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
-send_pay_notify_url.short_description = 'Выслать уведомление о оплате'
+send_pay_notify_url.short_description = 'Выслать Напоминание о оплате'
 refund_payments.short_description = 'Отменить платеж(и)'
 status_payments.short_description = 'Проверить платеж(и)'
 recalc_payments.short_description = 'Перепроверить оплату'
