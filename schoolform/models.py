@@ -209,7 +209,8 @@ class SchoolAppForm(models.Model):
         if self.price_f is not None:
             return False
 
-        code = None
+        if cc_code is None:
+            return False
 
 #        if cc_code is not None:
 #            code = PromoCode.objects.filter(flow=self.flow,
@@ -221,24 +222,21 @@ class SchoolAppForm(models.Model):
         if cc_code.elapsed_count < 1:
             return False
 
-        if code is not None:
-            code_item = cc_code
-            pr_field = PriceField()
-            pr_field.price = self.price
-            if code_item.is_percent:
-                pr_field.discount = pr_field.price*code_item.discount/100
-            else:
-                pr_field.discount = code_item.discount
-            self.price = pr_field.price - pr_field.discount
-            pr_field.save()
-            self.price_f = pr_field
-            self.save()
-            code_item.price.add(pr_field)
-            code_item.elapsed_count = code_item.elapsed_count - 1
-            code_item.save()
-            return True
+        code_item = cc_code
+        pr_field = PriceField()
+        pr_field.price = self.price
+        if code_item.is_percent:
+            pr_field.discount = pr_field.price*code_item.discount/100
         else:
-            return False
+            pr_field.discount = code_item.discount
+        self.price = pr_field.price - pr_field.discount
+        pr_field.save()
+        self.price_f = pr_field
+        self.save()
+        code_item.price.add(pr_field)
+        code_item.elapsed_count = code_item.elapsed_count - 1
+        code_item.save()
+        return True
 
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
