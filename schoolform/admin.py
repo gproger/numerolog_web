@@ -123,7 +123,7 @@ def send_pay_notify_url(modeladmin, request, qs):
 
 def admin_send_pay_notify_sms(modeladmin, request, qs):
     for p in qs:
-        send_pay_notify_sms(p.pk)
+        send_pay_notify_sms.delay(p.pk)
 
 
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
