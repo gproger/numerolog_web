@@ -3,6 +3,7 @@ from django.db.models import F, Q
 from django_tinkoff_merchant.services import MerchantAPI
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm
 from schoolform.tasks import send_school_form_pay_url, send_school_from_pay_notify
+from schoolform.tasks import send_pay_notify_sms
 
 def flow_name(obj):
     return obj.flow.flow_name
@@ -120,11 +121,17 @@ def send_pay_notify_url(modeladmin, request, qs):
     for p in qs:
         send_school_from_pay_notify.delay(p.pk)
 
+def send_pay_notify_sms(modeladmin, request, qs):
+    for p in qs:
+        send_pay_notify_sms(p.pk)
+
+
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
 send_pay_notify_url.short_description = 'Выслать Напоминание о оплате'
 refund_payments.short_description = 'Отменить платеж(и)'
 status_payments.short_description = 'Проверить платеж(и)'
 recalc_payments.short_description = 'Перепроверить оплату'
+send_pay_notify_sms.short_description = 'Выслать SMS Напоминание о оплате'
 
 
 @admin.register(SchoolAppForm)
@@ -132,7 +139,7 @@ class SchoolAppFormAdmin(admin.ModelAdmin):
     list_display = ['id', 'email','phone','first_name',
         'middle_name', 'last_name','instagramm','bid',flow_name,'pay_url_sended','payed_amount','price',payed]
     list_filter = ['flow__flow_name',PayedListFilter]
-    actions = [ resend_payment_url, send_pay_notify_url, status_payments, recalc_payments, refund_payments]
+    actions = [ resend_payment_url, send_pay_notify_url, send_pay_notify_sms, status_payments, recalc_payments, refund_payments]
     search_fields = ['id', 'phone','email','first_name','middle_name','last_name']
 
 

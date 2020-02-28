@@ -8,6 +8,7 @@ from weasyprint import HTML
 from numer.celery import app
 from django.conf import settings
 from schoolform.models import SchoolAppForm, SchoolAppCurator
+from smsgate.services import SendSMSAPI
 
 DEFAULT_SENDER = 'neNumerolog'
 
@@ -68,6 +69,8 @@ def send_pay_notify_sms(form_id):
     form = SchoolAppForm.objects.get(pk=form_id)
     context = {
         'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(form.id),
+        'recr_end' : form.flow.recruitment_stop,
     }
 
-    
+    sms = SendSMSAPI()
+    sms.send_pay_notify_smd(context)
