@@ -6,7 +6,6 @@ from django.conf import settings
 
 from django_tinkoff_merchant.models import TinkoffSettings
 from emails.emails import mail_user
-from promocode.models import PromoCode
 from celery.execute import send_task
 # Create your models here.
 
@@ -212,14 +211,18 @@ class SchoolAppForm(models.Model):
 
         code = None
 
-        if cc_code is not None:
-            code = PromoCode.objects.filter(flow=self.flow,
-                                            code=cc_code,
-                                            elapsed_count__gte=1)
+#        if cc_code is not None:
+#            code = PromoCode.objects.filter(flow=self.flow,
+#                                            code=cc_code,
+#                                            elapsed_count__gte=1)
 
+        if cc_code.flow != self.flow:
+            return False
+        if cc_code.elapsed_count < 1:
+            return False
 
         if code is not None:
-            code_item = code[0]
+            code_item = cc_code
             pr_field = PriceField()
             pr_field.price = self.price
             if code_item.is_percent:
