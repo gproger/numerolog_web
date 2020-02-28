@@ -6,7 +6,7 @@ from django.conf import settings
 
 from django_tinkoff_merchant.models import TinkoffSettings
 from emails.emails import mail_user
-
+from promocode.models import PromoCode
 from celery.execute import send_task
 # Create your models here.
 
