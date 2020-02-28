@@ -132,8 +132,9 @@ class SendSMSAPI(object):
             return {'result' : sms.status, 'desc' : desc_text}
 
     def get_pay_notify_text(self, context):
+        c = Context(context)
         t = Template(self._settings.client_st)
-        return t.render(context)
+        return t.render(c)
 
     def send_pay_notify_smd(self, phone, context):
         phone = get_phone(phone)
