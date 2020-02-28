@@ -205,6 +205,38 @@ class SchoolAppForm(models.Model):
             return forms.first()
         return None
 
+    def apply_promocode(self, cc_code):
+        # check if code already exist
+        if self.price_f is not None:
+            return False
+
+        code = None
+
+        if cc_code is not None:
+            code = PromoCode.objects.filter(flow=self.flow,
+                                            code=cc_code,
+                                            elapsed_count__gte=1)
+
+
+        if code is not None:
+            code_item = code[0]
+            pr_field = PriceField()
+            pr_field.price = self.price
+            if code_item.is_percent:
+                pr_field.discount = pr_field.price*code_item.discount/100
+            else:
+                pr_field.discount = code_item.discount
+            self.price = pr_field.price - pr_field.discount
+            pr_field.save()
+            self.price_f = pr_field
+            self.save()
+            code_item.price.add(pr_field)
+            code_item.elapsed_count = code_item.elapsed_count - 1
+            code_item.save()
+            return True
+        else:
+            return False
+
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
 
@@ -225,7 +257,7 @@ class SchoolAppForm(models.Model):
                 amount = obj.payed_amount*100 - p.amount
                 if amount == 0:
                     objs.append(obj)
-        return objs                                             
+        return objs
 
 
 class SchoolAppCurator(models.Model):
