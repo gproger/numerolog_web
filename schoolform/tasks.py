@@ -62,3 +62,12 @@ def send_school_from_pay_notify(form_id):
 
     mail_user(form, "Школа неНумерологии",'emails/notify_pay_mail',
         context=context, sender=DEFAULT_SENDER)
+
+@app.task
+def send_pay_notify_sms(form_id):
+    form = SchoolAppForm.objects.get(pk=form_id)
+    context = {
+        'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(form.id),
+    }
+
+    
