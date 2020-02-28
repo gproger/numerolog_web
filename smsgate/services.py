@@ -137,7 +137,7 @@ class SendSMSAPI(object):
 
     def send_pay_notify_smd(self, phone, context):
         phone = get_phone(phone)
-        sms = SendedSMS()
+        sms = NotifySMS()
         sms.phone = phone
         sms.text = self.get_pay_notify_text(context)
 
