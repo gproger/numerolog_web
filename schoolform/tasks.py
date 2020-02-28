@@ -73,4 +73,4 @@ def send_pay_notify_sms(form_id):
     }
 
     sms = SendSMSAPI()
-    sms.send_pay_notify_smd(form_id.phone, context)
+    sms.send_pay_notify_smd(form.phone, context)
