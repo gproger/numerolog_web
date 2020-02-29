@@ -141,7 +141,7 @@ class SchoolAppForm(models.Model):
     pay_url_sended = models.NullBooleanField(default=False)
     payed_amount = models.PositiveIntegerField(default=0)
     phone_valid = models.NullBooleanField(default=False)
-    comment = models.TextField(required=False)
+    comment = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
 
