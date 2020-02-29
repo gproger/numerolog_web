@@ -152,7 +152,7 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
 
     class Meta:
         model = SchoolAppForm
-        fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount','payment','price','price_f','promocode','phone_valid']
+        fields = ['first_name','middle_name','last_name','bid','phone','email','instagramm','created','payed_by','amount','payment','price','price_f','promocode','phone_valid','payed_amount']
 
 class SchoolPersCuratorSerializer(serializers.ModelSerializer):
 
