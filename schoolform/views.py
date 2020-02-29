@@ -111,6 +111,8 @@ class SchoolAppCuratorCreateView(generics.CreateAPIView):
         ser = SchoolAppCuratorCreateSerializer(data=request.data)
         if (ser.is_valid(raise_exception=True)):
             cc_flow = request.data.get('flow_id')
+            if cc_flow is None:
+                cc_flow=5
             c_flow = get_object_or_404(SchoolAppFlow,id=cc_flow)
             if c_flow.state != 1:
                 raise PermissionDenied({"message":"Запись на этот поток/курс не активна" })
@@ -166,7 +168,7 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
         if email.lower() != obj.email.lower():
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
-        
+
         return super(SchoolAppFormShowUpdateView,self).get(request,*args,**kwargs)
 
 
@@ -237,7 +239,7 @@ class SchoolApplyPersCurator(View):
             return HttpResponseBadRequest
 
         cur.save()
-        
+
         for term in json_data['accepted_toss']:
             tobj = get_object_or_404(TermsOfServicePage,id=term)
             cur.accepted_toss.add(tobj)
@@ -250,7 +252,7 @@ class SchoolApplyPersCurator(View):
 
 class SchoolApplyPersCuratorGetPayURL(View):
     def get(self, request, *args, **kwargs):
-        
+
         id = self.kwargs.get('id', None)
         print(id)
         pform = get_object_or_404(SchoolAppPersCuratorForm,pk=id)
@@ -258,7 +260,7 @@ class SchoolApplyPersCuratorGetPayURL(View):
         paym = pform.payment.last()
         serializer = PaymentSerializer(paym)
         return JsonResponse(serializer.data)
-        
+
 
 class SchoolAppFromFilterByPayDate(View):
     def get(self, request, *args, **kwargs):
@@ -267,4 +269,3 @@ class SchoolAppFromFilterByPayDate(View):
         dt = datetime.strptime("24-8-2017 15:00:00","%d-%m-%Y %H:%M:%S").replace(tzinfo=timezone.utc)
         objs = SchoolAppForm.get_registered_from_date(dt)
         print(objs)
-	
