@@ -146,14 +146,12 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
 class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializer
     queryset = SchoolAppFlow.objects.all().filter(state=1)
-    permisiion_classes = [AllowAny]
+    permission_classes = [AllowAny]
 
-    def get(self, request, *args, **kwargs):
-        referer = request.META.get('HTTP_REFERER')
-        ref_1 = request.META.get('REFERER')
-        print(referer)
-        print(ref_1)
-        super(SchoolAppFlowRecruitmentListView,self).get(request,*args,**kwargs)
+class SchoolAppFlowRegisterListView(generics.ListAPIView):
+    serializer_class = SchoolAppFlowWOChoicesSerializer
+    queryset = SchoolAppFlow.objects.all().filter(state=2)
+    permission_classes = [AllowAny]
 
 
 class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
