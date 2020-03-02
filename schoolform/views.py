@@ -148,6 +148,13 @@ class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
     queryset = SchoolAppFlow.objects.all().filter(state=1)
     permisiion_classes = [AllowAny]
 
+    def get(self, request, *args, **kwargs):
+        referer = request.META.get('HTTP_REFERER')
+        ref_1 = request.META.get('REFERER')
+        print(referer)
+        print(ref_1)
+        super(SchoolAppFlowRecruitmentListView,self).get(request,*args,**kwargs)
+
 
 class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
 
