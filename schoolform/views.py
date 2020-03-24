@@ -148,6 +148,14 @@ class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
     queryset = SchoolAppFlow.objects.all().filter(state=1)
     permission_classes = [AllowAny]
 
+
+class SchoolAppFlowViewBySlug(generics.RetrieveAPIView):
+    serializer_class = SchoolAppFlowWOChoicesSerializerBySlug
+    queryset = SchoolAppFlow.objects.all()
+    lookup_field = 'slug'
+    permission_classes = [AllowAny]
+
+
 class SchoolAppFlowRegisterListView(generics.ListAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializer
     queryset = SchoolAppFlow.objects.all().filter(state=2)

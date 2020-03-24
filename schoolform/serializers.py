@@ -64,6 +64,7 @@ class SchoolAppFlowSerializer(serializers.ModelSerializer):
     education_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
 
     choices = serializers.SerializerMethodField()
+    slug = serializers.SlugField(required = False)
 
     def get_choices(self, obj):
         return SchoolAppFlow.STATES
@@ -117,6 +118,50 @@ class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolAppFlow
         fields = '__all__'
+
+
+class SchoolAppFlowWOChoicesSerializerBySlug(serializers.ModelSerializer):
+
+#    state = serializers.SerializerMethodField()
+    price = serializers.IntegerField(default=30000, required = False)
+
+#   recruitment fields
+    recruitment_start = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+    recruitment_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+
+#   started fields
+    education_start = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+    education_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
+
+    toss = serializers.SerializerMethodField()
+    cur_toss = serializers.SerializerMethodField()
+    pers_toss = serializers.SerializerMethodField()
+
+
+    def get_cur_toss(self,obj):
+        lis = []
+        for x in obj.cur_toss.all():
+            lis.append({'id': x.id,'title' : x.title})
+        return lis
+
+    def get_toss(self,obj):
+        lis = []
+        for x in obj.toss.all():
+            lis.append({'id': x.id,'title' : x.title})
+        return lis
+
+    def get_pers_toss(self, obj):
+        lis = []
+        for x in obj.pers_cur_toss.all():
+            lis.append({'id': x.id,'title' : x.title})
+        return lis
+
+
+    class Meta:
+        model = SchoolAppFlow
+        lookup_field = 'slug'
+        fields = '__all__'
+
 
 class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
 

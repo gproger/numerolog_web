@@ -48,6 +48,7 @@ class SchoolAppFlow(models.Model):
     pers_cur_toss = models.ManyToManyField(TermsOfServicePage, null=True, blank=True, related_name='pers_toss+')
     avail_by_code = models.NullBooleanField(default=False, blank=True, null=True)
     by_code_hint = models.TextField(blank=True, null=True)
+    slug = models.SlugField()
 
     def __str__(self):
         return str(self.flow) + ' ' + str(self.flow_name)
