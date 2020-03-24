@@ -156,6 +156,11 @@ class SchoolAppFlowViewBySlug(generics.RetrieveAPIView):
     lookup_field = 'slug'
     permission_classes = [AllowAny]
 
+    def get_objects(self):
+        slug = self.kwargs.get('slug',None)
+        print('Search for slug ' + slug)
+        return get_object_or_404(SchoolAppFlow,slug=slug)
+
 
 class SchoolAppFlowRegisterListView(generics.ListAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializer
