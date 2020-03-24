@@ -25,14 +25,17 @@ class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
 class SchoolAppCuratorCreateSerializer(serializers.ModelSerializer):
     bid = serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y'])
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+    flow = serializers.PrimaryKeyRelatedField(queryset=SchoolAppFlow.objects.all(),many=False)
+
 
     def validate_email(self, value):
         norm_value = value.lower()
         return norm_value
 
+
     class Meta:
         model = SchoolAppCurator
-        exclude = ['flow']
+        fields = '__all__'
 
 class SchoolAppFlowListSerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField()
