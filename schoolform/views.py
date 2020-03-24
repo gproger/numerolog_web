@@ -13,6 +13,7 @@ from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
 from .serializers import SchoolAppFormCreateSerializer,SchoolAppFormFlowStudentsList
 from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializer, SchoolAppCuratorCreateSerializer
 from .serializers import SchoolPersCuratorSerializer
+from .serializers import SchoolAppFlowWOChoicesSerializerBySlug
 from django.shortcuts import render, get_object_or_404
 from promocode.models import PromoCode
 from django_tinkoff_merchant.serializers import PaymentSerializer
