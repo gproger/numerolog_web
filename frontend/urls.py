@@ -7,7 +7,7 @@ from django.views.generic import TemplateView, RedirectView
 urls = [
 #    url(r'^$',serve,{'path':'index.html'}),
 #    url(r'^$',TemplateView.as_view(template_name='index.html')),
-    url(r'^$',RedirectView.as_view(url="/school/apply")),
+    url(r'^$',RedirectView.as_view(url="/school/apply/")),
 #RedirectView.as_view(url=reverse_lazy('my_named_pattern')
     url(r'^chat/',TemplateView.as_view(template_name='index.html')),
     url(r'^blog/',TemplateView.as_view(template_name='index.html')),

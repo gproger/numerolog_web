@@ -64,7 +64,7 @@ class SchoolAppFlowSerializer(serializers.ModelSerializer):
     education_stop = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y'] , required = False)
 
     choices = serializers.SerializerMethodField()
-    slug = serializers.SlugField(required = False)
+    slug = serializers.SlugField( allow_unicode=True)
 
     def get_choices(self, obj):
         return SchoolAppFlow.STATES
@@ -95,6 +95,7 @@ class SchoolAppFlowWOChoicesSerializer(serializers.ModelSerializer):
     cur_toss = serializers.SerializerMethodField()
     pers_toss = serializers.SerializerMethodField()
 
+    slug = serializers.SlugField(required = False)
 
     def get_cur_toss(self,obj):
         lis = []
