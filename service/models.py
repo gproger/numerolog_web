@@ -22,6 +22,7 @@ class ServiceExpert(models.Model):
     balance = models.PositiveIntegerField(default=0)
     percent = models.PositiveSmallIntegerField(default=70)
     slug = models.SlugField()
+    is_olga = models.NullBooleanField(default=False)
 
     def save(self, *args, **kwargs):
         new = self.pk is None
@@ -64,13 +65,23 @@ class ServiceClient(models.Model):
         order_obj = str(self.pk)
         order_plural="Услуга "
         amount = amount*100
+        item_name = ''
+        descr = ''
+        if self.expert.is_olga:
+            item_name = 'Услуга Ольги Перцевой'
+            descr = 'Оплата услуги Ольги Перцевой'
+        else:
+            item_name = 'Услуга эксперта школы неНумерологии Ольги Перцевой'
+            descr = 'Оплата услуги эксперта школы неНумерологии Ольги Перцевой'
+
+
 
         items = [
-            {'name': 'Услуги экспертов школы неНумерологии Ольги Перцевой', 'price': amount, 'quantity': 1},
+            {'name': item_name, 'price': amount, 'quantity': 1},
         ]
 
 
-        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Оплата обучения в школе неНумерологии Ольги Перцевой', terminal=TinkoffSettings.get_services_terminal()) \
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description=descr, terminal=TinkoffSettings.get_services_terminal()) \
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 

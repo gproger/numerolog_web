@@ -58,4 +58,4 @@ class ServiceExpertInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceExpert
-        fields = ['first_name','last_name','toss']
+        fields = ['first_name','last_name','toss','is_olga']
