@@ -7,6 +7,8 @@ from django.conf import settings
 from django_tinkoff_merchant.models import TinkoffSettings
 from emails.emails import mail_user
 from celery.execute import send_task
+import pytz
+from datetime import datetime
 # Create your models here.
 
 PERS_CURATOR_DESC = 'Услуга персонального куратора в школе неНумерологии Ольги Перцевой'
@@ -169,7 +171,10 @@ class SchoolAppForm(models.Model):
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
-        payment = MerchantAPI().init(payment)
+        dt = datetime.combine(self.flow.education_start,datetime.min.time())
+        dt = dt.replace(tzinfo=pytz.UTC)
+
+        payment = MerchantAPI().init(payment, date_valid=dt.isoformat())
 
         payment.save()
 

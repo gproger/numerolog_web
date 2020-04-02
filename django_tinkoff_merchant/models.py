@@ -75,7 +75,7 @@ class Payment(models.Model):
             ReceiptItem.objects.create(receipt=self.receipt, **item)
         return self
 
-    def to_json(self):
+    def to_json(self, date_valid=None):
         url_success = settings.SUCCESS_TINKOFF_URL;
         url_fail = settings.FAIL_TINKOFF_URL;
         if self.terminal.using_school:
@@ -98,9 +98,10 @@ class Payment(models.Model):
             'FailURL' : url_fail+self.order_obj,
         }
 
+        if date_valid is not None:
+            data['RedirectDueDate'] = date_valid
+
         print(data)
-        logging.info(data)
-        logging.info("URL setted")
 
         if hasattr(self, 'receipt'):
             data['Receipt'] = self.receipt.to_json()

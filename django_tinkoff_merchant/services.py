@@ -83,8 +83,8 @@ class MerchantAPI(object):
     def token_correct(self, token, data, settings):
         return token == self._token(data, settings)
 
-    def init(self, payment):
-        response = self._request('INIT', requests.post, payment.to_json(), payment.terminal).json()
+    def init(self, payment, date_valid=None):
+        response = self._request('INIT', requests.post, payment.to_json(date_valid=date_valid), payment.terminal).json()
         return self.update_payment_from_response(payment, response)
 
     def status(self, payment):
