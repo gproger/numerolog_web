@@ -179,9 +179,10 @@ class SchoolAppForm(models.Model):
 
         if d_now > dt:
             dt = d_now + timedelta(days=10)
-
-
-        payment = MerchantAPI().init(payment, date_valid=dt.isoformat())
+            dt = dt.replace(hour=0,minute=0,second=0,microsecond=0)
+       	    payment = MerchantAPI().init(payment, date_valid=dt.isoformat())
+        else:
+       	     payment = MerchantAPI().init(payment, date_valid=dt.isoformat())
 
         payment.save()
 
