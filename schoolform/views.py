@@ -146,7 +146,7 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
 
 class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializer
-    queryset = SchoolAppFlow.objects.all().filter(state=1)
+    queryset = SchoolAppFlow.objects.all().filter(state=1,is_hidden=False)
     permission_classes = [AllowAny]
 
 
@@ -164,7 +164,7 @@ class SchoolAppFlowViewBySlug(generics.RetrieveAPIView):
 
 class SchoolAppFlowRegisterListView(generics.ListAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializer
-    queryset = SchoolAppFlow.objects.all().filter(state=2)
+    queryset = SchoolAppFlow.objects.all().filter(state=2,is_hidden=False)
     permission_classes = [AllowAny]
 
 

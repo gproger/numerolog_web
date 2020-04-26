@@ -51,6 +51,7 @@ class SchoolAppFlow(models.Model):
     avail_by_code = models.NullBooleanField(default=False, blank=True, null=True)
     by_code_hint = models.TextField(blank=True, null=True)
     slug = models.SlugField(allow_unicode=True)
+    is_hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.flow) + ' ' + str(self.flow_name)
