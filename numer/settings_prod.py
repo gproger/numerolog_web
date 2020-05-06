@@ -523,8 +523,9 @@ CELERY_RESULT_BACKEND = 'redis://' + CELERY_REDIS_HOST + ':' + CELERY_REDIS_PORT
 CELERY_TASK_DEFAULT_QUEUE = 'prod'
 CELERY_IGNORE_RESULT = True
 
+
 CELERY_BEAT_SCHEDULE = {
- 'update-transactions-status': {
+    'update-transactions-status': {
        'task': 'django_tinkoff_merchant.tasks.update_transactions',
         # There are 4 ways we can handle time, read further 
        'schedule': 300.0,
