@@ -127,7 +127,7 @@ def admin_send_pay_notify_sms(modeladmin, request, qs):
     for p in qs:
         send_pay_notify_sms.delay(p.pk)
 
-def refund_payments(modeladmin, request, qs):
+def refund_payments(modeladmin, request, queryset):
     form = None
 
     if 'apply' in request.POST:
