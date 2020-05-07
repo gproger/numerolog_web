@@ -4,7 +4,7 @@ from django_tinkoff_merchant.services import MerchantAPI
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm
 from schoolform.tasks import send_school_form_pay_url, send_school_from_pay_notify
 from schoolform.tasks import send_pay_notify_sms
-from .form import RefundForm
+from .forms import RefundForm
 
 def flow_name(obj):
     return obj.flow.flow_name
