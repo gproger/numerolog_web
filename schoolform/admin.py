@@ -153,7 +153,14 @@ def refund_payments(modeladmin, request, queryset):
 
                 count = ret_amount
 
-            modeladmin.message_user(request, "Возврат на сумму %d " % (count))
+                for p in item.payment.all():
+                    if p.is_paid() and ret_amount > p.amount:
+                        p.amount = ret_amount
+                        MerchantAPI.cancel(p)
+                        
+                     
+
+            modeladmin.message_user(request, "Возврат на сумму %d " % (count/100))
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:

@@ -57,7 +57,7 @@ class Payment(models.Model):
         return self.status == 'NEW' and self.payment_url
 
     def is_paid(self):
-        return self.status == 'CONFIRMED' or self.status == 'AUTHORIZED'
+        return self.status == 'CONFIRMED' or self.status == 'AUTHORIZED' or self.status == 'PARTIAL_REFUNDED'
 
     def with_receipt(self, email, taxation=None, phone=''):
         if not self.id:
