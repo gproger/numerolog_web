@@ -155,7 +155,7 @@ def refund_payments(modeladmin, request, queryset):
 
                 for p in item.payment.all():
                     if p.is_paid() and ret_amount <= p.amount:
-                        print("Trying return total %d and amount ret %d" %(p.amount, ret_amount))
+                        print("Trying return total %d and amount ret %d total %d" %(p.amount, ret_amount, total_amount))
                         p.amount = ret_amount
                         pt = MerchantAPI().cancel(p)
                         print(pt)
