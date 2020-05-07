@@ -59,6 +59,12 @@ class Payment(models.Model):
     def is_paid(self):
         return self.status == 'CONFIRMED' or self.status == 'AUTHORIZED' or self.status == 'PARTIAL_REFUNDED'
 
+    def is_user_pay(self):
+        return self.status == 'CONFIRMED' or self.status == 'AUTHORIZED'
+
+    def is_user_refund(self):
+        return self.status == 'PARTIAL_REFUNDED' or self.status == 'REFUNDED'
+
     def with_receipt(self, email, taxation=None, phone=''):
         if not self.id:
             self.save()
@@ -100,8 +106,6 @@ class Payment(models.Model):
 
         if date_valid is not None:
             data['RedirectDueDate'] = date_valid
-
-        print(data)
 
         if hasattr(self, 'receipt'):
             data['Receipt'] = self.receipt.to_json()

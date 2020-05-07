@@ -74,3 +74,29 @@ def send_pay_notify_sms(form_id):
 
     sms = SendSMSAPI()
     sms.send_pay_notify_smd(form.phone, context)
+
+
+@app.task
+def send_school_payment_notify(form_id, payment_id,amount):
+    form = SchoolAppForm.objects.get(pk=form_id)
+    payment = SchoolAppForm.payment.get(pk=payment_id)
+
+    context = {
+        'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(form.id),
+        'user_name' : form.first_name + ' ' + form.last_name,
+        'flow_num' : form.flow.flow,
+        'flow_name' : form.flow.flow_name,
+        'price' : form.price,
+        'total_amount' : form.payed_amount,
+        'amount' : amount,
+        'trans' : payment.status,
+        "SITE_HOST" : settings.MISAGO_ADDRESS,
+    }
+
+    if payment.success:
+        if payment.is_user_pay():
+            mail_user(form, "Школа неНумерологии",'emails/notify_payment_accepted_mail',
+                context=context, sender=DEFAULT_SENDER)
+        else payment.is_user_refund():
+            mail_user(form, "Школа неНумерологии",'emails/notify_payment_refunded_mail',
+                context=context, sender=DEFAULT_SENDER)
