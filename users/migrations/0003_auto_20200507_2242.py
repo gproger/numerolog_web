@@ -5,11 +5,60 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
+
+from django.apps import apps as global_apps
+
+
+def forwards(apps, schema_editor):
+    try:
+        TicketModel = apps.get_model('events', 'Ticket')
+    except LookupError:
+        # The old app isn't installed.
+        return
+
+    UserInfoModel = apps.get_model('users', 'UserInfo')
+
+    list_emails = UserInfoModel.objects.all().values_list('email', flat=True)
+
+    queryset = TicketModel.objects.exclude(email__in=list_emails).order_by('email')
+    last_email = ''
+    list_t = []
+    ### iterate through models and skip duplicate
+    for obj in queryset:
+        if last_email != obj.email:
+            new_obj = UserInfoModel(email=obj.email,
+            phone=obj.phone,
+            first_name=obj.first_name,
+            last_name=obj.last_name,
+            middle_name=obj.middle_name,
+            phone_valid=obj.phone_valid)
+            last_email=obj.email
+            list_t.append(new_obj)
+        elif obj.phone_valid:
+            list_t[-1].phone_valid=obj.phone_valid
+        
+    #create list of object by one query
+    UserInfoModel.objects.bulk_create(
+        list_t
+    )
+
+ #   NewModel.objects.bulk_create(
+ #       NewModel(new_attribute=old_object.old_attribute)
+ #       for old_object in OldModel.objects.all()
+ #   )
+
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
         ('users', '0002_auto_20200507_2146'),
     ]
 
+
+    if global_apps.is_installed('events'):
+        dependencies.append(('events', '0007_ticket_phone_valid'))
+
     operations = [
+        migrations.RunPython(forwards, reverse_code=migrations.RunPython.noop),
     ]
