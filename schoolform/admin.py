@@ -5,6 +5,7 @@ from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPer
 from schoolform.tasks import send_school_form_pay_url, send_school_from_pay_notify
 from schoolform.tasks import send_pay_notify_sms
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from .forms import RefundForm
 
 def flow_name(obj):
