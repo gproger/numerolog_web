@@ -79,7 +79,7 @@ def send_pay_notify_sms(form_id):
 @app.task
 def send_school_payment_notify(form_id, payment_id,amount):
     form = SchoolAppForm.objects.get(pk=form_id)
-    payment = SchoolAppForm.payment.get(pk=payment_id)
+    payment = form.payment.get(pk=payment_id)
 
     context = {
         'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(form.id),
