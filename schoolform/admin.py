@@ -154,10 +154,10 @@ def refund_payments(modeladmin, request, queryset):
                 count = ret_amount
 
                 for p in item.payment.all():
-                    if p.is_paid() and ret_amount > p.amount:
+                    if p.is_paid() and ret_amount < p.amount:
                         p.amount = ret_amount
-                        MerchantAPI.cancel(p)
-                        
+                        MerchantAPI().cancel(p)
+
                      
 
             modeladmin.message_user(request, "Возврат на сумму %d " % (count/100))
