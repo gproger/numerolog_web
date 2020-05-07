@@ -153,6 +153,9 @@ def refund_payments(modeladmin, request, queryset):
 
                 count = ret_amount
 
+                if ret_amount > total_amount:
+                    continue
+
                 for p in item.payment.all():
                     if p.is_paid() and ret_amount > 0:
                         if p.amount < ret_amount:
