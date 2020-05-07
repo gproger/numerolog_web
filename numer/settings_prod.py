@@ -530,7 +530,6 @@ CELERY_BEAT_SCHEDULE = {
         # There are 4 ways we can handle time, read further 
        'schedule': 300.0,
         # If you're using any arguments
-       'args': (‘We don’t need any’,),
     },         
 }
 
