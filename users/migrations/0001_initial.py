@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('website', models.URLField(blank=True, null=True)),
                 ('bid', models.DateField(null=True)),
                 ('phone_valid', models.NullBooleanField(default=False)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, related_name='ninfo', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, related_name='ninfo', ,null=True, blank=True, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(

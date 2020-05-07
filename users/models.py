@@ -13,7 +13,7 @@ class UserInfo(models.Model):
     instagram = models.CharField(max_length=80)
     website = models.URLField(null=True, blank=True)
     bid = models.DateField(null=True)
-    user = models.OneToOneField(get_user_model(), on_delete=models.DO_NOTHING, related_name="ninfo")
+    user = models.OneToOneField(get_user_model(), on_delete=models.DO_NOTHING, related_name="ninfo",null=True, blank=True)
     phone_valid = models.NullBooleanField(default=False)
 ### this class used as user info for auth user
 ### every application in system must be linked to this userinfo
