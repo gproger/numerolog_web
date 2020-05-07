@@ -88,7 +88,7 @@ def send_school_payment_notify(form_id, payment_id,amount):
         'flow_name' : form.flow.flow_name,
         'price' : form.price,
         'total_amount' : form.payed_amount,
-        'amount' : amount,
+        'amount' : amount//100,
         'trans' : payment.status,
         "SITE_HOST" : settings.MISAGO_ADDRESS,
     }
