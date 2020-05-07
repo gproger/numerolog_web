@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
 
 
     if global_apps.is_installed('events'):
-        dependencies.append(('events', '0007_ticket_phone_valid'))
+        dependencies.append(('events', '0008_auto_20200507_2259'))
 
     operations = [
         migrations.RunPython(forwards, reverse_code=migrations.RunPython.noop),

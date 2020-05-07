@@ -5,6 +5,19 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
+def forwards(apps, schema_editor):
+    
+
+
+    TicketModel = apps.get_model('events', 'Ticket')
+   
+    queryset = TicketModel.objects.all()
+
+    for obj in queryset:
+        obj.email = obj.email.lower()
+        obj.save()
+
+  
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -12,4 +25,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(forwards, reverse_code=migrations.RunPython.noop),
     ]
