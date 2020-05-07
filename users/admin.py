@@ -8,5 +8,5 @@ from .models import UserInfo
 @admin.register(UserInfo)
 class UserInfoAdmin(admin.ModelAdmin):
     list_display = ['id', 'email','phone','first_name',
-        'middle_name', 'last_name','instagramm','bid',]
+        'middle_name', 'last_name','instagram','bid',]
     search_fields = ['phone','email','first_name','last_name','middle_name']

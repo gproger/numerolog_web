@@ -253,6 +253,7 @@ INSTALLED_APPS = [
     'promocode',
     'smsgate',
     'events',
+    'users',
 ]
 
 if DEBUG:

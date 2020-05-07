@@ -8,14 +8,14 @@ from django.apps import apps as global_apps
 
 def forwards(apps, schema_editor):
     try:
-        SchoolAppFlowModel = apps.get_model('schoolform', 'SchoolAppFlow')
+        SchoolAppFormModel = apps.get_model('schoolform', 'SchoolAppForm')
     except LookupError:
         # The old app isn't installed.
         return
 
     UserInfoModel = apps.get_model('users', 'UserInfo')
 
-    queryset = SchoolAppFlowModel.objects.all().order_by(email)
+    queryset = SchoolAppFormModel.objects.all().order_by('email')
     last_email = ''
     list_t = []
     ### iterate through models and skip duplicate
@@ -26,7 +26,7 @@ def forwards(apps, schema_editor):
             first_name=obj.first_name,
             last_name=obj.last_name,
             middle_name=obj.middle_name,
-            instagram=obj.instagram,
+            instagram=obj.instagramm,
             bid=obj.bid,
             phone_valid=obj.phone_valid)
             last_email=obj.email
