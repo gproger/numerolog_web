@@ -140,7 +140,7 @@ def refund_payments(modeladmin, request, queryset):
             count = 0
             for item in queryset:
                 total_amount = 0
-                for p in item.payments.all():
+                for p in item.payment.all():
                     if p.is_paid():
                         total_amount += p.amount
 
