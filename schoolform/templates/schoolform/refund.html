@@ -2,7 +2,15 @@
 
 {% block content %}
 <form action="" method="post">{% csrf_token %}
-    {{ form }}
+    {% for field in form %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+        {% if field.help_text %}
+        <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+    </div>
+    {% endfor %}
     <p>Возврат будет выполнен для следующих анкет:</p>
     <ul>{{ items|unordered_list }}</ul>
     <input type="hidden" name="action" value="refund_payments" />
