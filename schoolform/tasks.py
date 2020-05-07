@@ -97,6 +97,6 @@ def send_school_payment_notify(form_id, payment_id,amount):
         if payment.is_user_pay():
             mail_user(form, "Школа неНумерологии",'emails/notify_payment_accepted_mail',
                 context=context, sender=DEFAULT_SENDER)
-        else payment.is_user_refund():
+        elif payment.is_user_refund():
             mail_user(form, "Школа неНумерологии",'emails/notify_payment_refunded_mail',
                 context=context, sender=DEFAULT_SENDER)
