@@ -147,7 +147,7 @@ def refund_payments(modeladmin, request, queryset):
 
                 ret_amount = amount
                 if is_percent:
-                    ret_amount = total_amount * (100-amount)/100
+                    ret_amount = total_amount * (amount)/100
                 else:
                     ret_amount = ret_amount * 100
 
