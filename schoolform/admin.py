@@ -98,7 +98,7 @@ def resend_payment_url(modeladmin, request, qs):
     for p in qs:
         send_school_form_pay_url.delay(p.pk)
 
-def refund_payments(modeladmin, request, qs):
+def cancel_payments(modeladmin, request, qs):
     for p in qs:
         for paym in p.payment.all():
             MerchantAPI().cancel(paym)
@@ -125,13 +125,47 @@ def admin_send_pay_notify_sms(modeladmin, request, qs):
     for p in qs:
         send_pay_notify_sms.delay(p.pk)
 
+def refund_payments(modeladmin, request, qs):
+    form = None
+
+    if 'apply' in request.POST:
+        form = RefundForm(request.POST)
+
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            is_percent = form.cleaned_data['is_percent']
+
+            count = 0
+            for item in queryset:
+                total_amount = 0
+                for p in item.payments.all():
+                    if p.is_paid():
+                        total_amount += p.amount
+
+                ret_amount = amount
+                if is_percent:
+                    ret_amount = total_amount * (100-amount)/100
+                else:
+                    ret_amount = ret_amount * 100
+
+                count = ret_amount
+
+            modeladmin.message_user(request, "Возврат на сумму %d " % (count))
+            return HttpResponseRedirect(request.get_full_path())
+
+    if not form:
+        form = RefundForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+
+    return render(request, 'schoolform/refund.html', {'items': queryset,'form': form, 'title':u'Возврат платежа(ей)'})
+
+
 
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
 send_pay_notify_url.short_description = 'Выслать Напоминание о оплате'
-refund_payments.short_description = 'Отменить платеж(и)'
 status_payments.short_description = 'Проверить платеж(и)'
 recalc_payments.short_description = 'Перепроверить оплату'
 admin_send_pay_notify_sms.short_description = 'Выслать SMS Напоминание о оплате'
+refund_payments.short_description = 'Сделать возврат(ы)'
 
 
 @admin.register(SchoolAppForm)
