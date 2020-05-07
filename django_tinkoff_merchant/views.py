@@ -43,12 +43,13 @@ class Notification(View):
         if not self.merchant_api.token_correct(data.get('Token'), data, payment.terminal):
             return HttpResponse(b'Bad token', status=400)
 
+        amoount = data['Amount']
 
         if data['Status'] == 'PARTIAL_REFUNDED' or data['Status'] == 'REFUNDED':
             data['Amount'] = payment.amount - data['Amount']
 
         self.merchant_api.update_payment_from_response(payment, data).save()
 
-        payment_update.send(self.__class__, payment=payment)
+        payment_update.send(self.__class__, payment=payment, amount=amount)
 
         return HttpResponse(b'OK', status=200)
