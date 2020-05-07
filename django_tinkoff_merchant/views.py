@@ -44,7 +44,7 @@ class Notification(View):
             return HttpResponse(b'Bad token', status=400)
 
 
-        if data['Status'] == 'PARTIAL_REFUNDED':
+        if data['Status'] == 'PARTIAL_REFUNDED' or data['Status'] == 'REFUNDED':
             data['Amount'] = payment.amount - data['Amount']
 
         self.merchant_api.update_payment_from_response(payment, data).save()
