@@ -148,7 +148,7 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
 class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializer
     startdate = datetime.today()
-    queryset = SchoolAppFlow.objects.all().filter(state=1,is_hidden=False, recruitment_stop__lt=startdate)
+    queryset = SchoolAppFlow.objects.all().filter(state=1,is_hidden=False, recruitment_stop__gt=startdate)
     permission_classes = [AllowAny]
 
 
