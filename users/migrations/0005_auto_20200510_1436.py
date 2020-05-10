@@ -15,6 +15,9 @@ def forwards(apps, schema_editor):
     for obj in queryset:
         res = ''
         res = res.join(regex.findall(obj.phone))
+        if len(res) == 0:
+            continue
+
         if res[0] == '8':
             res = '+7'+res[1:]
         obj.phone = res
