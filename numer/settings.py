@@ -167,7 +167,8 @@ DEFAULT_FROM_EMAIL = 'neNumerolog <%s>' % EMAIL_HOST_USER
 AUTH_USER_MODEL = 'misago_users.User'
 
 AUTHENTICATION_BACKENDS = [
-    'misago.users.authbackends.MisagoBackend',
+#    'misago.users.authbackends.MisagoBackend',
+    'users.authbackends,NumerologBackend',
 ]
 
 CSRF_FAILURE_VIEW = 'misago.core.errorpages.csrf_failure'
