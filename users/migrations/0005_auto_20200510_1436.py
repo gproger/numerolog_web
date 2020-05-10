@@ -3,7 +3,22 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
+import re
 
+
+def forwards(apps, schema_editor):
+    regex = re.compile('[+?\d+]')
+    UserInfoModel = apps.get_model('users', 'UserInfo')
+
+    queryset = UserInfoModel.objects.all()
+    ### iterate through models and skip duplicate
+    for obj in queryset:
+        res = ''
+        res = res.join(regex.findall(obj.phone))
+        if res[0] == '8':
+            res = '+7'+res[1:]
+        obj.phone = res
+        obj.save()
 
 class Migration(migrations.Migration):
 
@@ -12,4 +27,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(forwards, reverse_code=migrations.RunPython.noop),
     ]
