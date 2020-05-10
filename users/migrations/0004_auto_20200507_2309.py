@@ -31,12 +31,9 @@ def forwards(apps, schema_editor):
             last_name=obj.last_name,
             middle_name=obj.middle_name,
             instagram=obj.instagramm,
-            bid=obj.bid,
-            phone_valid=obj.phone_valid)
+            bid=obj.bid)
             last_email=obj.email
             list_t.append(new_obj)
-        elif obj.phone_valid:
-            list_t[-1].phone_valid=obj.phone_valid
         
     #create list of object by one query
     UserInfoModel.objects.bulk_create(
