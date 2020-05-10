@@ -22,6 +22,7 @@ import json
 from django.http import JsonResponse
 from datetime import datetime, timezone
 
+
 # Create your views here.
 
 
@@ -146,7 +147,8 @@ class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
 
 class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializer
-    queryset = SchoolAppFlow.objects.all().filter(state=1,is_hidden=False)
+    startdate = datetime.today()
+    queryset = SchoolAppFlow.objects.all().filter(state=1,is_hidden=False, recruitment_stop__lt=startdate)
     permission_classes = [AllowAny]
 
 
