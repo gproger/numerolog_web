@@ -17,6 +17,7 @@ from misago.users.serializers import AnonymousUserSerializer, AuthenticatedUserS
 import logging
 
 from .services import SendSMSAPI
+from users.services import createNewUser
 
 class SmsNotify(View):
     pass
@@ -95,10 +96,13 @@ class SMSTestCode(View):
         if type == 'auth' and res['result'] == 1:
             ## need to auth user
             user = authenticate(username=phone,phone=phone,password=code)
-            if user is not None:
-                auth.login(request, user)
-                user_s_data = AuthenticatedUserSerializer(user).data
-                res.update(user_s_data)
+            if user is None:
+                user = createNewUser(phone)
+                user = authenticate(username=phone,phone=phone,password=code)
+                
+            auth.login(request, user)
+            user_s_data = AuthenticatedUserSerializer(user).data
+            res.update(user_s_data)
  
         if res['result'] == -1:
             return JsonResponse({'desc' : 'На данный номер не высылалось сообщений'}, status=400)

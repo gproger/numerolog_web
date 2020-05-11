@@ -5,14 +5,14 @@ from django.contrib.auth import get_user_model
 
 
 class UserInfo(models.Model):
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
-    middle_name = models.CharField(max_length=40)
-    instagram = models.CharField(max_length=80)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=20,blank=True)
+    first_name = models.CharField(max_length=40,blank=True)
+    last_name = models.CharField(max_length=40,blank=True)
+    middle_name = models.CharField(max_length=40,blank=True)
+    instagram = models.CharField(max_length=80,blank=True)
     website = models.URLField(null=True, blank=True)
-    bid = models.DateField(null=True)
+    bid = models.DateField(null=True,blank=True)
     user = models.OneToOneField(get_user_model(), on_delete=models.DO_NOTHING, related_name="ninfo",null=True, blank=True)
     phone_valid = models.NullBooleanField(default=False)
 ### this class used as user info for auth user
