@@ -30,8 +30,14 @@ class SendSMSAPI(object):
     def send_verify_sms(self, phone, info):
         # first - check if sms was sended for this phones
         phone = get_phone(phone)
-        type = info.get('type',None)
-        t_id = info.get('id',None)
+        type = None
+        t_id = None
+        
+        if info is not None:
+            type = info.get('type',None)
+        
+        if info is not None:
+            t_id = info.get('id',None)
 
         if type is not None:
             if t_id is None:
