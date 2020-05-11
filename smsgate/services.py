@@ -57,7 +57,7 @@ class SendSMSAPI(object):
             seconds_cnt = auth_obj.get_time_delta()
             print(seconds_cnt)
             if seconds_cnt < 300:
-                return {'desc' : 'Wait few seconds', 'result' : -1, 'timer': int(seconds_cnt), 'error':'time','length' : 6}
+                return {'desc' : 'Wait few seconds', 'result' : -1, 'timer': 300-int(seconds_cnt), 'error':'time','length' : 6}
         else:
             auth_obj = PhoneAuthSMS()
             auth_obj.phone = phone
