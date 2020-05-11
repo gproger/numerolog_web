@@ -114,9 +114,7 @@ class SendSMSAPI(object):
                         t_obj.phone = phone
                         t_obj.phone_valid = True
                         t_obj.save()
-                if auth_obj.type == 'auth':
-                    ##create new user or return existed
-                    print("Auth OK")
+
             ### need add verification for this user by phone )))        
             ### need delete verification object for this sms code ->     
             return {'desc' : 'Code OK', 'result' : 1, 'phone' : phone}
