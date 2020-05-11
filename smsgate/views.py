@@ -5,10 +5,14 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
+from django.contrib import auth
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 from utils.phone import get_phone
+
+
+from misago.users.serializers import AnonymousUserSerializer, AuthenticatedUserSerializer
 
 import logging
 
@@ -87,11 +91,14 @@ class SMSTestCode(View):
 
         res = sms.test_verify_sms_code(phone,code,type)
 
+
         if type == 'auth' and res['result'] == 1:
             ## need to auth user
-            print('trying to get user')
             user = authenticate(username=phone,phone=phone,password=code)
-            print(user)
+            if user is not None:
+                auth.login(request, user)
+                user_s_data = AuthenticatedUserSerializer(user).data
+                res.update(user_s_data)
  
         if res['result'] == -1:
             return JsonResponse({'desc' : 'На данный номер не высылалось сообщений'}, status=400)
