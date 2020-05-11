@@ -43,7 +43,7 @@ class SendSMSAPI(object):
 
         if type is None:
             return {'desc' : 'Type not setted', 'result' : -2 }   
-        else if type not in type_values:
+        elif type not in type_values:
             return {'desc' : 'Type incorrect', 'result' : -3 }   
 
         
