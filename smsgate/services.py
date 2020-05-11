@@ -55,8 +55,7 @@ class SendSMSAPI(object):
             auth_obj = auth_obj.first()
             # test if date sended - current date > 5 min - we can send new sms
             seconds_cnt = auth_obj.get_time_delta()
-            print(seconds_cnt)
-            if seconds_cnt < 300:
+            if seconds_cnt < 300 or phone == '+79119804655':
                 return {'desc' : 'Wait few seconds', 'result' : -1, 'timer': 300-int(seconds_cnt), 'error':'time','length' : 6}
         else:
             auth_obj = PhoneAuthSMS()
