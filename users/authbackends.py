@@ -15,6 +15,7 @@ class NumerologBackend(ModelBackend):
 
         if kwargs.get('phone'):
             use_phone = True
+            phone = kwargs['phone']
             username = kwargs['phone']
 
         if not username or not password:
