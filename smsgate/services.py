@@ -32,17 +32,12 @@ class SendSMSAPI(object):
         phone = get_phone(phone)
         type = None
         t_id = None
-        
+
         if info is not None:
             type = info.get('type',None)
         
         if info is not None:
             t_id = info.get('id',None)
-
-        if type is not None:
-            if t_id is None:
-                return {'desc' : 'Incorrect request, t_id absent', 'result' : -5, 'error':'request'}
-
 
         auth_obj = PhoneAuthSMS.objects.filter(phone=phone,type=type)
 
@@ -83,7 +78,7 @@ class SendSMSAPI(object):
                 desc_text = "Сообщение не может быть доставлено(запрещена отправка)"
 
             auth_obj.status = 0
-            return {'result' : auth_obj.status, 'desc' : desc_text}
+            return {'result' : auth_obj.status, 'desc' : desc_text, 'length' : 6, 'timer' : 300}
 
 
     def test_verify_sms_code(self, phone, code, type):
@@ -97,7 +92,7 @@ class SendSMSAPI(object):
         auth_obj = auth_obj.first()
         if int(code) == int(auth_obj.code):
 
-            if auth_obj.t_id is not None and auth_obj.type is not None:
+            if auth_obj.type is not None:
                 if auth_obj.type == 'school':
                     s_obj = SchoolAppForm.objects.get(pk=auth_obj.t_id)
                     if s_obj.phone_valid is not True:
@@ -110,6 +105,9 @@ class SendSMSAPI(object):
                         t_obj.phone = phone
                         t_obj.phone_valid = True
                         t_obj.save()
+                if auth_obj.type == 'auth':
+                    ##create new user or return existed
+                    printf("Auth OK")
             ### need add verification for this user by phone )))            
             return {'desc' : 'Code OK', 'result' : 1, 'phone' : phone}
         else:
