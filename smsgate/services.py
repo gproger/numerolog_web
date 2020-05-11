@@ -56,7 +56,7 @@ class SendSMSAPI(object):
             # test if date sended - current date > 5 min - we can send new sms
             seconds_cnt = auth_obj.get_time_delta()
             if seconds_cnt < 300:
-                return {'desc' : 'Wait few seconds', 'result' : -1, 'value':seconds_cnt, 'error':'time'}
+                return {'desc' : 'Wait few seconds', 'result' : -1, 'timer':seconds_cnt, 'error':'time','length' : 6}
         else:
             auth_obj = PhoneAuthSMS()
             auth_obj.phone = phone
@@ -117,7 +117,8 @@ class SendSMSAPI(object):
                 if auth_obj.type == 'auth':
                     ##create new user or return existed
                     printf("Auth OK")
-            ### need add verification for this user by phone )))            
+            ### need add verification for this user by phone )))        
+            ### need delete verification object for this sms code ->     
             return {'desc' : 'Code OK', 'result' : 1, 'phone' : phone}
         else:
             return {'desc' : 'Code Fail', 'result' : 0}

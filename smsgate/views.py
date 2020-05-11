@@ -37,7 +37,7 @@ class SMSVerifyPhone(View):
             return JsonResponse({'desc' : 'На указанный номер телефона выслан код подтверждения','length' : res['length'],'timer' : res['timer']}, status=200)
 
         if res['result'] == -1:
-            return JsonResponse({'desc' : 'Попробуйте сделать запрос позже'}, status=400)
+            return JsonResponse({'desc' : 'Попробуйте сделать запрос позже', 'length' : res['length'],'timer' : res['timer']}, status=400)
 
         if res['result'] == -2:
             return JsonResponse({'desc' : 'Ошибка в запросе'}, status=400)
