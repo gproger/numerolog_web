@@ -33,6 +33,8 @@ class SMSVerifyPhone(View):
 
         res = sms.send_verify_sms(phone, info)
 
+        print(res)
+
         if res['result'] == 1:
             return JsonResponse({'desc' : 'На указанный номер телефона выслан код подтверждения','length' : res['length'],'timer' : res['timer']}, status=200)
 
