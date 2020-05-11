@@ -32,11 +32,10 @@ class SendSMSAPI(object):
         phone = get_phone(phone)
         type = info.get('type',None)
         t_id = info.get('id',None)
-        if type is None:
-            return {'desc' : 'Incorrect request, type absent', 'result' : -4, 'error':'request'}
 
-        if t_id is None:
-            return {'desc' : 'Incorrect request, t_id absent', 'result' : -5, 'error':'request'}
+        if type is not None:
+            if t_id is None:
+                return {'desc' : 'Incorrect request, t_id absent', 'result' : -5, 'error':'request'}
 
 
         auth_obj = PhoneAuthSMS.objects.filter(phone=phone,type=type)
@@ -55,8 +54,12 @@ class SendSMSAPI(object):
 
         auth_obj.code = random.randrange(100000,1000000,1)
         auth_obj.text = self.get_auth_phone_text(auth_obj.code)
-        auth_obj.type = type
-        auth_obj.t_id = t_id
+
+        if type is not None:
+            auth_obj.type = type
+        
+        if t_id is not None:    
+            auth_obj.t_id = t_id
 
         smsc = SMSC()
         res = smsc.send_sms(phones=auth_obj.phone,message=auth_obj.text)
@@ -87,7 +90,8 @@ class SendSMSAPI(object):
 
         auth_obj = auth_obj.first()
         if int(code) == int(auth_obj.code):
-            if auth_obj.t_id != 0:
+
+            if auth_obj.t_id is not None and auth_obj.type is not None:
                 if auth_obj.type == 'school':
                     s_obj = SchoolAppForm.objects.get(pk=auth_obj.t_id)
                     if s_obj.phone_valid is not True:
@@ -100,6 +104,7 @@ class SendSMSAPI(object):
                         t_obj.phone = phone
                         t_obj.phone_valid = True
                         t_obj.save()
+            ### need add verification for this user by phone )))            
             return {'desc' : 'Code OK', 'result' : 1, 'phone' : phone}
         else:
             return {'desc' : 'Code Fail', 'result' : 0}

@@ -58,13 +58,13 @@ class SMSTestCode(View):
         code = data.get('code',None)
         info = data.get('info',None)
 
-        if info is None:
-            return JsonResponse({'desc' : 'Нет информации о верифицируемом объекте'}, status=400)
+        ##if info is None:
+        ##    return JsonResponse({'desc' : 'Нет информации о верифицируемом объекте'}, status=400)
 
         type = info.get('type', None)
 
-        if type is None:
-            return JsonResponse({'desc' : 'Нет информации о типе верифицируемом объекте'}, status=400)
+        ##if type is None:
+        ##    return JsonResponse({'desc' : 'Нет информации о типе верифицируемом объекте'}, status=400)
 
         if phone is None:
             return JsonResponse({'desc' : 'Не указан номер телефона'}, status=400)
