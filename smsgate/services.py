@@ -16,6 +16,8 @@ import random
 from django.template import Template, Context
 
 
+type_values = ('school','ticket','auth')
+
 class SendSMSAPI(object):
     _settings = None
 
@@ -38,6 +40,13 @@ class SendSMSAPI(object):
         
         if info is not None:
             t_id = info.get('id',None)
+
+        if type is None:
+            return {'desc' : 'Type not setted', 'result' : -2 }   
+        else if type not in type_values:
+            return {'desc' : 'Type incorrect', 'result' : -3 }   
+
+        
 
         auth_obj = PhoneAuthSMS.objects.filter(phone=phone,type=type)
 
