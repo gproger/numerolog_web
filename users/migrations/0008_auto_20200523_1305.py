@@ -5,6 +5,16 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
+def forwards(apps, schema_editor):
+    UserInfoModel = apps.get_model('users', 'UserInfo')
+
+    queryset = UserInfoModel.objects.all()
+    ### iterate through models and skip duplicate
+    for obj in queryset:
+        obj.email_valid = True
+        obj.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -12,4 +22,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(forwards, reverse_code=migrations.RunPython.noop),
     ]
