@@ -97,7 +97,7 @@ class SMSTestCode(View):
             ## need to auth user
             user = authenticate(username=phone,phone=phone,password=code)
             if user is None:
-                user = createNewUser(phone)
+                user = createNewUser(phone, request.user_ip)
                 user = authenticate(username=phone,phone=phone,password=code)
                 
             auth.login(request, user)

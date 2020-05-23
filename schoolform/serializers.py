@@ -195,7 +195,7 @@ class SchoolAppFormFlowStudentsList(serializers.ModelSerializer):
     def get_amount(self,obj):
         total = 0
         for k in obj.payment.all():
-            if k.status == 'CONFIRMED':
+            if k.is_paid():
                 total += k.amount
         return total/100
 
