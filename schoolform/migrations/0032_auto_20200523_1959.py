@@ -15,7 +15,7 @@ def forwards(apps, schema_editor):
     ### iterate through models and skip duplicate
     for obj in queryset:
         u_info = UserInfoModel.objects.filter(email=obj._email)
-        if u_info is not None:
+        if u_info.first() is not None:
             obj.userinfo = u_info.first()
             obj.save()
         else:
@@ -37,7 +37,7 @@ def forwards(apps, schema_editor):
     
     for obj in queryset:
         u_info = UserInfoModel.objects.filter(email=obj._email)
-        if u_info is not None:
+        if u_info.first() is not None:
             obj.userinfo = u_info.first()
             obj.save()
         else:
@@ -56,7 +56,7 @@ def forwards(apps, schema_editor):
     queryset = SchoolAppCurator.objects.all()
     for obj in queryset:
         u_info = UserInfoModel.objects.filter(email=obj._email)
-        if u_info is not None:
+        if u_info.first() is not None:
             obj.userinfo = u_info.first()
             obj.save()
         else:
