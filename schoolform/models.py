@@ -58,17 +58,67 @@ class SchoolAppFlow(models.Model):
 
 class SchoolAppPersCuratorForm(models.Model):
 
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
-    middle_name = models.CharField(max_length=40)
-    bid = models.DateField(null=True)
+    _email = models.EmailField()
+    _phone = models.CharField(max_length=20)
+    _first_name = models.CharField(max_length=40)
+    _last_name = models.CharField(max_length=40)
+    _middle_name = models.CharField(max_length=40)
+    _bid = models.DateField(null=True)
     accepted = models.CharField(max_length=40)
     flow = models.ForeignKey(SchoolAppFlow)
     created = models.DateTimeField(auto_now_add=True)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
+
+    @property
+    def email(self):
+        return self._email
+    
+    @email.setter
+    def email(self, val):
+        self._email = val
+    
+    @property
+    def phone(self):
+        return self._phone
+    
+    @phone.setter
+    def phone(self, val):
+        self._phone = val
+
+    @property
+    def first_name(self):
+        return self._first_name
+    
+    @first_name.setter
+    def first_name(self, val):
+        self._first_name = val
+
+    @property
+    def last_name(self):
+        return self._last_name
+    
+    @last_name.setter
+    def last_name(self, val):
+        self._last_name = val
+
+
+    @property
+    def middle_name(self):
+        return self._last_name
+    
+    @middle_name.setter
+    def middle_name(self, val):
+        self._middle_name = val
+
+    @property
+    def bid(self):
+        return self._bid
+    
+    @bid.setter
+    def bid(self, val):
+        self._bid = val
+
 
     def save(self, *args, **kwargs):
 
@@ -103,7 +153,7 @@ class SchoolAppPersCuratorForm(models.Model):
 
     def get_payment_status(self):
         for payment in  self.payment.all():
-             if payment.status != 'CONFIRMED':
+             if not payment.is_paid():
                  MerchantAPI().status(payment).save()
 
     def cancel_payment(self):
