@@ -9,6 +9,8 @@ from emails.emails import mail_user
 from celery.execute import send_task
 import pytz
 from datetime import datetime, timedelta
+from users.models import UserInfo
+
 # Create your models here.
 
 PERS_CURATOR_DESC = 'Услуга персонального куратора в школе неНумерологии Ольги Перцевой'
@@ -69,6 +71,8 @@ class SchoolAppPersCuratorForm(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
+
+    userinfo = models.ForeignKey(UserInfo, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     @property
     def email(self):
@@ -199,6 +203,9 @@ class SchoolAppForm(models.Model):
     _email_valid = models.NullBooleanField(default=False)
     
     comment = models.TextField(null=True, blank=True)
+
+    userinfo = models.ForeignKey(UserInfo, on_delete=models.DO_NOTHING, blank=True, null=True)
+
 
 
     @property
@@ -420,6 +427,9 @@ class SchoolAppCurator(models.Model):
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
     curator = models.NullBooleanField()
     expert = models.NullBooleanField()
+
+    userinfo = models.ForeignKey(UserInfo, on_delete=models.DO_NOTHING, blank=True, null=True)
+
 
 
     @property
