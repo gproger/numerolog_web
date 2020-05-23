@@ -413,7 +413,7 @@ class SchoolAppCurator(models.Model):
     _first_name = models.CharField(max_length=40)
     _last_name = models.CharField(max_length=40)
     _middle_name = models.CharField(max_length=40)
-    _instagramm = models.CharField(max_length=80)
+    _instagram = models.CharField(max_length=80)
     _bid = models.DateField()
     flow = models.ForeignKey(SchoolAppFlow)
     created = models.DateTimeField(auto_now_add=True)
