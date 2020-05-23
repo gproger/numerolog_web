@@ -14,19 +14,19 @@ def forwards(apps, schema_editor):
     queryset = SchoolAppForm.objects.all()
     ### iterate through models and skip duplicate
     for obj in queryset:
-        u_info = UserInfoModel.objects.get(email=obj.email)
+        u_info = UserInfoModel.objects.filter(email=obj._email)
         if u_info is not None:
-            obj.userinfo = u_info
+            obj.userinfo = u_info.first()
             obj.save()
         else:
             u_info = UserInfoModel(
-                email=obj.email,
-                phone=obj.phone,
-                first_name=obj.first_name,
-                middle_name=obj.middle_name,
-                last_name=obj.last_name,
-                bid=obj.bid,
-                instagram=obj.instagramm,
+                email=obj._email,
+                phone=obj._phone,
+                first_name=obj._first_name,
+                middle_name=obj._middle_name,
+                last_name=obj._last_name,
+                bid=obj._bid,
+                instagram=obj._instagram,
             )
             u_info.save()
             obj.userinfo = u_info
@@ -36,18 +36,18 @@ def forwards(apps, schema_editor):
     queryset = SchoolAppPersCuratorForm.objects.all()
     
     for obj in queryset:
-        u_info = UserInfoModel.objects.get(email=obj.email)
+        u_info = UserInfoModel.objects.filter(email=obj._email)
         if u_info is not None:
-            obj.userinfo = u_info
+            obj.userinfo = u_info.first()
             obj.save()
         else:
             u_info = UserInfoModel(
-                email=obj.email,
-                phone=obj.phone,
-                first_name=obj.first_name,
-                middle_name=obj.middle_name,
-                last_name=obj.last_name,
-                bid=obj.bid,
+                email=obj._email,
+                phone=obj._phone,
+                first_name=obj._first_name,
+                middle_name=obj._middle_name,
+                last_name=obj._last_name,
+                bid=obj._bid,
             )
             u_info.save()
             obj.userinfo = u_info
@@ -55,19 +55,19 @@ def forwards(apps, schema_editor):
 
     queryset = SchoolAppCurator.objects.all()
     for obj in queryset:
-        u_info = UserInfoModel.objects.get(email=obj.email)
+        u_info = UserInfoModel.objects.filter(email=obj._email)
         if u_info is not None:
-            obj.userinfo = u_info
+            obj.userinfo = u_info.first()
             obj.save()
         else:
-             u_info = UserInfoModel(
-                email=obj.email,
-                phone=obj.phone,
-                first_name=obj.first_name,
-                middle_name=obj.middle_name,
-                last_name=obj.last_name,
-                bid=obj.bid,
-                instagram=obj.instagramm,
+            u_info = UserInfoModel(
+                email=obj._email,
+                phone=obj._phone,
+                first_name=obj._first_name,
+                middle_name=obj._middle_name,
+                last_name=obj._last_name,
+                bid=obj._bid,
+                instagram=obj._instagramm,
             )
             u_info.save()
             obj.userinfo = u_info
