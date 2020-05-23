@@ -5,6 +5,75 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
+def forwards(apps, schema_editor):
+    UserInfoModel = apps.get_model('users', 'UserInfo')
+    SchoolAppForm = apps.get_model('schoolform','SchoolAppForm')
+    SchoolAppPersCuratorForm = apps.get_model('schoolform','SchoolAppPersCuratorForm')
+    SchoolAppCurator = apps.get_model('schoolform','SchoolAppCurator')
+
+    queryset = SchoolAppForm.objects.all()
+    ### iterate through models and skip duplicate
+    for obj in queryset:
+        u_info = UserInfoModel.objects.get(email=obj.email)
+        if u_info is not None:
+            obj.userinfo = u_info
+            obj.save()
+        else:
+            u_info = UserInfoModel(
+                email=obj.email,
+                phone=obj.phone,
+                first_name=obj.first_name,
+                middle_name=obj.middle_name,
+                last_name=obj.last_name,
+                bid=obj.bid,
+                instagram=obj.instagramm,
+            )
+            u_info.save()
+            obj.userinfo = u_info
+            obj.save()
+
+
+    queryset = SchoolAppPersCuratorForm.objects.all()
+    
+    for obj in queryset:
+        u_info = UserInfoModel.objects.get(email=obj.email)
+        if u_info is not None:
+            obj.userinfo = u_info
+            obj.save()
+        else:
+            u_info = UserInfoModel(
+                email=obj.email,
+                phone=obj.phone,
+                first_name=obj.first_name,
+                middle_name=obj.middle_name,
+                last_name=obj.last_name,
+                bid=obj.bid,
+            )
+            u_info.save()
+            obj.userinfo = u_info
+            obj.save()
+
+    queryset = SchoolAppCurator.objects.all()
+    for obj in queryset:
+        u_info = UserInfoModel.objects.get(email=obj.email)
+        if u_info is not None:
+            obj.userinfo = u_info
+            obj.save()
+        else:
+             u_info = UserInfoModel(
+                email=obj.email,
+                phone=obj.phone,
+                first_name=obj.first_name,
+                middle_name=obj.middle_name,
+                last_name=obj.last_name,
+                bid=obj.bid,
+                instagram=obj.instagramm,
+            )
+            u_info.save()
+            obj.userinfo = u_info
+            obj.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -12,4 +81,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(forwards, reverse_code=migrations.RunPython.noop),
     ]
