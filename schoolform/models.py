@@ -176,13 +176,13 @@ class SchoolAppPersCuratorForm(models.Model):
 
 class SchoolAppForm(models.Model):
 
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
-    middle_name = models.CharField(max_length=40)
-    instagramm = models.CharField(max_length=80)
-    bid = models.DateField()
+    _email = models.EmailField()
+    _phone = models.CharField(max_length=20)
+    _first_name = models.CharField(max_length=40)
+    _last_name = models.CharField(max_length=40)
+    _middle_name = models.CharField(max_length=40)
+    _instagram = models.CharField(max_length=80)
+    _bid = models.DateField()
     accepted = models.CharField(max_length=40)
     payed_by = models.CharField(max_length=240, blank=True, null=True)
     payed_outline = models.PositiveIntegerField(default=0, null=True, blank=True)
@@ -194,8 +194,87 @@ class SchoolAppForm(models.Model):
     price_f = models.OneToOneField(PriceField, null=True, blank=True)
     pay_url_sended = models.NullBooleanField(default=False)
     payed_amount = models.PositiveIntegerField(default=0)
-    phone_valid = models.NullBooleanField(default=False)
+    
+    _phone_valid = models.NullBooleanField(default=False)
+    _email_valid = models.NullBooleanField(default=False)
+    
     comment = models.TextField(null=True, blank=True)
+
+
+    @property
+    def email(self):
+        return self._email
+    
+    @email.setter
+    def email(self, val):
+        self._email = val
+    
+    @property
+    def phone(self):
+        return self._phone
+    
+    @phone.setter
+    def phone(self, val):
+        self._phone = val
+
+    @property
+    def first_name(self):
+        return self._first_name
+    
+    @first_name.setter
+    def first_name(self, val):
+        self._first_name = val
+
+    @property
+    def last_name(self):
+        return self._last_name
+    
+    @last_name.setter
+    def last_name(self, val):
+        self._last_name = val
+
+
+    @property
+    def middle_name(self):
+        return self._last_name
+    
+    @middle_name.setter
+    def middle_name(self, val):
+        self._middle_name = val
+
+    @property
+    def bid(self):
+        return self._bid
+    
+    @bid.setter
+    def bid(self, val):
+        self._bid = val
+
+    @property
+    def instagramm(self):
+        return self._instagram
+    
+    @instagramm.setter
+    def instagramm(self, val):
+        self._instagram = val
+
+    @property
+    def phone_valid(self):
+        return self._phone_valid
+    
+    @phone_valid.setter
+    def phone_valid(self, val):
+        self._phone_valid = val
+
+    @property
+    def email_valid(self):
+        return self._email_valid
+    
+    @email_valid.setter
+    def email_valid(self, val):
+        self._email_valid = val
+
+
 
     def save(self, *args, **kwargs):
 
@@ -329,18 +408,76 @@ class SchoolAppForm(models.Model):
 
 class SchoolAppCurator(models.Model):
 
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
-    middle_name = models.CharField(max_length=40)
-    instagramm = models.CharField(max_length=80)
-    bid = models.DateField()
+    _email = models.EmailField()
+    _phone = models.CharField(max_length=20)
+    _first_name = models.CharField(max_length=40)
+    _last_name = models.CharField(max_length=40)
+    _middle_name = models.CharField(max_length=40)
+    _instagramm = models.CharField(max_length=80)
+    _bid = models.DateField()
     flow = models.ForeignKey(SchoolAppFlow)
     created = models.DateTimeField(auto_now_add=True)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
     curator = models.NullBooleanField()
     expert = models.NullBooleanField()
+
+
+    @property
+    def email(self):
+        return self._email
+    
+    @email.setter
+    def email(self, val):
+        self._email = val
+    
+    @property
+    def phone(self):
+        return self._phone
+    
+    @phone.setter
+    def phone(self, val):
+        self._phone = val
+
+    @property
+    def first_name(self):
+        return self._first_name
+    
+    @first_name.setter
+    def first_name(self, val):
+        self._first_name = val
+
+    @property
+    def last_name(self):
+        return self._last_name
+    
+    @last_name.setter
+    def last_name(self, val):
+        self._last_name = val
+
+
+    @property
+    def middle_name(self):
+        return self._last_name
+    
+    @middle_name.setter
+    def middle_name(self, val):
+        self._middle_name = val
+
+    @property
+    def bid(self):
+        return self._bid
+    
+    @bid.setter
+    def bid(self, val):
+        self._bid = val
+
+    @property
+    def instagramm(self):
+        return self._instagram
+    
+    @instagramm.setter
+    def instagramm(self, val):
+        self._instagram = val
 
     def save(self, *args, **kwargs):
 
