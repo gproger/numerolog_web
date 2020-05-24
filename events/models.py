@@ -10,6 +10,7 @@ from celery.execute import send_task
 
 
 from django_tinkoff_merchant.models import TinkoffSettings
+from users.models import UserInfo
 
 class OfflineEvent(models.Model):
 
@@ -46,11 +47,11 @@ class EventTicketTemplate(models.Model):
 
 class Ticket(models.Model):
     eventticket = models.ForeignKey(EventTicketTemplate)
-    email = models.EmailField()
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
-    middle_name = models.CharField(max_length=40)
-    phone = models.CharField(max_length=40)
+    _email = models.EmailField()
+    _first_name = models.CharField(max_length=40)
+    _last_name = models.CharField(max_length=40)
+    _middle_name = models.CharField(max_length=40)
+    _phone = models.CharField(max_length=40)
     count = models.PositiveSmallIntegerField(default = 1)
     price_f = models.OneToOneField(PriceField, null=True, blank=True)
     price = models.PositiveIntegerField(default = 0)
@@ -58,8 +59,38 @@ class Ticket(models.Model):
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True, related_name='ticket')
     ticket_sended = models.NullBooleanField(default=False)
     pay_url_sended = models.NullBooleanField(default=False)
-    phone_valid = models.NullBooleanField(default=False)
+    _phone_valid = models.NullBooleanField(default=False)
 
+    userinfo = models.ForeignKey(UserInfo, on_delete=models.DO_NOTHING, blank=True, null=True)
+
+    @property
+    def email(self):
+        return self._email
+    
+    @property
+    def phone(self):
+        return self._phone
+    
+    @property
+    def first_name(self):
+        return self._first_name
+
+    @property
+    def last_name(self):
+        return self._last_name
+    
+    @property
+    def middle_name(self):
+        return self._middle_name
+    
+    @property
+    def phone(self):
+        return self._phone
+    
+    @property
+    def phone_valid(self):
+        return self._phone_valid
+    
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)
         order_plural="Встреча "
