@@ -20,19 +20,44 @@ class UserInfoSerializer(serializers.Serializer):
         return get_phone(phone)
 
 
-class UserOrderSerializer():
-    pass
-
 class UserOrderTicketsListSerializer():
-    pass
+    id = serializers.IntegerField(read_only=True)
+    price = serializers.IntegerField(read_only=True)
+    payed_amount = serializers.MethodField()
+    created = serializers.DateTimeField(read_only=True,format="%d.%m.%Y %H:%M")
+    title = serializers.MethodField()
+
+    def get_title(self, obj):
+        return obj.eventticket.event.name
+
 
 class UserOrderSchoolListSerializer():
-    pass
+    id = serializers.IntegerField(read_only=True)
+    price = serializers.IntegerField(read_only=True)
+    payed_amount = serializers.IntegerField(read_only=True)
+    created = serializers.DateTimeField(read_only=True,format="%d.%m.%Y %H:%M")
+    title = serializers.MethodField()
+
+    def get_title(self, obj):
+        return 'Обучение в школе на '+obj.flow.flow_name
+
 
 class UserOrderCuratorListSerializer():
-    pass
+    id = serializers.IntegerField(read_only=True)
+    price = serializers.IntegerField(read_only=True)
+    payed_amount = serializers.IntegerField(read_only=True)
+    created = serializers.DateTimeField(read_only=True,format="%d.%m.%Y %H:%M")
+    title = serializers.MethodField()
+
+    def get_title(self, obj):
+        return 'Услуга личного куратора'
+
 
 class UserOrderServicesListSerializer():
+    pass
+
+
+class UserOrdersSerializer():
     pass
 
 class UserOrderTicketSerializer():

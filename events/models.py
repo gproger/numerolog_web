@@ -60,6 +60,8 @@ class Ticket(models.Model):
     ticket_sended = models.NullBooleanField(default=False)
     pay_url_sended = models.NullBooleanField(default=False)
     _phone_valid = models.NullBooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    
 
     userinfo = models.ForeignKey(UserInfo, on_delete=models.DO_NOTHING, blank=True, null=True)
 
@@ -90,6 +92,10 @@ class Ticket(models.Model):
     @property
     def phone_valid(self):
         return self._phone_valid
+
+    @property
+    def payed_amount(self):
+        return self.get_amount()
     
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)

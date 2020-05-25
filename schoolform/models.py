@@ -91,11 +91,20 @@ class SchoolAppPersCuratorForm(models.Model):
 
     @property
     def middle_name(self):
-        return self.userinfo.middle_name
+        return self.userinfo.last_name
     
     @property
     def bid(self):
         return self.userinfo.bid
+
+    @property
+    def payed_amount(self):
+        total = 0
+        for payment in self.payment.all():
+            if payment.is_paid():
+                total += payment.amount
+        total /= 100
+        return total 
 
 
     def save(self, *args, **kwargs):
@@ -192,7 +201,7 @@ class SchoolAppForm(models.Model):
     
     @property
     def middle_name(self):
-        return self.userinfo.middle_name
+        return self.userinfo.last_name
     
     @property
     def bid(self):
@@ -256,7 +265,7 @@ class SchoolAppForm(models.Model):
 
     def get_payment_status(self):
         for payment in  self.payment.all():
-             if payment.status != 'CONFIRMED':
+             if payment.is_paid():
                  MerchantAPI().status(payment).save()
 
     def cancel_payment(self):
@@ -372,9 +381,11 @@ class SchoolAppCurator(models.Model):
     def middle_name(self):
         return self.userinfo.middle_name
 
+
     @property
     def bid(self):
         return self.userinfo.bid
+
 
     @property
     def instagramm(self):

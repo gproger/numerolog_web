@@ -10,7 +10,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbid
 
 
 from .serializers import UserInfoSerializer
-from .serializers import UserOrderSerializer
+from .serializers import UserOrdersSerializer
 from .serializers import UserOrderTicketsListSerializer
 from .serializers import UserOrderSchoolListSerializer
 from .serializers import UserOrderCuratorListSerializer
@@ -33,20 +33,57 @@ class UserInfoDetail(generics.RetrieveUpdateDestroyAPIView):
         return user.ninfo
 
 
-class UserOrderList(generics.ListAPIView):
-    pass
+class UserOrderList(generics.RetrieveUpdateDestroyAPIView):
+    
+    serializer_class = UserOrdersSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_fields = []
+
+    def get_object(self):
+        user = self.request.user
+        return user.ninfo
 
 
 class UserOrderTicketList(generics.ListAPIView):
-    pass
+
+    serializer_class = UserOrderTicketsListSerializer
+    queryset = UserInfo.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        userInfo = self.request.user.ninfo
+        if userInfo is not None:
+            qs = userInfo.ticket_set.all()
+            return qs
+        return None
 
 
 class UserOrderSchoolList(generics.ListAPIView):
-    pass
+    
+    serializer_class = UserOrderSchoolListSerializer
+    queryset = UserInfo.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        userInfo = self.request.user.ninfo
+        if userInfo is not None:
+            qs = userInfo.schoolappform_set.all()
+            return qs
+        return None
 
 
 class UserOrderCuratorList(generics.ListAPIView):
-    pass
+    
+    serializer_class = UserOrderCuratorListSerializer
+    queryset = UserInfo.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        userInfo = self.request.user.ninfo
+        if userInfo is not None:
+            qs = userInfo.schoolappperscuratorform_set.all()
+            return qs
+        return None
 
 
 class UserOrderServicesList(generics.ListAPIView):
