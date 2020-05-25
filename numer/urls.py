@@ -83,9 +83,13 @@ urlpatterns = [
     url(r'^', include(numer_service_api)),
     url(r'^', include(codes_api)),
     url(r'^', include(events_api)),
-    url(r'^', include(wagtail_urls)),
 
 ]
+
+if 'users' in settings.INSTALLED_APPS:
+    from users.urls import urls as users_urls
+    urlpatterns += [url(r'^', include(users_urls)),]
+
 
 # If debug mode is enabled, include debug toolbar
 if settings.DEBUG:
@@ -94,6 +98,8 @@ if settings.DEBUG:
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ]
 
+
+urlpatterns += [url(r'^', include(wagtail_urls)),]
 
 # Use static file server for static and media files (debug only)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

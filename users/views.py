@@ -6,7 +6,6 @@ from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 from django.views import View
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
-
 # Create your views here.
 
 
@@ -26,9 +25,10 @@ from .models import UserInfo
 class UserInfoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserInfoSerializer
     queryset = UserInfo.objects.all()
-    permission_classes = [AllowAny]
-    
-    def get_queryset(self):
+    permission_classes = [IsAuthenticated]
+    lookup_fields = []
+
+    def get_object(self):
         user = self.request.user
         return user.ninfo
 
