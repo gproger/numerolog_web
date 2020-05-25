@@ -33,15 +33,6 @@ class UserInfoDetail(generics.RetrieveUpdateDestroyAPIView):
         return user.ninfo
 
 
-class UserOrderList(generics.RetrieveUpdateDestroyAPIView):
-    
-    serializer_class = UserOrdersSerializer
-    permission_classes = [IsAuthenticated]
-    lookup_fields = []
-
-    def get_object(self):
-        user = self.request.user
-        return user.ninfo
 
 
 class UserOrderTicketList(generics.ListAPIView):
@@ -84,6 +75,17 @@ class UserOrderCuratorList(generics.ListAPIView):
             qs = userInfo.schoolappperscuratorform_set.all()
             return qs
         return None
+
+
+class UserOrderList(generics.RetrieveUpdateDestroyAPIView):
+    
+    serializer_class = UserOrdersSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_fields = []
+
+    def get_object(self):
+        user = self.request.user
+        return user.ninfo
 
 
 class UserOrderServicesList(generics.ListAPIView):
