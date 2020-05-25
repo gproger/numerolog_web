@@ -95,7 +95,7 @@ class Ticket(models.Model):
 
     @property
     def payed_amount(self):
-        return self.get_amount()
+        return self.get_amount(self)
     
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)

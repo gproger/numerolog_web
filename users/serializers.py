@@ -20,54 +20,54 @@ class UserInfoSerializer(serializers.Serializer):
         return get_phone(phone)
 
 
-class UserOrderTicketsListSerializer():
+class UserOrderTicketsListSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     price = serializers.IntegerField(read_only=True)
-    payed_amount = serializers.MethodField()
+    payed_amount = serializers.IntegerField(read_only=True)
     created = serializers.DateTimeField(read_only=True,format="%d.%m.%Y %H:%M")
-    title = serializers.MethodField()
+    title = serializers.SerializerMethodField()
 
     def get_title(self, obj):
         return obj.eventticket.event.name
 
 
-class UserOrderSchoolListSerializer():
+class UserOrderSchoolListSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     price = serializers.IntegerField(read_only=True)
     payed_amount = serializers.IntegerField(read_only=True)
     created = serializers.DateTimeField(read_only=True,format="%d.%m.%Y %H:%M")
-    title = serializers.MethodField()
+    title = serializers.SerializerMethodField()
 
     def get_title(self, obj):
         return 'Обучение в школе на '+obj.flow.flow_name
 
 
-class UserOrderCuratorListSerializer():
+class UserOrderCuratorListSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     price = serializers.IntegerField(read_only=True)
     payed_amount = serializers.IntegerField(read_only=True)
     created = serializers.DateTimeField(read_only=True,format="%d.%m.%Y %H:%M")
-    title = serializers.MethodField()
+    title = serializers.SerializerMethodField()
 
     def get_title(self, obj):
         return 'Услуга личного куратора'
 
 
-class UserOrderServicesListSerializer():
+class UserOrderServicesListSerializer(serializers.Serializer):
     pass
 
 
-class UserOrdersSerializer():
+class UserOrdersSerializer(serializers.Serializer):
     pass
 
-class UserOrderTicketSerializer():
+class UserOrderTicketSerializer(serializers.Serializer):
     pass
 
-class UserOrderSchoolSerializer():
+class UserOrderSchoolSerializer(serializers.Serializer):
     pass
 
-class UserOrderCuratorSerializer():
+class UserOrderCuratorSerializer(serializers.Serializer):
     pass
 
-class UserOrderServicesSerializer():
+class UserOrderServicesSerializer(serializers.Serializer):
     pass
