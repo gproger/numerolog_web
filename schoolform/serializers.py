@@ -207,6 +207,7 @@ class SchoolPersCuratorSerializer(serializers.ModelSerializer):
 
     payment = PaymentSerializer(required=False, many = True)
     payed = serializers.SerializerMethodField(required=False)
+    price = serializers.IntegerField(read_only=True)
 
     def get_payed(self,obj):
         return obj.is_payed()

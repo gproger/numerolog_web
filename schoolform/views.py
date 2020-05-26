@@ -250,6 +250,7 @@ class SchoolApplyPersCurator(View):
         cur.middle_name = form.middle_name
         cur.email = form.email
         cur.flow = flow
+        cur.price = flow.pers_cur_price
         test_c = True
         for term in json_data['accepted_toss']:
             tobj = get_object_or_404(TermsOfServicePage,id=term)

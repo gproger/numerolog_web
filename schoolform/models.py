@@ -66,7 +66,7 @@ class SchoolAppPersCuratorForm(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     accepted_toss = models.ManyToManyField(TermsOfServicePage)
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
-
+    price = models.PositiveIntegerField(default = 0)
     userinfo = models.ForeignKey(UserInfo, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     @property
@@ -117,7 +117,7 @@ class SchoolAppPersCuratorForm(models.Model):
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)
         order_plural="Школа "
-        amount = self.flow.pers_cur_price*100
+        amount = self.price*100
         if 'amount' in kwargs:
             amount = kwargs.get('amount')
 
