@@ -15,7 +15,7 @@ class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
         return norm_value
 
     def validate_phone(self, value):
-        return get_phone(value)
+        get_phone(value)
 
     class Meta:
         model = SchoolAppForm

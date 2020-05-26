@@ -21,7 +21,7 @@ import json
 
 from django.http import JsonResponse
 from datetime import datetime, timezone
-
+from utils.phone import get_phone
 
 # Create your views here.
 
@@ -79,7 +79,7 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
 
 
 
-            objs = SchoolAppForm.objects.filter(flow=c_flow,email=request.data.get('email').strip().lower())
+            objs = SchoolAppForm.objects.filter(flow=c_flow,userinfo__phone=get_phone(request.data.get('phone')))
             if objs.count() > 0:
                 objs = objs.first()
                 ser = SchoolAppFormCreateSerializer(objs)
