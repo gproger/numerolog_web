@@ -73,3 +73,4 @@ class UserOrderCuratorSerializer(serializers.Serializer):
 
 class UserOrderServicesSerializer(serializers.Serializer):
     pass
+

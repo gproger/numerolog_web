@@ -11,8 +11,11 @@ from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 from utils.phone import get_phone
 
+from users.serializers import UserInfoSerializer
 
 from misago.users.serializers import AnonymousUserSerializer, AuthenticatedUserSerializer
+
+
 
 import logging
 
@@ -102,7 +105,9 @@ class SMSTestCode(View):
                 
             auth.login(request, user)
             user_s_data = AuthenticatedUserSerializer(user).data
+            user_info_data = UserInfoSerializer(user.ninfo).data
             res.update(user_s_data)
+            res.update({'ninfo' : user_info_data})
  
         if res['result'] == -1:
             return JsonResponse({'desc' : 'На данный номер не высылалось сообщений'}, status=400)
