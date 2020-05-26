@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm
 from django_tinkoff_merchant.serializers import PaymentSerializer
 
+from users.serializers import UserInfoSerializer
+
 class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
     bid = serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y'])
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
@@ -138,6 +140,14 @@ class SchoolAppFlowWOChoicesSerializerBySlug(serializers.ModelSerializer):
     cur_toss = serializers.SerializerMethodField()
     pers_toss = serializers.SerializerMethodField()
 
+    ninfo = serializers.SerializerMethodField()
+
+
+    def get_ninfo(self, obj):
+        uinfo = self.context.get('request').user.ninfo
+        return UserInfoSerializer(uinfo).data
+
+    
 
     def get_cur_toss(self,obj):
         lis = []

@@ -33,7 +33,6 @@ class SMSVerifyPhone(View):
         phone = data.get('phone',None)
         phone = get_phone(phone)
         info = data.get('info', None)
-        print(data)
 
         if phone is None:
             return JsonResponse({'desc' : 'Не указан номер телефона'}, status=400)
@@ -41,8 +40,6 @@ class SMSVerifyPhone(View):
         sms = SendSMSAPI()
 
         res = sms.send_verify_sms(phone, info)
-
-        print(res)
 
         if res['result'] == 1:
             return JsonResponse({'desc' : 'На указанный номер телефона выслан код подтверждения','length' : res['length'],'timer' : res['timer']}, status=200)
