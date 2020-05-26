@@ -3,6 +3,8 @@ from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPer
 from django_tinkoff_merchant.serializers import PaymentSerializer
 
 from users.serializers import UserInfoSerializer
+from utils.phone import get_phone
+
 
 class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
     bid = serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y'])
@@ -13,15 +15,11 @@ class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
         return norm_value
 
     def validate_phone(self, value):
-        value = value.replace(" ","")
-        value = value.replace("(","")
-        value = value.replace(")","")
-        value = value.replace("-","")
-        return value
+        return get_phone(value)
 
     class Meta:
         model = SchoolAppForm
-        exclude = ['payment','phone_valid']
+        exclude = ['payment']
 
 
 class SchoolAppCuratorCreateSerializer(serializers.ModelSerializer):

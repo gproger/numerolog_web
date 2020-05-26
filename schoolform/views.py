@@ -54,7 +54,7 @@ class SchoolAppFormListView(generics.ListAPIView):
 class SchoolAppFormCreateView(generics.CreateAPIView):
     serializer_class = SchoolAppFormCreateSerializer
     queryset = SchoolAppForm.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(cls, request, format=None):
         ser = SchoolAppFormCreateSerializer(data=request.data)
@@ -107,7 +107,7 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
 class SchoolAppCuratorCreateView(generics.CreateAPIView):
     serializer_class = SchoolAppCuratorCreateSerializer
     queryset = SchoolAppCurator.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(cls, request, format=None):
         ser = SchoolAppCuratorCreateSerializer(data=request.data)
@@ -173,7 +173,7 @@ class SchoolAppFlowRegisterListView(generics.ListAPIView):
 class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
 
     serializer_class = SchoolAppFormSerializer
-    permisiion_classes = [AllowAny]
+    permisiion_classes = [IsAuthenticated]
 
     def get_object(self):
 
@@ -196,7 +196,7 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
 class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
     serializer_class = SchoolAppFormSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         id = self.kwargs.get('id', None)
@@ -230,7 +230,7 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 class SchoolPersCuratorPayView(generics.CreateAPIView):
 
     serializer_class = SchoolPersCuratorSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class SchoolApplyPersCurator(View):
