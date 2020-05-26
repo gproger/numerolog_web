@@ -50,7 +50,7 @@ class UserOrderCuratorListSerializer(serializers.Serializer):
     title = serializers.SerializerMethodField()
 
     def get_title(self, obj):
-        return 'Услуга личного куратора' + obj.flow.flow_name
+        return 'Услуга личного куратора ' + obj.flow.flow_name
 
 
 class UserOrderServicesListSerializer(serializers.Serializer):
