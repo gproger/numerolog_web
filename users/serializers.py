@@ -15,10 +15,16 @@ class UserInfoSerializer(serializers.Serializer):
     bid = serializers.DateField(format='%d.%m.%Y',input_formats=['%d.%m.%Y'])
     phone_valid = serializers.BooleanField(read_only=True)
     email_valid = serializers.BooleanField(read_only=True)
-
+    validate_url = serializers.SerializerMethodField()
+    
     def validate_phone(self, phone):
         return get_phone(phone)
 
+    def get_validate_url(self, obj):
+        if obj.is_validated and obj.is_correct:
+            return None
+        
+        return '/numer/api/user'
 
 class UserOrderTicketsListSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)

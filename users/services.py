@@ -32,8 +32,6 @@ def createNewUser(phone, request_ip):
 
 
 
-
-
 """
 activation_kwargs = {}
     if settings.account_activation == 'user':

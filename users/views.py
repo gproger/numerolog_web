@@ -22,7 +22,7 @@ from .serializers import UserOrderServicesSerializer
 
 from .models import UserInfo
 
-class UserInfoDetail(generics.RetrieveUpdateDestroyAPIView):
+class UserInfoDetail(generics.RetrieveUpdateAPIView):
     serializer_class = UserInfoSerializer
     queryset = UserInfo.objects.all()
     permission_classes = [IsAuthenticated]
