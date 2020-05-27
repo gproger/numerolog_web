@@ -17,6 +17,9 @@ class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
     def validate_phone(self, value):
         get_phone(value)
 
+    def save(self):
+        print(self.validated_data)
+
     class Meta:
         model = SchoolAppForm
         exclude = ['payment']

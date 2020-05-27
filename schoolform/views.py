@@ -79,10 +79,10 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
 
 
 
-            objs = SchoolAppForm.objects.filter(flow=c_flow,userinfo__phone=get_phone(request.data.get('phone')))
+            objs = SchoolAppForm.objects.filter(flow=c_flow,userinfo__id=request.data.get('ninfo_id'))
             if objs.count() > 0:
                 objs = objs.first()
-                ser = SchoolAppFormCreateSerializer(objs)
+                print('userinfo available')
             else:
                 objs = ser.save()
                 if code is not None:
