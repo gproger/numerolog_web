@@ -19,8 +19,41 @@ class UserInfo(models.Model):
 ### this class used as user info for auth user
 ### every application in system must be linked to this userinfo
 
-### all SchoolForms 
+### all SchoolForms
+    @property
+    def is_correct(self):
+        if self.user is None:
+            return False
+        if self.bid is None:
+            return False
+        
+        if self.middle_name is None:
+            return False
+        if len(self.middle_name) < 2:
+            return False
+        
+        if self.first_name is None:
+            return False
+        if len(self.first_name) < 2:
+            return False
 
+        if self.last_name is None:
+            return False
+        if len(self.last_name) < 2:
+            return False
+
+        if self.phone is None:
+            return False
+        if self.email is None:
+            return False
+
+        return True
+
+    @property
+    def is_validated(self):
+        return self.phone_valid and self.email_valid
+
+    
 
 class UserReviews(models.Model):
     pass
