@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
-from django.core.validators import email_re
+from django.core.validators import EmailValidator
 
 from django.views import View
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
@@ -45,9 +45,6 @@ class UserInfoValidateSend(View):
 
         if email is None:
             return JsonResponse({'desc' : 'Не указан адрес электронной почты'}, status=400)
-
-        if email_re.match(email):
-            return JsonResponse({'desc' : 'Указан некорректный адрес электронной почты'}, status=400)
 
         if not request.user.IsAuthenticated:
             return JsonResponse({'desc' : 'Авторизуйтесь в системе'}, status=403)
