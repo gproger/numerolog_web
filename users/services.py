@@ -10,7 +10,7 @@ def createNewUser(phone, request_ip):
     )
     last_pk = get_user_model().objects.last().pk
     email = 'dummy_user'+str(last_pk)+'@nenumerolog.ru'
-    username = 'dummy_user'+str(last_pk)
+    username = 'dummyuser'+str(last_pk)
     password = get_random_string(8)
     activation_kwargs = {}
     new_user = get_user_model().objects.create_user(
@@ -23,6 +23,7 @@ def createNewUser(phone, request_ip):
             **activation_kwargs
         )
     userInfo.user = new_user
+    userInfo.phone_valid = True
     userInfo.save()
     new_user.save()
     return new_user
