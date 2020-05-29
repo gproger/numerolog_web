@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from celery.execute import send_task
 
 # Create your models here.
 

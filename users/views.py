@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 from django.core.validators import EmailValidator
+from django.http import HttpResponse, JsonResponse
 
 from django.views import View
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
@@ -23,6 +24,8 @@ from .serializers import UserOrderCuratorSerializer
 from .serializers import UserOrderServicesSerializer
 
 from .models import UserInfo
+import json
+
 
 class UserInfoDetail(generics.RetrieveUpdateAPIView):
     serializer_class = UserInfoSerializer
@@ -46,7 +49,7 @@ class UserInfoValidateSend(View):
         if email is None:
             return JsonResponse({'desc' : 'Не указан адрес электронной почты'}, status=400)
 
-        if not request.user.IsAuthenticated:
+        if not request.user.is_authenticated:
             return JsonResponse({'desc' : 'Авторизуйтесь в системе'}, status=403)
 
         userinfo = request.user.ninfo
@@ -55,8 +58,8 @@ class UserInfoValidateSend(View):
         userinfo.save()
 
         userinfo.send_email_code()
-
-        return JsonResponse({'desc' : 'На указанный адрес электронной почты, выслан код подтерждения', 'length' : 6}, status=200)
+        ser = UserInfoSerializer(userinfo)
+        return JsonResponse(ser.data, status=200)
 
 
 
@@ -69,15 +72,21 @@ class UserInfoValidateTest(View):
         if code is None:
             return JsonResponse({'desc' : 'Не указан код проверки'}, status=400)
 
+        if not request.user.is_authenticated:
+            return JsonResponse({'desc' : 'Авторизуйтесь в системе'}, status=403)
+
+
         userinfo = request.user.ninfo
 
-        if userinfo.email_validation_code == code:
+
+        if userinfo.email_validation_code == int(code):
             userinfo.validating_email = False
             userinfo.email = userinfo.email_temp
             userinfo.email_temp = ''
             userinfo.email_valid = True
             userinfo.save() 
-            return JsonResponse({'desc' : 'Код корректен, адрес электронной почты подтвержден'}, status=200)
+            ser = UserInfoSerializer(userinfo)
+            return JsonResponse(ser.data, status=200)
         else:
             return JsonResponse({'desc' : 'Код некорректен, адрес электронной почты неподтвержден'}, status=400)
 

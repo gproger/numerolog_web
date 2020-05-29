@@ -13,17 +13,17 @@ import random
 DEFAULT_SENDER = 'neNumerolog'
 
 @app.task
-def send_email_code(form_id):
-    userInfo = UserInfo.objects.get(pk=form_id)
-    userInfo.code = random.randrange(100000,1000000,1)
+def send_email_code(userInfo_id):
+    userInfo = UserInfo.objects.get(pk=userInfo_id)
+    userInfo.email_validation_code = random.randrange(100000,1000000,1)
 
     context = {
         "SITE_HOST" : settings.MISAGO_ADDRESS,
-        "code" : userInfo.code,
+        "code" : userInfo.email_validation_code,
     }
     userInfo.save()
 
-    receipent = {}
+    receipent = lambda: None
     receipent.email = userInfo.email_temp
 
     mail_user(receipent, "Школа неНумерологии",'emails/validate_email_form',

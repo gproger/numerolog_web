@@ -8,5 +8,4 @@
 Укажите этот код в странице заполнения анкеты
 {% endblocktrans %}
 
-{% endblocktrans %}
 {% endblock content %}
