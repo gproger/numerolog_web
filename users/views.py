@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
+from django.core.validators import email_re
+
 from django.views import View
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 # Create your views here.
@@ -32,7 +34,55 @@ class UserInfoDetail(generics.RetrieveUpdateAPIView):
         user = self.request.user
         return user.ninfo
 
+class UserInfoValidateTest(View):
+    pass
 
+class UserInfoValidateSend(View):
+
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body.decode())
+        email = data.get('email',None)
+
+        if email is None:
+            return JsonResponse({'desc' : 'Не указан адрес электронной почты'}, status=400)
+
+        if email_re.match(email):
+            return JsonResponse({'desc' : 'Указан некорректный адрес электронной почты'}, status=400)
+
+        if not request.user.IsAuthenticated:
+            return JsonResponse({'desc' : 'Авторизуйтесь в системе'}, status=403)
+
+        userinfo = request.user.ninfo
+        userinfo.email_temp = email
+        userinfo.validating_email = True
+        userinfo.save()
+
+        userinfo.send_email_code()
+
+        return JsonResponse({'desc' : 'На указанный адрес электронной почты, выслан код подтерждения', 'length' : 6}, status=200)
+
+
+
+class UserInfoValidateTest(View):
+
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body.decode())
+        code = data.get('code',None)
+
+        if code is None:
+            return JsonResponse({'desc' : 'Не указан код проверки'}, status=400)
+
+        userinfo = request.user.ninfo
+
+        if userinfo.email_validation_code == code:
+            userinfo.validating_email = False
+            userinfo.email = userinfo.email_temp
+            userinfo.email_temp = ''
+            userinfo.email_valid = True
+            userinfo.save() 
+            return JsonResponse({'desc' : 'Код корректен, адрес электронной почты подтвержден'}, status=200)
+        else
+            return JsonResponse({'desc' : 'Код некорректен, адрес электронной почты неподтвержден'}, status=400)
 
 
 class UserOrderTicketList(generics.ListAPIView):

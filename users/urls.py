@@ -1,6 +1,8 @@
 from django.conf.urls import url
 
 from .views import UserInfoDetail
+from .views import UserInfoValidateTest
+from .views import UserInfoValidateSend
 from .views import UserOrderList
 from .views import UserOrderTicketList
 from .views import UserOrderSchoolList
@@ -11,8 +13,11 @@ from .views import UserOrderSchoolDetail
 from .views import UserOrderCuratorDetail
 from .views import UserOrderServicesDetail
 
+
 urls = [
     url(r'^numer/api/user/$', UserInfoDetail.as_view(), name="users:info"),
+    url(r'^numer/api/user/validate/test/$', UserInfoValidateTest.as_view(), name="users:validate:test"),
+    url(r'^numer/api/user/validate/send/$', UserInfoValidateSend.as_view(), name="users:validate:send"),
     url(r'^numer/api/user/orders/$',UserOrderList.as_view(), name="users:orders"),
     url(r'^numer/api/user/orders/ticket/$', UserOrderTicketList.as_view(), name="users:orders:tickets"),
     url(r'^numer/api/user/orders/school/$', UserOrderSchoolList.as_view(), name="users:orders:schools"),

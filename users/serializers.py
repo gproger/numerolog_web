@@ -5,8 +5,8 @@ from utils.phone import get_phone
 
 class UserInfoSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    email = serializers.EmailField()
-    phone = serializers.CharField()
+    email = serializers.EmailField(read_only=True)
+    phone = serializers.CharField(read_only=True)
     first_name = serializers.CharField(min_length=2)
     last_name = serializers.CharField(min_length=2)
     middle_name = serializers.CharField(min_length=2)
@@ -16,6 +16,7 @@ class UserInfoSerializer(serializers.Serializer):
     phone_valid = serializers.BooleanField(read_only=True)
     email_valid = serializers.BooleanField(read_only=True)
     validate_url = serializers.SerializerMethodField()
+    validating_email = serializers.BooleanField(read_only=True)
     
     def validate_phone(self, phone):
         return get_phone(phone)
@@ -23,7 +24,6 @@ class UserInfoSerializer(serializers.Serializer):
     def get_validate_url(self, obj):
         if obj.is_validated and obj.is_correct:
             return None
-        
         return '/numer/api/user'
 
 class UserOrderTicketsListSerializer(serializers.Serializer):

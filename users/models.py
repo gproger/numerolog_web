@@ -16,6 +16,10 @@ class UserInfo(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.DO_NOTHING, related_name="ninfo",null=True, blank=True)
     phone_valid = models.NullBooleanField(default=False)
     email_valid = models.NullBooleanField(default=False)
+    validating_email = models.NullBooleanField(default=False)
+    email_validation_code = models.IntegerField(null=True)
+    email_temp = models.EmailField(blank=True)
+    
 ### this class used as user info for auth user
 ### every application in system must be linked to this userinfo
 
@@ -52,6 +56,12 @@ class UserInfo(models.Model):
     @property
     def is_validated(self):
         return self.phone_valid and self.email_valid
+
+    def send_email_code(self):
+        send_task('users.tasks.send_email_code',
+                kwargs={"userInfo_id": self.pk})
+
+
 
     
 
