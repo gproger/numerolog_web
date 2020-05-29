@@ -21,6 +21,7 @@ urls = [
     url(r'^pay/*',TemplateView.as_view(template_name='index.html')),
     url(r'^serv_pay/*',TemplateView.as_view(template_name='index.html')),
     url(r'^expert/*',TemplateView.as_view(template_name='index.html')),
+    url(r'^userInfo/*',TemplateView.as_view(template_name='index.html')),
     url(r'^ticket/*',TemplateView.as_view(template_name='index.html')),
     url(r'^sale/*',TemplateView.as_view(template_name='index.html')),
     url(r'^admin/experts/*',TemplateView.as_view(template_name='index.html')),
