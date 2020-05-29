@@ -287,7 +287,7 @@ class SchoolAppForm(models.Model):
         self.save()
 
     def get_curator_form(self):
-        forms = SchoolAppPersCuratorForm.objects.filter(flow=self.flow,email=self.email)
+        forms = SchoolAppPersCuratorForm.objects.filter(flow=self.flow,userinfo=self.userinfo)
         if forms.count() != 0:
             return forms.first()
         return None

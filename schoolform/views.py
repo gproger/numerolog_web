@@ -79,12 +79,14 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
 
 
 
-            objs = SchoolAppForm.objects.filter(flow=c_flow,userinfo__id=request.data.get('ninfo_id'))
+            objs = SchoolAppForm.objects.filter(flow=c_flow,userinfo__id=request.user.ninfo.id)
             if objs.count() > 0:
                 objs = objs.first()
                 print('userinfo available')
             else:
                 objs = ser.save()
+                objs.userinfo = request.user.ninfo
+                objs.save()
                 if code is not None:
                     code_item = code[0]
                     pr_field = PriceField()
@@ -184,10 +186,7 @@ class SchoolAppFormShowUpdateView(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         obj = self.get_object()
-        email = request.GET.get('email', None)
-        if email is None:
-             raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
-        if email.lower() != obj.email.lower():
+        if obj.userinfo != request.user.ninfo:
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
 
         return super(SchoolAppFormShowUpdateView,self).get(request,*args,**kwargs)
