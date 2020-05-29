@@ -81,7 +81,7 @@ class UserInfoValidateTest(View):
             userinfo.email_valid = True
             userinfo.save() 
             return JsonResponse({'desc' : 'Код корректен, адрес электронной почты подтвержден'}, status=200)
-        else
+        else:
             return JsonResponse({'desc' : 'Код некорректен, адрес электронной почты неподтвержден'}, status=400)
 
 
