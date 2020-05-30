@@ -157,13 +157,8 @@ class SchoolAppFlowRecruitmentListView(generics.ListAPIView):
 class SchoolAppFlowViewBySlug(generics.RetrieveAPIView):
     serializer_class = SchoolAppFlowWOChoicesSerializerBySlug
     queryset = SchoolAppFlow.objects.all()
-    lookup_field = 'slug'
+    lookup_field = 'slug__iexact'
     permission_classes = [AllowAny]
-
-    def get_objects(self):
-        slug = self.kwargs.get('slug',None)
-        print('Search for slug ' + slug)
-        return get_object_or_404(SchoolAppFlow,slug=slug)
 
 
 class SchoolAppFlowRegisterListView(generics.ListAPIView):

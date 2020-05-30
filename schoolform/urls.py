@@ -20,7 +20,7 @@ urls = [
     url(r'^numer/api/pers_curr_f/$', SchoolApplyPersCurator.as_view()),
     url(r'^numer/api/pers_curr_purl/(?P<id>[0-9]+)', SchoolApplyPersCuratorGetPayURL.as_view()),
     url(r'^numer/api/recr_flow/$', SchoolAppFlowRecruitmentListView.as_view()),
-    url(r'^numer/api/recr_flow/(?P<slug>[-\w]+)/$', SchoolAppFlowViewBySlug.as_view()),
+    url(r'^numer/api/recr_flow/(?P<slug__iexact>[-\w]+)/$', SchoolAppFlowViewBySlug.as_view()),
     url(r'^numer/api/reg_flow/$', SchoolAppFlowRegisterListView.as_view()),
     url(r'^numer/api/school/(?P<id>[0-9]+)/$', SchoolAppFormShowUpdateView.as_view()),
     url(r'^numer/api/schoolurl/(?P<id>[0-9]+)/$', SchoolAppFormShowUpdateURLView.as_view()),
