@@ -120,12 +120,15 @@ class SchoolAppCuratorCreateView(generics.CreateAPIView):
             c_flow = get_object_or_404(SchoolAppFlow,id=cc_flow)
             if c_flow.state == 0 or c_flow.state == 4:
                 raise PermissionDenied({"message":"Запись на этот поток/курс не активна" })
-            objs = SchoolAppCurator.objects.filter(flow=c_flow,email=request.data.get('email').strip().lower())
+            objs = SchoolAppCurator.objects.filter(flow=c_flow,userinfo=request.user.ninfo)
             if objs.count() > 0:
                 objs = objs.first()
                 ser = SchoolAppCuratorCreateSerializer(objs)
             else:
                 objs = ser.save()
+                objs.userinfo = request.user.ninfo
+                objs.save()
+            
             return Response(ser.data)
 
 
