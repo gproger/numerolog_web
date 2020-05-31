@@ -221,7 +221,7 @@ class SchoolPersCuratorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SchoolAppPersCuratorForm
-        exclude = ['bid','flow']
+        exclude = ['flow']
 
 
 class SchoolAppFormSerializer(serializers.ModelSerializer):

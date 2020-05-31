@@ -78,7 +78,7 @@ class UserOrderServicesListSerializer(serializers.Serializer):
 
 
 class UserOrdersSerializer(serializers.Serializer):
-    tickets = UserOrderTicketsListSerializer(many=True, source="ticket_set")
+    ticket = UserOrderTicketsListSerializer(many=True, source="ticket_set")
     school = UserOrderSchoolListSerializer(many=True, source="schoolappform_set")
     curator = UserOrderCuratorListSerializer(many=True, source="schoolappperscuratorform_set")
 

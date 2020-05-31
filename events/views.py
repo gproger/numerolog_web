@@ -91,7 +91,7 @@ class TicketListView(generics.ListAPIView):
 class TicketAddView(generics.CreateAPIView):
     serializer_class = TicketCreateSerializer
     queryset = Ticket.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(cls, request, format=None):
         ser = TicketCreateSerializer(data=request.data)
@@ -133,14 +133,16 @@ class TicketAddView(generics.CreateAPIView):
                 code_item.price.add(pr_field)
                 code_item.elapsed_count = code_item.elapsed_count - 1
                 code_item.save()
-                objs.save()
+            objs.userinfo = request.user.ninfo
+            objs.save()
+
             return Response(ser.data)
 
 
 class TicketShowUpdateView(generics.RetrieveAPIView):
 
     serializer_class = TicketAppFormSerializer
-    permisiion_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
 
@@ -150,10 +152,7 @@ class TicketShowUpdateView(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         obj = self.get_object()
-        email = request.GET.get('email', None)
-        if email is None:
-             raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
-        if email.lower() != obj.email.lower():
+        if obj.userinfo !=  request.user.ninfo:
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
 
         return super(TicketShowUpdateView,self).get(request,*args,**kwargs)
@@ -162,7 +161,7 @@ class TicketShowUpdateView(generics.RetrieveAPIView):
 class TicketShowUpdateURLView(generics.UpdateAPIView):
 
     serializer_class = TicketAppFormSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         id = self.kwargs.get('id', None)
@@ -171,6 +170,9 @@ class TicketShowUpdateURLView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         inst = self.get_object()
+
+        if inst.userinfo != request.user.ninfo:
+             raise PermissionDenied({"message":"У вас нет прав доступа для измения данных" })
 
         if request.data['amount']  <= 0:
             return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
