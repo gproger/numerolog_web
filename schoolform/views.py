@@ -213,7 +213,7 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
         total = 0
         for k in inst.payment.all():
-            if k.status == 'CONFIRMED':
+            if k.is_paid():
                 total += k.amount
 
         if request.data['amount'] > inst.price*100-total:
@@ -229,9 +229,29 @@ class SchoolPersCuratorPayView(generics.CreateAPIView):
     serializer_class = SchoolPersCuratorSerializer
     permission_classes = [IsAuthenticated]
 
-
 class SchoolApplyPersCurator(View):
+    def get(self, request, *args, **kwargs):
+    
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
+        id = self.kwargs.get('id', None)
+
+        if id is None:
+            return HttpResponseForbidden()
+
+        obj = get_object_or_404(SchoolAppPersCuratorForm,id=id)
+
+        if obj.userinfo != request.user.ninfo:
+            return HttpResponseForbidden()
+
+        ser = SchoolPersCuratorSerializer(obj)
+        return JsonResponse(ser.data)
+
     def post(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
 
         json_data = json.loads(request.body.decode('utf-8'))
         flow = get_object_or_404(SchoolAppFlow,id=json_data['flow_id'])
@@ -240,14 +260,10 @@ class SchoolApplyPersCurator(View):
             return HttpResponseForbidden()
 
         cur = SchoolAppPersCuratorForm()
-        cur.first_name = form.first_name
-        cur.last_name = form.last_name
-        cur.phone = form.phone
-        cur.bid = form.bid
-        cur.middle_name = form.middle_name
-        cur.email = form.email
+
         cur.flow = flow
         cur.price = flow.pers_cur_price
+        cur.userinfo = request.user.ninfo
         test_c = True
         for term in json_data['accepted_toss']:
             tobj = get_object_or_404(TermsOfServicePage,id=term)
@@ -264,25 +280,68 @@ class SchoolApplyPersCurator(View):
             cur.accepted_toss.add(tobj)
 
         cur.save()
+
+### here we must return AppCuratorObject
+
         paym = cur.payment.last()
         serializer = PaymentSerializer(paym)
         return JsonResponse(serializer.data)
 
 
 class SchoolApplyPersCuratorGetPayURL(View):
-    def get(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
+
+
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
 
         id = self.kwargs.get('id', None)
-        print(id)
-        pform = get_object_or_404(SchoolAppPersCuratorForm,pk=id)
-        pform.create_payment()
-        paym = pform.payment.last()
-        serializer = PaymentSerializer(paym)
-        return JsonResponse(serializer.data)
+        
+        if id is None:
+            return HttpResponseBadRequest()
 
+
+        pform = get_object_or_404(SchoolAppPersCuratorForm,pk=id)
+
+        if request.user.ninfo != pform.userinfo:
+            return HttpResponseForbidden()
+
+        json_data = json.loads(request.body.decode('utf-8'))
+
+
+        if json_data['amount']  <= 0:
+            return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
+#        if request.data['amount'] % 100000 != 0:
+#            return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
+        if json_data['amount'] > pform.price*100:
+            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
+
+
+        total = 0
+        for k in pform.payment.all():
+            if k.is_paid():
+                total += k.amount
+
+        if json_data['amount'] > pform.price*100-total:
+            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
+
+
+        pform.create_payment(amount=json_data['amount'])
+
+        ser = SchoolPersCuratorSerializer(pform)
+        return JsonResponse(ser.data)
 
 class SchoolAppFromFilterByPayDate(View):
     def get(self, request, *args, **kwargs):
+
+
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
+        if not request.user.is_superuser:
+            return HttpResponseForbidden()
+
+
         date = self.kwargs.get('date', None)
         dtime = datetime.strptime("24-8-2019 15:00:00","%d-%m-%Y %H:%M:%S")
         dt = datetime.strptime("24-8-2017 15:00:00","%d-%m-%Y %H:%M:%S").replace(tzinfo=timezone.utc)
