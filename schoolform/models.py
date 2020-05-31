@@ -111,8 +111,6 @@ class SchoolAppPersCuratorForm(models.Model):
 
         new = self.pk is None
         super(SchoolAppPersCuratorForm, self).save(*args, **kwargs)
-        if new:
-            self.create_payment()
 
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)

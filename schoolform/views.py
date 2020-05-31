@@ -103,7 +103,7 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                     code_item.elapsed_count = code_item.elapsed_count - 1
                     code_item.save()
 
-
+            ser = SchoolAppFormCreateSerializer(objs)
             return Response(ser.data)
 
 class SchoolAppCuratorCreateView(generics.CreateAPIView):
@@ -259,6 +259,10 @@ class SchoolApplyPersCurator(View):
         if flow != form.flow:
             return HttpResponseForbidden()
 
+        qs = SchoolAppPersCuratorForm.objects.filter(flow=flow,userinfo=request.user.ninfo)
+        if qs.first() is not None:
+            return JsonResponse(SchoolPersCuratorSerializer(qs.first()).data)
+
         cur = SchoolAppPersCuratorForm()
 
         cur.flow = flow
@@ -273,7 +277,9 @@ class SchoolApplyPersCurator(View):
         if not test_c:
             return HttpResponseBadRequest
 
+### for add many to many - we first need to save and get object
         cur.save()
+
 
         for term in json_data['accepted_toss']:
             tobj = get_object_or_404(TermsOfServicePage,id=term)
@@ -283,9 +289,8 @@ class SchoolApplyPersCurator(View):
 
 ### here we must return AppCuratorObject
 
-        paym = cur.payment.last()
-        serializer = PaymentSerializer(paym)
-        return JsonResponse(serializer.data)
+        ser = SchoolPersCuratorSerializer(cur)
+        return JsonResponse(ser.data)
 
 
 class SchoolApplyPersCuratorGetPayURL(View):
