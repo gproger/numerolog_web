@@ -62,11 +62,16 @@ class UserInfo(models.Model):
         send_task('users.tasks.send_email_code',
                 kwargs={"userInfo_id": self.pk})
 
+    def send_new_user_passwd(self, passwd):
+        send_task('users.tasks.send_email_passwd',
+                kwargs={"userInfo_id": self.pk,"passwd" : passwd})
+
 
 
     
 
 class UserReviews(models.Model):
     pass
+
 
 

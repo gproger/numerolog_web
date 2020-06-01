@@ -5,9 +5,14 @@ from django.utils.crypto import get_random_string
 
 
 def createNewUser(phone, request_ip):
-    userInfo = UserInfo.objects.create(
-        phone=phone
-    )
+    users = UserInfo.objects.filter(phone=phone)
+    userInfo = None
+    if users.exists():
+        userInfo=users[0]
+    else:
+        userInfo = UserInfo.objects.create(
+            phone=phone
+        )
     last_pk = get_user_model().objects.last().pk
     email = 'dummy_user'+str(last_pk)+'@nenumerolog.ru'
     username = 'dummyuser'+str(last_pk)

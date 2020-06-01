@@ -36,13 +36,16 @@ class NumerologBackend(ModelBackend):
                     return user
         else:
             try:
-                userInfo = UserInfo.objects.get(phone=phone)
+                userInfo = UserInfo.objects.filter(phone=phone)
+                print(userInfo)
+                userInfo = userInfo[0]
             except UserInfo.DoesNotExist:
                 UserModel().set_password(password)
             else:
                 user = userInfo.user
                 if user is None:
                     UserModel().set_password(password)
+                    return None
                 elif self.user_can_authenticate(user):
                     return user
 

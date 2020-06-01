@@ -221,6 +221,12 @@ class SchoolPersCuratorSerializer(serializers.ModelSerializer):
         order = []
         if not hasattr(obj,'id'):
             return order
+
+        toss = []
+
+        for x in obj.accepted_toss.all():
+            toss.append({'url': '/tos/'+str(x.id),'title' : x.title})
+
         order.append({'name' : 'Заказ №', 'value' : obj.id, 'type' : 'id'})
         order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow, 'type' : 'flow_id'})
         order.append({'name' : 'Курс обучения:', 'value' : obj.flow.flow_name, 'type' : 'flow_name'})
@@ -229,6 +235,7 @@ class SchoolPersCuratorSerializer(serializers.ModelSerializer):
         order.append({'name' : 'E-mail:', 'value' : obj.email, 'type' : 'email'})
         order.append({'name' : 'Телефон:', 'value' : obj.phone, 'type' : 'phone'})
         order.append({'name' : 'Стоимость услуги:', 'value' : obj.price, 'type' : 'price'})
+        order.append({'name' : 'Соглашения:', 'value' : toss, 'type' : 'toss'})
         #if hasattr(obj,'payed_outline'):
         #    if obj.payed_outline > 0:
         #        order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
@@ -278,6 +285,12 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order = []
         if not hasattr(obj,'id'):
             return order
+        toss = []
+
+        for x in obj.accepted_toss.all():
+            toss.append({'url': '/tos/'+str(x.id),'title' : x.title})
+
+
         order.append({'name' : 'Заказ №', 'value' : obj.id, 'type' : 'id'})
         order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow, 'type' : 'flow_id'})
         order.append({'name' : 'Курс обучения:', 'value' : obj.flow.flow_name, 'type' : 'flow_name'})
@@ -286,7 +299,8 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order.append({'name' : 'E-mail:', 'value' : obj.email, 'type' : 'email'})
         order.append({'name' : 'Телефон:', 'value' : obj.phone, 'type' : 'phone'})
         order.append({'name' : 'Стоимость обучения:', 'value' : obj.price, 'type' : 'price'})
-        #if hasattr(obj,'payed_outline'):
+        order.append({'name' : 'Соглашения:', 'value' : toss, 'type' : 'toss'})
+	#if hasattr(obj,'payed_outline'):
         #    if obj.payed_outline > 0:
         #        order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
 
