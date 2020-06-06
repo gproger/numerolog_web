@@ -73,7 +73,7 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                                                 elapsed_count__gte=1)
 
             if c_flow.avail_by_code:
-                if code.count() <= 0:
+                if code is not None and code.count() <= 0:
                     raise PermissionDenied({"message":
                                      "Код для записи на курс не корректен" })
 
