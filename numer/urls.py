@@ -37,6 +37,7 @@ from service.urls import urls as numer_service_api
 from promocode.urls import urls as codes_api
 from events.urls import urls as events_api
 from smsgate.urls import urls as smsgate_api
+from schoolpub.urls import urls as schoolpub_urls
 
 from misago.users.forms.auth import AdminAuthenticationForm
 from blog.api import api_router
@@ -75,6 +76,7 @@ urlpatterns = [
     url(r'^', include(numer_app_api)),
     url(r'^', include(numer_favs_api)),
     url(r'^', include(numer_school_form_api)),
+    url(r'^', include(schoolpub_urls)),
     url(r'^', include(frontend_urls)),
     url(r'^', include(wgtail_custom_api)),
     url(r'^', include(wgtail_post_comments_api)),
