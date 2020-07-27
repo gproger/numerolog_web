@@ -7,6 +7,7 @@ from django.contrib.auth import update_session_auth_hash
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse, JsonResponse
 
 from django.views import View
@@ -48,6 +49,8 @@ class UserInfoValidateSend(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body.decode())
         email = data.get('email',None)
+        email = email.replace(' ','')
+        email = email.lower()
 
         if email is None:
             return JsonResponse({'desc' : 'Указан некорректный адрес электронной почты либо пользователь с таким адресом уже существует'}, status=400)
@@ -83,6 +86,8 @@ class UserInfoValidateTest(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body.decode())
         code = data.get('code',None)
+        code = code.replace(' ','')
+
 
         if code is None:
             return JsonResponse({'desc' : 'Не указан код проверки'}, status=400)

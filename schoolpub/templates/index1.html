@@ -8,6 +8,20 @@
 <link href="/static/css/media.css?v=5" type="text/css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 <script src="/static/js/jquery-3.2.1.min.js"></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(64751164, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/64751164" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 </head>
 <body>
 
@@ -18,6 +32,9 @@
     <div class="container header__container">
       <a href="#intro" class="js-scroll header__logo">
         <img src="/static/images/logo.svg" alt="logo" class="header__logo-img">
+      </a>
+      <a href="https://instagram.com/ne_numerolog">
+        <img src="/static/images/inst_glyph_50.png" alt="instagram logo">
       </a>
       <nav class="nav header__nav">
         <ul class="nav__list">
@@ -58,7 +75,10 @@
         <img src="/static/images/olga-pertseva.png" alt="Ольга Перцева" class="intro__author-avatar">
         <div class="intro__author-description">Автор курса<br><span class="color--accent fw-600">Ольга Перцева</span></div>
       </div>
-      <a href="#" class="btn intro__btn">Зарегистрироваться</a>
+      <div class="price-ob intro__price">
+        <div class="color--accent price-stage">49000 руб.</div>
+        <a href="/school/apply/?flow=15-1-и-2" class="btn intro__btn">Зарегистрироваться</a>
+      </div>
     </div>
   </section>
   <!-- intro END -->
@@ -69,10 +89,13 @@
       <div class="section-nav section-nav--position_right">video</div>
       <div class="container section__container">
         <div class="video">
-<!--          <div class="js-video-play video__btn"></div> -->
-          <video controls>
-             <source src="/static/video/part_1.mp4" type="video/mp4">
+ <!--         <div class="js-video-play video__btn"></div>-->
+          <iframe src="https://www.youtube.com/embed/MNmrrpvsI_A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<!--          <video class="video__player" controls preload="none">
+            <source src="/static/video/part_1.mp4" type="video/mp4">
           </video>
+-->
         </div>
       </div>
     </div>
@@ -225,10 +248,10 @@
             </div>
           </div>
         </div>
-        <h2 class="">
-          <span class="color--accent steps__btn">49000 руб.</span>
-        </h2>
-        <a href="#" class="btn steps__btn">Зарегистрироваться</a>
+        <div class="price-ob process__price">
+          <div class="color--accent price-stage">49000 руб.</div>
+          <a href="/school/apply/?flow=15-1-и-2"" class="btn">Зарегистрироваться</a>
+        </div>
         <img src="/static/images/process-author.png" alt="Ольга Перцева" class="process__author">
       </div>
     </section>
@@ -242,113 +265,69 @@
           <div class="reviews-slider__col">
             <div class="reviews-slider-item">
               <a href="#" class="reviews-slider-item__link">
-                <video controls height="253" width="350">
-                  <source src="/static/video/review_1.mp4" type="video/mp4">
-                </video>
-<!--                <img src="/static/images/reviews-1.jpg" alt="Екатерина" class="reviews-slider-item__img">
--->
-              </a>
-            </div>
-            <div class="reviews-slider-item__text">
-              <div class="reviews-slider-item__name">Марина</div>
-            </div>
-            <div class="reviews-slider-item__date">2020</div>
-          </div>
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <video controls height="253" width="350">
-                  <source src="/static/video/review_2.mp4" type="video/mp4">
-                </video>
-              </a>
-            </div>
-            <div class="reviews-slider-item__text">
-              <div class="reviews-slider-item__name">Иван</div>
-            </div>
-            <div class="reviews-slider-item__date">2020</div>
-          </div>
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <video controls height="253" width="350">
-                  <source src="/static/video/review_3.mp4" type="video/mp4">
-                </video>
+                <iframe src="https://www.youtube.com/embed/54wNxfR9TYE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
 
- <!--               <img src="/static/images/reviews-3.jpg" alt="Мария" class="reviews-slider-item__img">
- -->
               </a>
             </div>
-            <div class="reviews-slider-item__text">
-              <div class="reviews-slider-item__name">Надежда</div>
-            </div>
-            <div class="reviews-slider-item__date">2020</div>
           </div>
           <div class="reviews-slider__col">
             <div class="reviews-slider-item">
               <a href="#" class="reviews-slider-item__link">
-                <video controls height="253" width="350">
-                  <source src="/static/video/review_4.mp4" type="video/mp4">
-                </video>
-
- <!--               <img src="/static/images/reviews-3.jpg" alt="Мария" class="reviews-slider-item__img">
- -->
+                <iframe src="https://www.youtube.com/embed/ikLqhZ-GVSc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
               </a>
             </div>
-            <div class="reviews-slider-item__text">
-              <div class="reviews-slider-item__name">Елена</div>
-            </div>
-            <div class="reviews-slider-item__date">2020</div>
           </div>
           <div class="reviews-slider__col">
             <div class="reviews-slider-item">
               <a href="#" class="reviews-slider-item__link">
-                <video controls height="253" width="350">
-                  <source src="/static/video/review_5.mp4" type="video/mp4">
-                </video>
-
- <!--               <img src="/static/images/reviews-3.jpg" alt="Мария" class="reviews-slider-item__img">
- -->
+                <iframe src="https://www.youtube.com/embed/Th2xVLRj7d4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
               </a>
             </div>
-            <div class="reviews-slider-item__text">
-              <div class="reviews-slider-item__name">Иван</div>
-            </div>
-            <div class="reviews-slider-item__date">2020</div>
           </div>
           <div class="reviews-slider__col">
             <div class="reviews-slider-item">
               <a href="#" class="reviews-slider-item__link">
-                <video controls height="253" width="350">
-                  <source src="/static/video/review_6.mp4" type="video/mp4">
-                </video>
-
- <!--               <img src="/static/images/reviews-3.jpg" alt="Мария" class="reviews-slider-item__img">
- -->
+                <iframe src="https://www.youtube.com/embed/EPoukKk6lJc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
               </a>
             </div>
-            <div class="reviews-slider-item__text">
-              <div class="reviews-slider-item__name">Иван</div>
+          </div>
+          <div class="reviews-slider__col">
+            <div class="reviews-slider-item">
+              <a href="#" class="reviews-slider-item__link">
+                <iframe src="https://www.youtube.com/embed/sGXT2r4tMm4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
+
+              </a>
             </div>
-            <div class="reviews-slider-item__date">2020</div>
+          </div>
+          <div class="reviews-slider__col">
+            <div class="reviews-slider-item">
+              <a href="#" class="reviews-slider-item__link">
+                <iframe src="https://www.youtube.com/embed/HdLDrkQchEY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
+              </a>
+            </div>
           </div>
           
           
           <div class="reviews-slider__col">
             <div class="reviews-slider-item">
               <a href="#" class="reviews-slider-item__link">
-                <video controls height="253" width="350">
-                  <source src="/static/video/review_7.mp4" type="video/mp4">
-                </video>
-
- <!--               <img src="/static/images/reviews-3.jpg" alt="Мария" class="reviews-slider-item__img">
- -->
+                <iframe src="https://www.youtube.com/embed/Xdjyep2lmFQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
               </a>
             </div>
-            <div class="reviews-slider-item__text">
-              <div class="reviews-slider-item__name">Ксения</div>
-            </div>
-            <div class="reviews-slider-item__date">2020</div>
           </div>
+
+          <div class="reviews-slider__col">
+            <div class="reviews-slider-item">
+              <a href="#" class="reviews-slider-item__link">
+                <iframe src="https://www.youtube.com/embed/QXBeOOvDTuo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+
+
         </div>
       </div>
     </section>
@@ -359,11 +338,11 @@
       <div class="container section__container">
         <h2 class="video-section__title">Ступень 1</h2>
         <div class="video">
-          <video controls>
-             <source src="/static/video/part_2.mp4" type="video/mp4">
-          </video>
-
+	<iframe src="https://www.youtube.com/embed/xVs2qp4fDOA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <!--          <div class="js-video-play video__btn"></div>
+          <video class="video__player" controls preload="none">
+            <source src="/static/video/part_2.mp4" type="video/mp4">
+          </video>
 -->
         </div>
       </div>
@@ -442,10 +421,10 @@
             </div>
           </div>
         </div>
-        <h2 class="">
-          <span class="color--accent steps__btn">39000 руб.</span>
-        </h2>
-        <a href="#" class="btn steps__btn">Зарегистрироваться</a>
+        <div class="price-ob step__price">
+          <div class="color--accent price-stage">39000 руб.</div>
+          <a href="/school/apply/?flow=15-ступень-1" class="btn steps__btn">Зарегистрироваться</a>
+        </div>
       </div>
     </section>
     <!-- step END -->
@@ -455,11 +434,12 @@
       <div class="container section__container">
         <h2 class="video-section__title">Ступень 2</h2>
         <div class="video">
-          <video controls>
-             <source src="/static/video/part_3.mp4" type="video/mp4">
-          </video>
+<iframe src="https://www.youtube.com/embed/NYOd_vaH4tc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <!--
           <div class="js-video-play video__btn"></div>
+          <video class="video__player" controls preload="none">
+            <source src="/static/video/part_3.mp4" type="video/mp4">
+          </video>
 -->
         </div>
       </div>
@@ -493,7 +473,7 @@
             <div class="d-block-line step-item step__list-item">
               <img src="/static/images/certificate.svg" class="step-item__icon" alt="Сертификат 1-й ступени*">
               <div class="step-item__content">
-                <div class="step-item__title">Сертификат<br>консультанта<br>профиссионала</div>
+                <div class="step-item__title">Сертификат<br>консультанта<br>профессионала</div>
               </div>
             </div>
           </div>
@@ -555,10 +535,10 @@
             </div>
           </div>
         </div>
-        <h2 class="">
-          <span class="color--accent steps__btn">15000 руб.</span>
-        </h2>
-        <a href="#" class="btn steps__btn">Зарегистрироваться</a>
+        <div class="price-ob step__price">
+          <div class="color--accent price-stage">15000 руб.</div>
+          <a href="/school/apply/?flow=15-ступень-2" class="btn steps__btn">Зарегистрироваться</a>
+        </div>
       </div>
     </section>
     <!-- step END -->
@@ -655,7 +635,7 @@
     <div class="container section__container">
       <div class="appeal__inner">
         <h2 class="section-title appeal__title">Не хватает только <span class="color--accent">вас!</span></h2>
-        <a href="#" class="btn appeal__btn">Зарегистрироваться</a>
+        <a href="/school/apply/"" class="btn appeal__btn">Зарегистрироваться</a>
       </div>
     </div>
   </section>

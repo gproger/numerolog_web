@@ -33,8 +33,41 @@ def createNewUser(phone, request_ip):
     new_user.save()
     return new_user
 
+def createNewUserByAdmin(userinfo, request_ip):
+
+    if userinfo.user is not None:
+        return
+
+    last_pk = get_user_model().objects.last().pk
+    email = userinfo.email
+    username = 'dummyuser'+str(last_pk)
+    password = get_random_string(8)
+
+    activation_kwargs = {}
+    new_user = get_user_model().objects.create_user(
+            username,
+            email,
+            password,
+            create_audit_trail=True,
+            joined_from_ip=request_ip,
+            set_default_avatar=True,
+            **activation_kwargs
+        )
+    userinfo.user = new_user
+    userinfo.phone_valid = True
+    userinfo.save()
+    new_user.save()
+    userinfo.send_new_user_passwd(password)
     
 
+def changeUserPassword(userinfo):
+    if userinfo.user is None:
+        return
+
+    password = get_random_string(8)
+    userinfo.user.set_password(password)
+    userinfo.user.save()
+    userinfo.send_new_user_passwd(password)
 
 
 """

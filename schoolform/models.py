@@ -199,7 +199,7 @@ class SchoolAppForm(models.Model):
     
     @property
     def middle_name(self):
-        return self.userinfo.last_name
+        return self.userinfo.middle_name
     
     @property
     def bid(self):

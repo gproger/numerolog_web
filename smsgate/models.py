@@ -24,6 +24,9 @@ class SendedSMS(models.Model):
         now = datetime.datetime.utcnow().replace(tzinfo=utc)
         return (now - self.sended_at).total_seconds()
 
+    def __str__(self):
+        return str(self.phone)
+
 class PhoneAuthSMS(SendedSMS):
     code = models.PositiveIntegerField()
     type = models.CharField(max_length=200,blank=True)
