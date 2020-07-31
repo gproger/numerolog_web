@@ -55,8 +55,15 @@ class SchoolAppFlow(models.Model):
     slug = models.SlugField(allow_unicode=True)
     is_hidden = models.BooleanField(default=False)
 
+    discounts_by_orders = models.ManyToManyField('SchoolDiscount', blank=True, related_name='main_flow')
+
     def __str__(self):
         return str(self.flow) + ' ' + str(self.flow_name)
+
+
+class SchoolDiscount(models.Model):
+    flow = models.ForeignKey(SchoolAppFlow)
+    discount = models.PositiveIntegerField(default = 0)
 
 class SchoolAppPersCuratorForm(models.Model):
 

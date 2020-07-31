@@ -138,6 +138,7 @@ class SchoolAppFlowWOChoicesSerializerBySlug(serializers.ModelSerializer):
 
     ninfo = serializers.SerializerMethodField()
 
+    discount = serializers.SerializerMethodField()
 
     def get_ninfo(self, obj):
         uinfo = self.context.get('request').user.ninfo
@@ -162,6 +163,14 @@ class SchoolAppFlowWOChoicesSerializerBySlug(serializers.ModelSerializer):
         for x in obj.pers_cur_toss.all():
             lis.append({'id': x.id,'title' : x.title})
         return lis
+
+    def get_discount(self, obj):
+        max_discount = 0
+        uinfo = self.context.get('request').user.ninfo
+        forms = SchoolAppForm.objects.filter(userinfo=uinfo)
+        print(forms)
+        return max_dscount
+            
 
 
     class Meta:
