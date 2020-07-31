@@ -102,6 +102,17 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                     code_item.price.add(pr_field)
                     code_item.elapsed_count = code_item.elapsed_count - 1
                     code_item.save()
+                forms = SchoolAppForm.objects.filter(userinfo=objs.userinfo)
+                all_discounts = objs.flow.discounts_by_orders.all()
+                max_discount = 0
+                for form in forms:
+                    for t in all_discounts:
+                        if t.flow == form.flow:
+                            if t.discount > max_discount:
+                                max_discount = t.discount
+                if max_discount > 0:
+                    objs.price = objs.price - max_discount
+                    objs.save()
 
             ser = SchoolAppFormCreateSerializer(objs)
             return Response(ser.data)

@@ -257,6 +257,8 @@ INSTALLED_APPS = [
     'events',
     'schoolpub',
     'users',
+# push notifications service
+    'push_notifications',
 ]
 
 if DEBUG:
@@ -537,3 +539,18 @@ TERMINAL_SECRET_KEY = ''
 NOTIFY_TINKOFF_URL = MISAGO_ADDRESS+'/notification/'
 SUCCESS_TINKOFF_URL = MISAGO_ADDRESS+'/pay/success/'
 FAIL_TINKOFF_URL = MISAGO_ADDRESS+'/pay/fail/'
+
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+ #       "FCM_API_KEY": "[your api key]",
+ #       "GCM_API_KEY": "[your api key]",
+        "APNS_CERTIFICATE": "/home/greg/aps.pem",
+        "APNS_TOPIC": "org.reactjs.native.example.matrx-perceva",
+        "APNS_AUTH_KEY_ID" : "P52XE8TBG7",
+        "APNS_TEAM_ID" : "P52XE8TBG7",
+        "APNS_USE_SANDBOX" : True,
+ #       "WNS_PACKAGE_SECURITY_ID": "[your package security id, e.g: 'ms-app://e-3-4-6234...']",
+ #       "WNS_SECRET_KEY": "[your app secret key, e.g.: 'KDiejnLKDUWodsjmewuSZkk']",
+ #       "WP_PRIVATE_KEY": "/path/to/your/private.pem",
+ #       "WP_CLAIMS": {'sub': "mailto: development@example.com"}
+}

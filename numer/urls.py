@@ -42,6 +42,13 @@ from schoolpub.urls import urls as schoolpub_urls
 from misago.users.forms.auth import AdminAuthenticationForm
 from blog.api import api_router
 from django_tinkoff_merchant.urls import urlpatterns as tinkoff_urls
+from push_notifications.api.rest_framework import APNSDeviceAuthorizedViewSet, GCMDeviceAuthorizedViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'device/apns', APNSDeviceAuthorizedViewSet)
+router.register(r'device/gcm', GCMDeviceAuthorizedViewSet)
+
 
 
 admin.autodiscover()
@@ -85,6 +92,7 @@ urlpatterns = [
     url(r'^', include(numer_service_api)),
     url(r'^', include(codes_api)),
     url(r'^', include(events_api)),
+    url(r'^', include(router.urls)),
 
 ]
 

@@ -168,8 +168,13 @@ class SchoolAppFlowWOChoicesSerializerBySlug(serializers.ModelSerializer):
         max_discount = 0
         uinfo = self.context.get('request').user.ninfo
         forms = SchoolAppForm.objects.filter(userinfo=uinfo)
-        print(forms)
-        return max_dscount
+        all_discounts = obj.discounts_by_orders.all()
+        for form in forms:
+             for t in all_discounts:
+                 if t.flow == form.flow:
+                     if t.discount > max_discount:
+                         max_discount = t.discount
+        return max_discount
             
 
 
