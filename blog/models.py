@@ -57,9 +57,9 @@ class BlogPage(RoutablePageMixin, Page):
     def get_posts(self):
         return PostPage.objects.descendant_of(self).live().order_by('-date')
 
-    @route(r'^(\d{4})/$')
-    @route(r'^(\d{4})/(\d{2})/$')
-    @route(r'^(\d{4})/(\d{2})/(\d{2})/$')
+#    @route(r'^(\d{4})/$')
+#    @route(r'^(\d{4})/(\d{2})/$')
+#    @route(r'^(\d{4})/(\d{2})/(\d{2})/$')
     def post_by_date(self, request, year, month=None, day=None, *args, **kwargs):
         self.posts = self.get_posts().filter(date__year=year)
         self.search_type = 'date'
@@ -73,33 +73,34 @@ class BlogPage(RoutablePageMixin, Page):
             self.search_term = date_format(date(int(year), int(month), int(day)))
         return Page.serve(self, request, *args, **kwargs)
 
-    @route(r'^(\d{4})/(\d{2})/(\d{2})/(.+)/$')
+#    @route(r'^(\d{4})/(\d{2})/(\d{2})/(.+)/$')
     def post_by_date_slug(self, request, year, month, day, slug, *args, **kwargs):
         post_page = self.get_posts().filter(slug=slug).first()
         if not post_page:
             raise Http404
         return Page.serve(post_page, request, *args, **kwargs)
 
-    @route(r'^tag/(?P<tag>[-\w]+)/$')
+#    @route(r'^tag/(?P<tag>[-\w]+)/$')
     def post_by_tag(self, request, tag, *args, **kwargs):
         self.search_type = 'tag'
         self.search_term = tag
         self.posts = self.get_posts().filter(tags__slug=tag)
         return Page.serve(self, request, *args, **kwargs)
 
-    @route(r'^category/(?P<category>[-\w]+)/$')
+#    @route(r'^category/(?P<category>[-\w]+)/$')
     def post_by_category(self, request, category, *args, **kwargs):
         self.search_type = 'category'
         self.search_term = category
         self.posts = self.get_posts().filter(categories__slug=category)
         return Page.serve(self, request, *args, **kwargs)
 
-    @route(r'^$')
+#    @route(r'^$')
     def post_list(self, request, *args, **kwargs):
         self.posts = self.get_posts()
         return Page.serve(self, request, *args, **kwargs)
 
-    @route(r'^search/$')
+
+#    @route(r'^search/$')
     def post_search(self, request, *args, **kwargs):
         search_query = request.GET.get('q', None)
         self.posts = self.get_posts()
