@@ -106,6 +106,8 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                 all_discounts = objs.flow.discounts_by_orders.all()
                 max_discount = 0
                 for form in forms:
+                    if form.payed_amount != form.price:
+                        continue
                     for t in all_discounts:
                         if t.flow == form.flow:
                             if t.discount > max_discount:

@@ -182,6 +182,7 @@ class TinkoffSettings(models.Model):
     terminal_key = models.CharField(verbose_name="Пароль терминала", max_length=40)
     using_school = models.BooleanField(verbose_name="Для школы", default = False)
     using_services = models.BooleanField(verbose_name="Для услуг", default = False)
+    name = models.CharField(verbose_name="Название терминала",max_length=80,blank=True)
 
     def __unicode__(self):
         if self.using_school:
@@ -193,11 +194,11 @@ class TinkoffSettings(models.Model):
 
     def __str__(self):
         if self.using_school:
-            return "Школа"
+            return "Школа " + self.name
         elif self.using_services:
-            return "Услуги"
+            return "Услуги " + self.name
         else:
-            return "Неизвестный"
+            return "Неизвестный " + self.name
 
     @classmethod
     def get_school_terminal(cls):
@@ -206,3 +207,4 @@ class TinkoffSettings(models.Model):
     @classmethod
     def get_services_terminal(cls):
         return TinkoffSettings.objects.filter(using_services=True).first()
+
