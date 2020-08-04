@@ -262,13 +262,17 @@ class SchoolAppForm(models.Model):
 
         dt = datetime.combine(self.flow.education_start,datetime.min.time())
         dt = dt.replace(tzinfo=pytz.UTC)
+        delta = dt-d_now
 
         if d_now > dt:
             dt = d_now + timedelta(days=10)
             dt = dt.replace(hour=0,minute=0,second=0,microsecond=0)
        	    payment = MerchantAPI().init(payment, date_valid=dt.isoformat())
         else:
-       	     payment = MerchantAPI().init(payment, date_valid=dt.isoformat())
+            if delta.days > 89:
+                dt = d_now + timedelta(days=89)
+                dt = dt.replace(hour=0,minute=0,second=0,microsecond=0)
+            payment = MerchantAPI().init(payment, date_valid=dt.isoformat())
 
         payment.save()
 

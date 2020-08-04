@@ -35,24 +35,17 @@ class NumerologBackend(ModelBackend):
                 if user.check_password(password) and self.user_can_authenticate(user):
                     return user
         else:
-            try:
-                userInfo = UserInfo.objects.filter(phone=phone)
-                print(userInfo)
-                userInfo = userInfo[0]
-            except UserInfo.DoesNotExist:
-                UserModel().set_password(password)
-            else:
-                user = userInfo.user
+            userInfo = UserInfo.objects.filter(phone=phone)
+            if userInfo.count() > 0:
+                user = userInfo[0].user
                 if user is None:
                     UserModel().set_password(password)
                     return None
                 elif self.user_can_authenticate(user):
                     return user
-
-
-
-                
-                
+            else:
+                UserModel().set_password(password)
+                return None
 
 
     def get_user(self, pk):
