@@ -3,7 +3,9 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.staticfiles.views import serve
 from django.views.generic import TemplateView, RedirectView
+from .views import SchoolPubView
+
 
 urls = [
-    url(r'^school/$',TemplateView.as_view(template_name='index1.html')),
+    url(r'^school/$',SchoolPubView.as_view()),
 ]

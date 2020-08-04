@@ -1,3 +1,4 @@
+{% load wagtailcore_tags %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -262,67 +263,11 @@
       <div class="container section__container">
         <h2 class="section-title reviews__title">Отзывы</h2>
         <div class="js-reviews-slider-init reviews-slider">
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <iframe src="https://www.youtube.com/embed/54wNxfR9TYE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
-
-              </a>
-            </div>
-          </div>
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <iframe src="https://www.youtube.com/embed/ikLqhZ-GVSc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
-              </a>
-            </div>
-          </div>
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <iframe src="https://www.youtube.com/embed/Th2xVLRj7d4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
-              </a>
-            </div>
-          </div>
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <iframe src="https://www.youtube.com/embed/EPoukKk6lJc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
-              </a>
-            </div>
-          </div>
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <iframe src="https://www.youtube.com/embed/sGXT2r4tMm4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
-
-              </a>
-            </div>
-          </div>
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <iframe src="https://www.youtube.com/embed/HdLDrkQchEY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
-              </a>
-            </div>
-          </div>
-          
-          
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <iframe src="https://www.youtube.com/embed/Xdjyep2lmFQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
-              </a>
-            </div>
-          </div>
-
-          <div class="reviews-slider__col">
-            <div class="reviews-slider-item">
-              <a href="#" class="reviews-slider-item__link">
-                <iframe src="https://www.youtube.com/embed/QXBeOOvDTuo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen id="video" width="350" height="253"></iframe>
-              </a>
-            </div>
-          </div>
+         {% for block in page.feedback %}
+             {% if block.block_type == 'video' %}
+                 {% include_block block %}
+             {% endif %}
+         {% endfor %}
 
         </div>
 
