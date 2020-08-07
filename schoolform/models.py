@@ -58,6 +58,7 @@ class SchoolAppFlow(models.Model):
     discounts_by_orders = models.ManyToManyField('SchoolDiscount', blank=True, related_name='main_flow')
     terminal = models.ManyToManyField(TinkoffSettings, blank=True, related_name='used_in+')
 
+    program_html = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.flow) + ' ' + str(self.flow_name)
