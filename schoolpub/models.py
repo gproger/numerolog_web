@@ -31,4 +31,30 @@ class SchoolLandingPage(Page):
     ]
 
 
+class FeedBackReviewIndexBlock(blocks.StructBlock):
+    header = blocks.CharBlock()
+    text = blocks.TextBlock()
+
+
+class SchoolTextReviewsPage(Page):
+
+    review = StreamField([('review',blocks.ListBlock(FeedBackReviewIndexBlock, template='blocks/feedbackvideo_list.html'))],null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('review', classname="full")
+    ]
+
+class FaqBlock(blocks.StructBlock):
+    header = blocks.TextBlock()
+    infoText = blocks.RichTextBlock()
+
+class SchoolFAQPage(Page):
+
+    faq = StreamField([('faq',blocks.ListBlock(FaqBlock, template='blocks/feedbackvideo_list.html'))],null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('faq', classname="full")
+    ]
+
+
 # Create your models here.
