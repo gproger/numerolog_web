@@ -74,6 +74,9 @@ class SchoolDiscount(models.Model):
     flow = models.ForeignKey(SchoolAppFlow)
     discount = models.PositiveIntegerField(default = 0)
 
+    def __str__(self):
+        return str(self.flow.flow_name)+' '+str(self.discount)
+
 class SchoolAppPersCuratorForm(models.Model):
 
 
