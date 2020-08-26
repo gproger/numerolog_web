@@ -127,7 +127,7 @@ class SchoolAppCuratorCreateView(generics.CreateAPIView):
     def post(cls, request, format=None):
         ser = SchoolAppCuratorCreateSerializer(data=request.data)
         if (ser.is_valid(raise_exception=True)):
-            cc_flow = request.data.get('flow_id')
+            cc_flow = request.data.get('flow')
             if cc_flow is None:
                 cc_flow=5
             c_flow = get_object_or_404(SchoolAppFlow,id=cc_flow)

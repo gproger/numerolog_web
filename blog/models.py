@@ -237,13 +237,21 @@ class FormPage(AbstractEmailForm):
         return self.get_parent().specific
 
 
+class ServiceAboutBlock(blocks.StructBlock):
+    desc = blocks.CharBlock()
+    image = ImageChooserBlock()
+
+    class Meta:
+        label='Описание услуги'
+        template='blocks/feedbackvideo_item.html'
+
 class ServicePage(Page):
-    descr = RichTextField(blank=True)
-    short_descr = RichTextField(blank=True)
     price = models.PositiveIntegerField(blank=True)
     expert = models.BooleanField(blank=True)
 
     date_cnt = models.SmallIntegerField(blank=True)
+
+    whatInclude = models.CharField(max_length=255, blank=True)
 
     date = models.DateTimeField(verbose_name="Service Added", default=datetime.datetime.today)
 
@@ -261,26 +269,41 @@ class ServicePage(Page):
     comp_parent = models.NullBooleanField(blank=True, default=False, verbose_name="Совместимость родителей")
     impr_chld = models.NullBooleanField(blank=True, default=False, verbose_name="Влияние на ребёнка")
 
+    image_light = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+    )
+
+    image_dark = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+    )
+
+    about = StreamField([('about',blocks.ListBlock(ServiceAboutBlock, template='blocks/feedbackvideo_list.html'))],null=True,blank=True)
+
 
     search_fields = Page.search_fields + [ # Inherit search_fields from Page
         index.SearchField('title', partial_match=True, boost=3),
-        index.SearchField('descr'),
-        index.SearchField('short_descr'),
         index.FilterField('expert'),
     ]
 
     api_fields = [
         APIField('title'),
-        APIField('descr'),
-        APIField('short_descr'),
         APIField('price'),
         APIField('expert'),
         APIField('date_cnt'),
+        APIField('image_light'),
+        APIField('image_dark'),
+        APIField('about'),
+        APIField('whatInclude')
     ]
 
     content_panels = Page.content_panels + [
-        FieldPanel('descr',classname='full'),
-        FieldPanel('short_descr', classname='full'),
+        FieldPanel('whatInclude',classname='full'),
         FieldPanel('price',classname='full'),
         FieldPanel('expert',classname='full'),
         FieldPanel('date_cnt',classname='full'),
@@ -289,6 +312,9 @@ class ServicePage(Page):
         FieldPanel('kids_cnt',classname='full'),
         FieldPanel('comp_parent',classname='full'),
         FieldPanel('impr_chld',classname='full'),
+        ImageChooserPanel('image_light'),
+        ImageChooserPanel('image_dark'),
+        StreamFieldPanel('about', classname="full")
     ]
 
     settings_panels = Page.settings_panels + [

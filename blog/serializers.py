@@ -86,9 +86,22 @@ class TermsOfServiceCustomShortSerializer(serializers.ModelSerializer):
         fields = ['id','title']
 
 
+
+class ServiceAboutStreamDataSerializer(serializers.Serializer):
+
+#    image=ImageWagtailCustomSerializer(source=get_image,read_only=True)
+    desc = serializers.CharField()
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        return Image.objects.get(id=obj['image']).file.url
+
 class ServicesCustomSerializer(serializers.ModelSerializer):
     toss = TermsOfServiceCustomShortSerializer(many=True, read_only=True)
-    order = serializers.SerializerMethodField()
+    order = serializers.SerializerMethodField(read_only=True)
+    image_light = ImageWagtailCustomSerializer(read_only=True)
+    image_dark = ImageWagtailCustomSerializer(read_only=True)
+    about = serializers.SerializerMethodField()
 
     def get_order(self, obj):
         return {
@@ -99,9 +112,18 @@ class ServicesCustomSerializer(serializers.ModelSerializer):
             'price' : obj.price,
         }
 
+    def get_about(self, obj):
+        if obj.about.stream_data:
+            if 'value' in obj.about.stream_data[0]:
+                return ServiceAboutStreamDataSerializer(obj.about.stream_data[0]['value'], many=True).data
+            else:
+                return []
+        else:
+            return []
+
     class Meta:
         model = ServicePage
-        fields = ['descr','price','expert','date_cnt','date','title','toss','id','short_descr','order']
+        fields = ['price','expert','date_cnt','date','title','toss','id','order','image_light','image_dark','about','whatInclude']
 
 class TermsOfServiceCustomSerializer(serializers.ModelSerializer):
 
