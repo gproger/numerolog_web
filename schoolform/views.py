@@ -1,6 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, BasePermission
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 from django.views import View
@@ -25,9 +25,15 @@ from utils.phone import get_phone
 
 # Create your views here.
 
+class IsSchoolAdmin(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        return request.user.has_perm('schoolform.change_schoolappflow') or request.user.is_superuser
+
 
 class SchoolAppFormListView(generics.ListAPIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsSchoolAdmin]
     serializer_class = SchoolAppFormSerializer
 
     def get_queryset(self):
@@ -146,7 +152,7 @@ class SchoolAppCuratorCreateView(generics.CreateAPIView):
 
 
 class SchoolAppFlowListView(generics.ListCreateAPIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsSchoolAdmin]
     serializer_class = SchoolAppFlowListSerializer
 
     def list(self, request):
@@ -155,7 +161,7 @@ class SchoolAppFlowListView(generics.ListCreateAPIView):
         return Response(serializer.data)
 
 class SchoolAppFlowView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsSchoolAdmin]
     serializer_class = SchoolAppFlowSerializer
 
     def get_object(self):
