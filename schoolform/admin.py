@@ -4,7 +4,7 @@ from django_tinkoff_merchant.services import MerchantAPI
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm
 from .models import SchoolDiscount
 from schoolform.tasks import send_school_form_pay_url, send_school_from_pay_notify
-from schoolform.tasks import send_pay_notify_sms
+from schoolform.tasks import send_pay_notify_sms, send_payed_notify_task
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .forms import RefundForm
@@ -130,6 +130,27 @@ def admin_send_pay_notify_sms(modeladmin, request, qs):
     for p in qs:
         send_pay_notify_sms.delay(p.pk)
 
+def recheck_discount_price(modeladmin, request, qs):
+    for p in qs:
+        forms = SchoolAppForm.objects.filter(userinfo=p.userinfo)
+        all_disc = p.flow.discounts_by_orders.all()
+        m_disc = 0
+        for form in forms:
+            if form.payed_amount != form.price:
+                continue
+            for t in all_disc:
+                if t.flow == form.flow and t.discount > m_disc:
+                    m_disc = t.discount
+
+        if p.price > p.flow.price - m_disc:
+            p.price = p.flow.price - m_disc
+            p.save()
+
+def send_payed_notify(modeladmin, request, qs):
+    for p in qs:
+        send_payed_notify_task.delay(p.pk)
+
+
 def refund_payments(modeladmin, request, queryset):
     form = None
 
@@ -182,10 +203,12 @@ def refund_payments(modeladmin, request, queryset):
 
 resend_payment_url.short_description = 'Выслать письмо для оплаты'
 send_pay_notify_url.short_description = 'Выслать Напоминание о оплате'
+recheck_discount_price.short_description = 'Пересчитать стоимость обучения(скидки)'
 status_payments.short_description = 'Проверить платеж(и)'
 recalc_payments.short_description = 'Перепроверить оплату'
 admin_send_pay_notify_sms.short_description = 'Выслать SMS Напоминание о оплате'
 refund_payments.short_description = 'Сделать возврат(ы)'
+send_payed_notify.short_description = 'Выслать подтверждение полной оплаты'
 
 
 @admin.register(SchoolAppForm)
@@ -193,7 +216,7 @@ class SchoolAppFormAdmin(admin.ModelAdmin):
     list_display = ['id', 'email','phone','first_name',
         'middle_name', 'last_name','instagramm','bid',flow_name,'pay_url_sended','payed_amount','price',payed]
     list_filter = ['flow__flow_name',PayedListFilter]
-    actions = [ resend_payment_url, send_pay_notify_url, admin_send_pay_notify_sms, status_payments, recalc_payments, refund_payments]
+    actions = [ resend_payment_url, recheck_discount_price, send_pay_notify_url, admin_send_pay_notify_sms, status_payments, recalc_payments, refund_payments, send_payed_notify]
     search_fields = ['id', 'userinfo__phone','userinfo__email','userinfo__first_name','userinfo__middle_name','userinfo__last_name']
 
 

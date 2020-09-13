@@ -101,3 +101,22 @@ def send_school_payment_notify(form_id, payment_id,amount):
         elif payment.is_user_refund():
             mail_user(form, "Школа неНумерологии",'emails/notify_payment_refunded_mail',
                 context=context, sender=DEFAULT_SENDER)
+
+
+@app.task
+def send_payed_notify_task(form_id):
+    form = SchoolAppForm.objects.get(pk=form_id)
+
+    context = {
+        'user_name' : form.first_name + ' ' + form.last_name,
+        'flow_num' : form.flow.flow,
+        'flow_name' : form.flow.flow_name,
+        'price' : form.price,
+        'total_amount' : form.payed_amount,
+        "SITE_HOST" : settings.MISAGO_ADDRESS,
+    }
+
+    if context['price'] == context['total_amount']:
+        mail_user(form, "Школа неНумерологии",'emails/notify_payment_all_mail',
+                context=context, sender=DEFAULT_SENDER)
+

@@ -26,9 +26,17 @@ from utils.phone import get_phone
 # Create your views here.
 
 class IsSchoolAdmin(BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
+
     def has_object_permission(self, request, view, obj):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
+
+        if not request.user.is_authenticated:
+            return False
+
         return request.user.has_perm('schoolform.change_schoolappflow') or request.user.is_superuser
 
 

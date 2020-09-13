@@ -28,7 +28,15 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
     tags = serializers.SerializerMethodField('get_tags_serializer')
     last_published_at = serializers.SerializerMethodField('get_published_date')
     fav = serializers.SerializerMethodField('get_favorite_serializer')
+    date = serializers.SerializerMethodField('get_date_spec')
     tz = tzutc()
+    url = serializers.SerializerMethodField('get_url_front')
+
+    def get_date_spec(self, obj):
+        return obj.last_published_at
+
+    def get_url_front(self,obj):
+        return '/blog/view/'+str(obj.id)+'/'
 
     def get_published_date(self,obj):
         d_now = datetime.datetime.now(tz=self.tz)
@@ -77,7 +85,7 @@ class PostPageCustomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostPage
-        fields = ['id','title','body','comments','header_image','last_published_at','likes','tags','fav']
+        fields = ['id','title','body','comments','header_image','last_published_at','likes','tags','fav','date','url']
 
 class TermsOfServiceCustomShortSerializer(serializers.ModelSerializer):
 
