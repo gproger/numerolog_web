@@ -13,11 +13,17 @@ class ShortUserSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField('get_avatar_serializer')
 
     def get_user_name(self,obj):
-        r_name = obj.profile_fields.get('real_name')
-        if not r_name is None:
+        r_name = ''
+        if hasattr(obj,'ninfo'):
+            r_name = obj.ninfo.first_name +' '+obj.ninfo.last_name
             return r_name
         else:
-            return obj.username
+            r_name = obj.profile_fields.get('real_name')
+            if not r_name is None:
+                return r_name
+            else:
+                return obj.username
+
 
     def get_avatar_serializer(self,obj):
         for i in obj.avatars:
