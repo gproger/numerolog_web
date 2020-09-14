@@ -93,5 +93,4 @@ class MerchantAPI(object):
 
     def cancel(self, payment):
         response = self._request('CANCEL', requests.post, {'PaymentId': payment.payment_id, 'Amount' : payment.amount }, payment.terminal).json()
-        print(response)
         return self.update_payment_from_response(payment, response)

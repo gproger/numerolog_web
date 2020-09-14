@@ -289,9 +289,10 @@ class SchoolAppForm(models.Model):
              if payment.is_paid():
                  MerchantAPI().status(payment).save()
 
-    def cancel_payment(self):
+    def cancel_payment(self, payment):
 
-        return MerchantAPI().cancel(self.payment)
+        return (MerchantAPI().cancel(payment)).save()
+
 
     def send_mail_notification(self):
         send_task('schoolform.tasks.send_school_form_pay_url',

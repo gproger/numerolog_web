@@ -297,6 +297,8 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     phone_valid = serializers.BooleanField(required=False)
 
+    cancelUrl = serializers.SerializerMethodField(required=False)
+
     def get_order(self,obj):
         order = []
         if not hasattr(obj,'id'):
@@ -349,7 +351,10 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
             lis.append({'id': x.id,'title' : x.title})
         return {'price':obj.flow.pers_cur_price,'flow':obj.flow.id,'id':obj.id,'toss':lis}
 
+    def get_cancelUrl(self, obj):
+        return '/numer/api/schoolurl/'+str(obj.id)+'/'
+
 
     class Meta:
         model = SchoolAppForm
-        fields = ['order','payment','amount','cform','curator','phone_valid']
+        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl']

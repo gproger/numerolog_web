@@ -251,6 +251,18 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
 
         return super(SchoolAppFormShowUpdateURLView,self).put(request,*args,**kwargs)
 
+
+    def patch(self, request, *args, **kwargs):
+        inst = self.get_object()
+
+        for k in inst.payment.all():
+            if not k.is_paid():
+                if k.status == 'NEW' or k.status == 'FORM_SHOWED' or k.status == 'AUTH_FAIL' and k.error_code == 0:
+                    inst.cancel_payment(k)
+
+        return super(SchoolAppFormShowUpdateURLView,self).put(request,*args,**kwargs)
+        
+
 class SchoolPersCuratorPayView(generics.CreateAPIView):
 
     serializer_class = SchoolPersCuratorSerializer
