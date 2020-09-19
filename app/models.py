@@ -7,6 +7,8 @@ import random
 from django_tinkoff_merchant.models import Payment
 from django_tinkoff_merchant.services import MerchantAPI
 from celery.execute import send_task
+from private_storage.fields import PrivateFileField
+
 
 class AppOrder(models.Model):
 
@@ -70,3 +72,7 @@ class AppOrder(models.Model):
 ## TODO: add notification to email on create ( or pay? )
 
 
+class AppResultFile(models.Model):
+    title = models.CharField("Title", max_length=200)
+    file = PrivateFileField("File", upload_to="apporders/")
+    order = models.ForeignKey(AppOrder, on_delete=models.DO_NOTHING)

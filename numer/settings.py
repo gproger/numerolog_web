@@ -232,6 +232,7 @@ INSTALLED_APPS = [
     'el_pagination',
     'wagtailmenus',
     'wagtailemoji',
+    'private_storage',
 
     # our soft
     'blog',
@@ -259,7 +260,6 @@ INSTALLED_APPS = [
     'users',
 # push notifications service
     'push_notifications',
-    'private_storage',
 ]
 
 if DEBUG:
