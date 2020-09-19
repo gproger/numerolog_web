@@ -48,7 +48,10 @@ class AppOrder(models.Model):
 
     @property
     def first_name(self):
-        return self.owner.ninfo.first_name
+        if hasattr(self.owner,'ninfo'):
+            return self.owner.ninfo.first_name
+        else:
+            return self.owner.get_real_name()
 
     @property
     def last_name(self):
@@ -58,6 +61,9 @@ class AppOrder(models.Model):
     def email(self):
         return self.owner.ninfo.email
     
+    @property
+    def doer_name(self):
+        return self.doer.ninfo.first_name+' '+self.doer.ninfo.last_name
     
     @property
     def phone(self):
@@ -88,4 +94,4 @@ class AppOrder(models.Model):
 class AppResultFile(models.Model):
     title = models.CharField("Title", max_length=200)
     file = PrivateFileField("File", upload_to="apporders/")
-    order = models.ForeignKey(AppOrder, on_delete=models.DO_NOTHING)
+    order = models.ForeignKey(AppOrder, on_delete=models.DO_NOTHING,related_name="files")

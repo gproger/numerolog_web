@@ -558,5 +558,5 @@ PUSH_NOTIFICATIONS_SETTINGS = {
 
 
 PRIVATE_STORAGE_ROOT = '/home/greg/web/numer/media/private_storage/'
-PRIVATE_STORAGE_AUTH_FUNCTION = 'private_storage.permissions.allow_staff'
+PRIVATE_STORAGE_AUTH_FUNCTION = 'private_storage.permissions.allow_superuser'
 

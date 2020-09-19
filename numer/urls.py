@@ -94,7 +94,7 @@ urlpatterns = [
     url(r'^', include(codes_api)),
     url(r'^', include(events_api)),
     url(r'^', include(router.urls)),
-    url('^private-media/', include(private_storage.urls)),
+    url('^private-media/', include(private_storage.urls) ),
 ]
 
 if 'users' in settings.INSTALLED_APPS:

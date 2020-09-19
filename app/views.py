@@ -6,10 +6,11 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
 
 
-from .models import AppOrder
+from .models import AppOrder, AppResultFile
 
 from .serializers import AppOrderSerializer, AppWorkSerializer
 from .serializers import AppOrderItemExtSerializer
+from private_storage.views import PrivateStorageDetailView
 
 
 class AppOrderListViewSet(generics.ListCreateAPIView):
@@ -40,3 +41,17 @@ class AppOrderItemView(generics.RetrieveUpdateAPIView):
         id = self.kwargs.get('id', None)
 
         return get_object_or_404(AppOrder,pk=id)
+
+from pprint import pprint
+
+class FileServeView(PrivateStorageDetailView):
+    model=AppResultFile
+    model_file_field='file'
+
+    def can_access_file(self, private_file):
+        obj = self.object
+        if obj.order.owner.id == self.request.user.id:
+            return True
+        if obj.order.doer.id == self.request.user.id:
+            return True
+        return False

@@ -1,4 +1,4 @@
-
+from django.urls import reverse
 from rest_framework import serializers
 from .models import AppOrder
 from django_tinkoff_merchant.serializers import PaymentSerializer
@@ -36,33 +36,46 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
         if not hasattr(obj,'id'):
             return order
 
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            user = request.user
+
         toss = []
 
-        return []
 
-        for x in obj.accepted_toss.all():
-            toss.append({'url': '/tos/'+str(x.id),'title' : x.title})
+#        for x in obj.accepted_toss.all():
+#            toss.append({'url': '/tos/'+str(x.id),'title' : x.title})
 
         order.append({'name' : 'Заказ №', 'value' : obj.id, 'type' : 'id'})
-        order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow, 'type' : 'flow_id'})
-        order.append({'name' : 'Курс обучения:', 'value' : obj.flow.flow_name, 'type' : 'flow_name'})
-        order.append({'name' : 'Фамилия:', 'value' : obj.last_name, 'type' : 'last_name'})
-        order.append({'name' : 'Имя:', 'value' : obj.first_name, 'type' : 'first_name'})
-        order.append({'name' : 'E-mail:', 'value' : obj.email, 'type' : 'email'})
-        order.append({'name' : 'Телефон:', 'value' : obj.phone, 'type' : 'phone'})
+        if obj.owner.id == user.id:
+            order.append({'name' : 'Исполнитель:', 'value' : obj.doer_name, 'type' : 'doer_name'})
+        else:
+            order.append({'name' : 'Заказчик:', 'value' : obj.first_name, 'type' : 'owner_name'})
+
+        order.append({'name' : 'Создан:', 'value' : obj.created_at, 'type' : 'datetime'})
+        order.append({'name' : 'Получение описания до:', 'value' : obj.deadline_at, 'type' : 'datetime'})
+        order.append({'name' : 'Консультация:', 'value' : obj.consult_at, 'type' : 'datetime'})
+        
+        it_array = []
+        for p in obj.items['items']:
+            it_array.append({'name':'Имя:','value':p['name'],'type':'it_name'})
+            it_array.append({'name':'Дата:','value':p['date'],'type':'date'})
+            it_array.append({'name':'Пол:','value':p['gender'],'type':'gender'})
+
+
+        order.append({'name':'Детали заказа:', 'value' : it_array, 'type': 'array'})
+
         order.append({'name' : 'Стоимость услуги:', 'value' : obj.price, 'type' : 'price'})
-        order.append({'name' : 'Соглашения:', 'value' : toss, 'type' : 'toss'})
-        #if hasattr(obj,'payed_outline'):
-        #    if obj.payed_outline > 0:
-        #        order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
 
+        files_array = []
 
+        for p in obj.files.all():
+            files_array.append({'name':p.title,'value':reverse('file_download',kwargs={'pk':p.id}),'type':'url'})
 
-        #if hasattr(obj,'payed_by'):
-        #    order.append({'name' : 'Оплачено на карту:', 'value' : obj.payed_outline})
-        #if hasattr(obj,'payed_by'):
-        #    if obj.payed_by != '':
-        #        order.append({'name' : 'Оплачено от имени:', 'value' : obj.payed_by})
+        if len(files_array) > 0:
+            order.append({'name':'Файлы','value':files_array,'type':'array'})
+        else:
+            order.append({'name':'Файлы','value':'Файлов нет','type':'caption'})
 
         return order
 
