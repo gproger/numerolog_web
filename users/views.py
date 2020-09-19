@@ -25,6 +25,7 @@ from .serializers import UserOrderTicketSerializer
 from .serializers import UserOrderSchoolSerializer
 from .serializers import UserOrderCuratorSerializer
 from .serializers import UserOrderServicesSerializer
+from .serializers import UserWorkSerializer
 from misago.users.serializers import AnonymousUserSerializer, AuthenticatedUserSerializer
 
 from .models import UserInfo
@@ -171,6 +172,16 @@ class UserOrderList(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         user = self.request.user
         return user.ninfo
+
+
+class UserWorksList(generics.RetrieveAPIView):
+
+    serializer_clss = UserWorkSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_fieds = []
+
+    def get_objects(self):
+        return self.request.user.serv_appl_doer
 
 
 class UserOrderServicesList(generics.ListAPIView):

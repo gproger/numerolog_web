@@ -26,6 +26,7 @@ class AppOrder(models.Model):
     consult_at = models.DateTimeField()
     items = JSONField()
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
+    price = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
         """ Add Slug creating/checking to save method.  """
@@ -36,6 +37,8 @@ class AppOrder(models.Model):
                 self.generate_auto_description()
             else:
                 self.send_create_mail_notification()
+
+
 
 
     @property

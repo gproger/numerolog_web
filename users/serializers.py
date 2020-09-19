@@ -94,3 +94,19 @@ class UserOrderCuratorSerializer(serializers.Serializer):
 class UserOrderServicesSerializer(serializers.Serializer):
     pass
 
+class UserWorkSerializer(serializers.Serializer):
+
+    id = serializers.IntegerField(read_only=True)
+    price = serializers.IntegerField(read_only=True)
+    payed_amount = serializers.IntegerField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+    deadline_at = serializers.DateTimeField(read_only=True)
+    consult_at = serializers.DateTimeField(read_only=True)
+    requester = serializers.SerializerMethodField()
+
+
+    def get_requester(self, obj):
+        if hasAttr(obj.doer,'ninfo') and obj.doer.ninfo is not None:
+            return obj.doer.ninfo.first_name
+        else:
+            return obje.doer.first_name
