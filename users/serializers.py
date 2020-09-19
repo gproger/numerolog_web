@@ -103,10 +103,11 @@ class UserWorkSerializer(serializers.Serializer):
     deadline_at = serializers.DateTimeField(read_only=True)
     consult_at = serializers.DateTimeField(read_only=True)
     requester = serializers.SerializerMethodField()
+    payed_amount = serializers.IntegerField(read_only=True)
 
 
     def get_requester(self, obj):
-        if hasAttr(obj.doer,'ninfo') and obj.doer.ninfo is not None:
-            return obj.doer.ninfo.first_name
+        if hasattr(obj.owner,'ninfo') and obj.owner.ninfo is not None:
+            return obj.owner.ninfo.first_name
         else:
-            return obje.doer.first_name
+            return obj.owner.get_real_name()

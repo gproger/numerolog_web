@@ -63,6 +63,16 @@ class AppOrder(models.Model):
     def phone(self):
         return self.owner.ninfo.phone
 
+    @property
+    def payed_amount(self):
+        payed = 0
+        for p in self.payment.all():
+            if p.is_paid():
+                payed += p.amount
+        return payed // 100 ##self.owner.ninfo.phone
+
+
+
     def send_mail_notification(self):
         send_task('app.tasks.send_create_notification',
                 kwargs={"app_id": self.pk})

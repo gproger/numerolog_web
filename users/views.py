@@ -174,15 +174,13 @@ class UserOrderList(generics.RetrieveUpdateDestroyAPIView):
         return user.ninfo
 
 
-class UserWorksList(generics.RetrieveAPIView):
+class UserWorksList(generics.ListAPIView):
 
-    serializer_clss = UserWorkSerializer
+    serializer_class = UserWorkSerializer
     permission_classes = [IsAuthenticated]
-    lookup_fieds = []
 
-    def get_objects(self):
-        return self.request.user.serv_appl_doer
-
+    def get_queryset(self):
+        return self.request.user.serv_appl_doer.all()
 
 class UserOrderServicesList(generics.ListAPIView):
     pass
