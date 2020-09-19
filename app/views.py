@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
 
 
-from .models import AppOrder, AppUser
+from .models import AppOrder
 
 from .serializers import AppOrderSerializer, AppWorkSerializer
 
@@ -17,15 +17,6 @@ class AppOrderListViewSet(generics.ListCreateAPIView):
     def list(self, request):
         email = request.data.get('email').strip().lower()
         phone = request.data.get('phone').strip().lower()
-        appUser = AppUser.objects.filter(email=request.user.email)
-        if appUser.count() > 0:
-            if appUser.phone != phone:
-                PermissionDenied({"phone":"Указан неправильный номер телефона. Вы можете посмотреть, точное написание в письме от нашего сервиса."})
-            queryset = AppOrder.objects.filter(requester=appUser[0])
-            serializer = AppOrderSerializer(queryset, many=True)
-            return Response(serializer.data)
-        else:
-            raise Http404
 
 
 class AppWorkListViewSet(generics.ListCreateAPIView):
@@ -37,8 +28,3 @@ class AppWorkListViewSet(generics.ListCreateAPIView):
         serializer = AppWorkSerializer(queryset, many=True)
         return Response(serializer.data)
 
-class AppUserCreateViewSet(generics.CreateAPIView):
-
-    permission_classes = [IsAuthenticated]
-    serializer_class = AppOrderSerializer
-    

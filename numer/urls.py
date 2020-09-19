@@ -44,6 +44,7 @@ from blog.api import api_router
 from django_tinkoff_merchant.urls import urlpatterns as tinkoff_urls
 from push_notifications.api.rest_framework import APNSDeviceAuthorizedViewSet, GCMDeviceAuthorizedViewSet
 from rest_framework.routers import DefaultRouter
+import private_storage.urls
 
 router = DefaultRouter()
 router.register(r'device/apns', APNSDeviceAuthorizedViewSet)
@@ -93,7 +94,7 @@ urlpatterns = [
     url(r'^', include(codes_api)),
     url(r'^', include(events_api)),
     url(r'^', include(router.urls)),
-
+    url('^private-media/', include(private_storage.urls)),
 ]
 
 if 'users' in settings.INSTALLED_APPS:

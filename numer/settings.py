@@ -259,6 +259,7 @@ INSTALLED_APPS = [
     'users',
 # push notifications service
     'push_notifications',
+    'private_storage',
 ]
 
 if DEBUG:
@@ -554,3 +555,8 @@ PUSH_NOTIFICATIONS_SETTINGS = {
  #       "WP_PRIVATE_KEY": "/path/to/your/private.pem",
  #       "WP_CLAIMS": {'sub': "mailto: development@example.com"}
 }
+
+
+PRIVATE_STORAGE_ROOT = '/home/greg/web/numer/media/private_storage/'
+PRIVATE_STORAGE_AUTH_FUNCTION = 'private_storage.permissions.allow_staff'
+
