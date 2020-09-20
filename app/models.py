@@ -6,9 +6,11 @@ import datetime
 import random
 from django_tinkoff_merchant.models import Payment
 from django_tinkoff_merchant.services import MerchantAPI
+from django_tinkoff_merchant.models import TinkoffSettings
 from celery.execute import send_task
 from private_storage.fields import PrivateFileField
 
+SERVICE_PAYMENT_DESC = 'Оплата разбора психоматрицы экспертом школы неНумерологии Ольги Перцевой'
 
 class AppOrder(models.Model):
 
@@ -39,6 +41,8 @@ class AppOrder(models.Model):
                 self.send_create_mail_notification()
 
 
+    def get_payment_terminal(self):
+        return TinkoffSettings.get_services_terminal()
 
 
     @property
@@ -86,6 +90,34 @@ class AppOrder(models.Model):
     def generate_auto_description(self):
         send_task('app.tasks.generate_description',
                 kwargs={"app_id": self.pk})
+
+
+    def create_payment(self, *args, **kwargs):
+        order_obj = str(self.pk)
+        order_plural="Услуга "
+        amount = self.price*100
+        if 'amount' in kwargs:
+            amount = kwargs.get('amount')
+
+        items = [
+            {'name': 'Описание статистической психоматрицы', 'price': amount, 'quantity': 1},
+        ]
+
+
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description=SERVICE_PAYMENT_DESC,terminal=self.get_payment_terminal()) \
+            .with_receipt(email=self.email,phone=self.phone) \
+            .with_items(items)
+
+        payment = MerchantAPI().init(payment)
+
+        payment.save()
+
+        self.payment.add(payment)
+        self.save()
+
+    def cancel_payment(self, payment):
+        return (MerchantAPI().cancel(payment)).save()
+
 
 
 ## TODO: add notification to email on create ( or pay? )

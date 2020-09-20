@@ -19,6 +19,7 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
     payment = PaymentSerializer(required=False, many=True)
     amount = serializers.SerializerMethodField()
     order = serializers.SerializerMethodField()
+    cancelUrl = serializers.SerializerMethodField()
 
     def get_amount(self,obj):
         total = 0
@@ -79,6 +80,9 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
 
         return order
 
+    def get_cancelUrl(self, obj):
+        return reverse('service_pay_view',kwargs={'id':obj.id})
+
     class Meta:
         model = AppOrder
-        fields = ['payment','amount','order']
+        fields = ['payment','amount','order','cancelUrl']

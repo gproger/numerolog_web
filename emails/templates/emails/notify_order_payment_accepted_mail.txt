@@ -1,0 +1,20 @@
+{% extends "emails/base.txt" %}
+{% load i18n %}
+
+
+
+
+{% block content %}
+{% blocktrans trimmed with user=user %}
+{{ user_name }}, для  оплаты Вашего заказа услуги {{ order_num }}  на сайте Ольги Перцевой поступил платеж на сумму
+{{ amount }} рублей. <br>
+{% endblocktrans %}
+{% if price == total_amount %}
+Вы полностью оплатили заказ. Благодарим Вас за полную оплату.
+{% else %}
+На текущий момент Вы оплатили {{ total_amount }} руб.<br>
+Полная стоимость услуги составляет {{ price }} руб.
+{% endif %}
+
+
+{% endblock content %}

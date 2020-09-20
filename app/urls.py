@@ -3,11 +3,13 @@ from rest_framework import routers
 from .views import AppOrderListViewSet, AppWorkListViewSet
 from .views import AppOrderItemView
 from .views import FileServeView
+from .views import AppOrderItemShowUpdateURLView
 
 urls = [
     url(r'^numer/api/orders',AppOrderListViewSet.as_view()),
     url(r'^numer/api/work',AppWorkListViewSet.as_view()),
     url(r'^numer/api/service/(?P<id>[0-9]+)/$',AppOrderItemView.as_view()),
+    url(r'^numer/api/serviceurl/(?P<id>[0-9]+)/$', AppOrderItemShowUpdateURLView.as_view(), name='service_pay_view'),
     url('^privatefiles/(?P<pk>[0-9]+)/$', FileServeView.as_view(), name='file_download'),
 
 ]

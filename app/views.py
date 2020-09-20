@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
 
-
+from django.db.models import Q
 from .models import AppOrder, AppResultFile
 
 from .serializers import AppOrderSerializer, AppWorkSerializer
@@ -39,8 +39,61 @@ class AppOrderItemView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         id = self.kwargs.get('id', None)
+        qs = AppOrder.objects.filter(Q(doer=id)|Q(owner=id)).filter(pk=id).first()
+        return qs
 
-        return get_object_or_404(AppOrder,pk=id)
+
+class AppOrderItemShowUpdateURLView(generics.RetrieveUpdateAPIView):
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = AppOrderItemExtSerializer
+
+    def get_object(self):
+        id = self.kwargs.get('id', None)
+        qs = AppOrder.objects.filter(Q(doer=id)|Q(owner=id)).filter(pk=id).first()
+        return qs
+
+    def put(self, request, *args, **kwargs):
+        inst = self.get_object()
+        if inst is None:
+            return Response({"amount" : "Услуга не найдена"},status=status.HTTP_404_BAD_REQUEST)
+      
+        if request.data['amount']  <= 0:
+            return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
+#        if request.data['amount'] % 100000 != 0:
+#            return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
+        if request.data['amount'] > inst.price*100:
+            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
+
+
+        total = 0
+        for k in inst.payment.all():
+            if k.is_paid():
+                total += k.amount
+
+        if request.data['amount'] > inst.price*100-total:
+            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
+
+        inst.create_payment(amount=request.data['amount'])
+        inst.save()
+
+        return super(AppOrderItemShowUpdateURLView,self).put(request,*args,**kwargs)
+
+
+    def patch(self, request, *args, **kwargs):
+        inst = self.get_object()
+
+        if inst is None:
+            return Response({"amount" : "Услуга не найдена"},status=status.HTTP_404_BAD_REQUEST)
+        
+        for k in inst.payment.all():
+            if not k.is_paid():
+                if k.status == 'NEW' or k.status == 'FORM_SHOWED' or k.status == 'AUTH_FAIL' and k.error_code == 0:
+                    inst.cancel_payment(k)
+
+        return super(AppOrderItemShowUpdateURLView,self).get(request,*args,**kwargs)
+
+
 
 from pprint import pprint
 
