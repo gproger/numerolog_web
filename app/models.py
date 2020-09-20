@@ -25,6 +25,7 @@ class AppOrder(models.Model):
         blank=True
     )
     created_at = models.DateTimeField()
+    created = models.DateTimeField(auto_now_add=True)
     deadline_at = models.DateTimeField()
     consult_at = models.DateTimeField()
     items = JSONField()
@@ -60,16 +61,22 @@ class AppOrder(models.Model):
 
     @property
     def last_name(self):
-        return self.owner.ninfo.last_name
-    
+        if hasattr(self.owner,'ninfo'):
+            return self.owner.ninfo.last_name
+        else:
+            return ''
+
     @property
     def email(self):
         return self.owner.ninfo.email
     
     @property
     def doer_name(self):
-        return self.doer.ninfo.first_name+' '+self.doer.ninfo.last_name
-    
+        if not self.is_autogen:
+            return self.doer.ninfo.first_name+' '+self.doer.ninfo.last_name
+        else:
+            return 'Автоматически'
+
     @property
     def phone(self):
         return self.owner.ninfo.phone
@@ -99,7 +106,7 @@ class AppOrder(models.Model):
          bid = self.items['items'][0]['date']
          bid = bid[-2:]+'.'+bid[5:7]+'.'+bid[0:4]
 
-         send_task('app.tasks.generate_description',
+         send_task('app.tasks.get_automatic_description',
             kwargs={"order_id": self.pk,'bid':bid})
 
 
@@ -142,8 +149,6 @@ class AppResultFile(models.Model):
     def save(self, *args, **kwargs):
 
         new = self.pk is None
-        if new:
-            self.price = self.flow.price
         super(AppResultFile, self).save(*args, **kwargs)
         if new:
             self.send_mail_notification()

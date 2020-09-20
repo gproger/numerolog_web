@@ -19,7 +19,7 @@ DEFAULT_SENDER = 'neNumerolog'
 
 @app.task
 def send_create_notifications(app_id):
-    app = AppOrder.objects.get(pk=app_id)
+    app = AppOrder.objects.get(id=app_id)
 
     context = {
         'url_pay' : settings.MISAGO_ADDRESS+'/pay/pay/school/'+str(form.id),
@@ -46,8 +46,8 @@ def send_create_notifications(app_id):
 
 @app.task
 def send_app_payment_notify(form_id, payment_id,amount):
-    form = AppOrder.objects.get(pk=form_id)
-    payment = form.payment.get(pk=payment_id)
+    form = AppOrder.objects.get(id=form_id)
+    payment = form.payment.get(id=payment_id)
 
     context = {
         'url_pay' : settings.MISAGO_ADDRESS+'/profile/orders.',
@@ -89,3 +89,20 @@ def get_automatic_description(order_id,bid):
         appFileResult.file.save(str(int(round(time.time() * 1000)))+'-'+str(uuid.uuid4())+'.pdf',tFile)
         appFileResult.save()
     return 0
+
+
+@app.task
+def appResultFileAdded(app_id):
+    file = AppResultFile.objects.get(pk=app_id)
+    form = file.order
+    
+    context = {
+        'url_pay' : settings.MISAGO_ADDRESS+'/service/'+str(form.id),
+        'user_name' : form.first_name + ' ' + form.last_name,
+        'order_num' : form.id,
+        'title'     : file.title,
+        "SITE_HOST" : settings.MISAGO_ADDRESS,
+    }
+
+    mail_user(form, "Школа неНумерологии",'emails/notify_apporder_payment_file_added',
+                context=context, sender=DEFAULT_SENDER)

@@ -8,6 +8,7 @@ def payment_check_callback(sender, **kwargs):
     if payment.apporder_set.count() != 0:
         apporder = payment.apporder_set.first()
         apporder.check_full_payment()
+        print('params '+str(apporder.pk) + ' ' + str(payment.pk)+ ' ' + str(amount))
         send_app_payment_notify.delay(apporder.pk,payment.pk, amount)
 
 

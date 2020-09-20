@@ -1,0 +1,15 @@
+{% extends "emails/base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+{% blocktrans trimmed with user=user %}
+{{ user_name }}, в Ваш заказ услуги {{ order_num }}  на сайте Ольги Перцевой
+добавлен новый файл результата: {{ title }}. <br>
+Для просмотра файла, перейдите на страницу заказа.
+Вы можете перейти на страницу вашего заказа по следующей ссылке
+<a href="{{ url_pay }}">Перейти к заказу</a>
+{% endblocktrans %}
+<br>
+
+{% endblock content %}
