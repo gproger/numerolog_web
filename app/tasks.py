@@ -7,6 +7,13 @@ from django.template import Context
 from numer.celery import app
 from django.conf import settings
 from app.models import AppOrder
+from app.models import AppAutoGeneratorOptions
+from app.models import AppResultFile
+import requests,re
+from bs4 import BeautifulSoup
+import uuid
+import time
+import tempfile
 
 DEFAULT_SENDER = 'neNumerolog'
 
@@ -61,3 +68,24 @@ def send_app_payment_notify(form_id, payment_id,amount):
             mail_user(form, "Школа неНумерологии",'emails/notify_apporder_payment_refunded_mail',
                 context=context, sender=DEFAULT_SENDER)
 
+
+@app.task
+def get_automatic_description(order_id,bid):
+    settings = AppAutoGeneratorOptions.objects.first()
+    session = requests.session()
+    r1 = session.get(settings.url_login)
+    bsoup = BeautifulSoup(r1.content,'html.parser')
+    login_data={'username':settings.username,'password':settings.userpass,'csrfmiddlewaretoken':bsoup.input['value'],\
+        'next':'/calc/downAPIDesc/?template='+str(settings.templateid)+'&bid='+bid}
+    r2 = session.post(settings.url_login,data=login_data)
+    with tempfile.NamedTemporaryFile(delete=True) as tFile:
+        tFile.write(r2.content)
+        appOrder = AppOrder.objects.get(id=order_id)
+        if appOrder is None:
+            return
+        appFileResult = AppResultFile()
+        appFileResult.order=appOrder
+        appFileResult.title='Автоматическое описание'
+        appFileResult.file.save(str(int(round(time.time() * 1000)))+'-'+str(uuid.uuid4())+'.pdf',tFile)
+        appFileResult.save()
+    return 0

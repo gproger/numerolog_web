@@ -21,7 +21,8 @@ class AppOrder(models.Model):
     doer = models.ForeignKey(
         get_user_model(),
         null=True,
-        related_name='serv_appl_doer'
+        related_name='serv_appl_doer',
+        blank=True
     )
     created_at = models.DateTimeField()
     deadline_at = models.DateTimeField()
@@ -47,7 +48,7 @@ class AppOrder(models.Model):
 
     @property
     def is_autogen(self):
-        return False
+        return 'auto' in self.items
 
 
     @property
@@ -81,15 +82,25 @@ class AppOrder(models.Model):
                 payed += p.amount
         return payed // 100 ##self.owner.ninfo.phone
 
-
+    def check_full_payment(self):
+        count = 0
+        for payment in self.payment.all():
+             if payment.is_paid():
+                 count = count + payment.amount
+        count /= 100
+        if self.price == count and self.is_autogen:
+            self.generate_auto_description()
 
     def send_mail_notification(self):
         send_task('app.tasks.send_create_notification',
                 kwargs={"app_id": self.pk})
 
     def generate_auto_description(self):
-        send_task('app.tasks.generate_description',
-                kwargs={"app_id": self.pk})
+         bid = self.items['items'][0]['date']
+         bid = bid[-2:]+'.'+bid[5:7]+'.'+bid[0:4]
+
+         send_task('app.tasks.generate_description',
+            kwargs={"order_id": self.pk,'bid':bid})
 
 
     def create_payment(self, *args, **kwargs):
@@ -127,3 +138,26 @@ class AppResultFile(models.Model):
     title = models.CharField("Title", max_length=200)
     file = PrivateFileField("File", upload_to="apporders/")
     order = models.ForeignKey(AppOrder, on_delete=models.DO_NOTHING,related_name="files")
+
+    def save(self, *args, **kwargs):
+
+        new = self.pk is None
+        if new:
+            self.price = self.flow.price
+        super(AppResultFile, self).save(*args, **kwargs)
+        if new:
+            self.send_mail_notification()
+
+    def send_mail_notification(self):
+        send_task('app.tasks.appResultFileAdded',
+                kwargs={"app_id": self.pk})
+
+
+class AppAutoGeneratorOptions(models.Model):
+    url_login = models.URLField(max_length=200)
+    url_getDesc = models.URLField(max_length=200)
+    username = models.CharField(max_length=200)
+    userpass = models.CharField(max_length=200)
+    templateid = models.PositiveIntegerField(default=0)
+
+
