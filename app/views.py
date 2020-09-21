@@ -10,17 +10,24 @@ from .models import AppOrder, AppResultFile
 
 from .serializers import AppOrderSerializer, AppWorkSerializer
 from .serializers import AppOrderItemExtSerializer
+from .serializers import AppOrderCreateSerializer
 from private_storage.views import PrivateStorageDetailView
 
 
+
 class AppOrderListViewSet(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = AppOrderSerializer
 
     def list(self, request):
         email = request.data.get('email').strip().lower()
         phone = request.data.get('phone').strip().lower()
 
+
+class AppOrderCreateView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = AppOrderCreateSerializer
+    queryset = AppOrder.objects.all()
 
 class AppWorkListViewSet(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]

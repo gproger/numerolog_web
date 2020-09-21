@@ -4,9 +4,11 @@ from .views import AppOrderListViewSet, AppWorkListViewSet
 from .views import AppOrderItemView
 from .views import FileServeView
 from .views import AppOrderItemShowUpdateURLView
+from .views import AppOrderCreateView
 
 urls = [
     url(r'^numer/api/orders',AppOrderListViewSet.as_view()),
+    url(r'^numer/api/order/create', AppOrderCreateView.as_view()),
     url(r'^numer/api/work',AppWorkListViewSet.as_view()),
     url(r'^numer/api/service/(?P<id>[0-9]+)/$',AppOrderItemView.as_view()),
     url(r'^numer/api/serviceurl/(?P<id>[0-9]+)/$', AppOrderItemShowUpdateURLView.as_view(), name='service_pay_view'),

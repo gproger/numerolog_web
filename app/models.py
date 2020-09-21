@@ -37,10 +37,8 @@ class AppOrder(models.Model):
         new = self.pk is None
         super(AppOrder, self).save(*args, **kwargs)
         if new:
-            if self.is_autogen:
-                self.generate_auto_description()
-            else:
-                self.send_create_mail_notification()
+            print('created')
+            #self.send_create_mail_notification()
 
 
     def get_payment_terminal(self):

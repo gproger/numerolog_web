@@ -74,13 +74,21 @@ class UserOrderCuratorListSerializer(serializers.Serializer):
 
 
 class UserOrderServicesListSerializer(serializers.Serializer):
-    pass
+    id = serializers.IntegerField(read_only=True)
+    price = serializers.IntegerField(read_only=True)
+    payed_amount = serializers.IntegerField(read_only=True)
+    created = serializers.DateTimeField(read_only=True,format="%d.%m.%Y %H:%M")
+    title = serializers.SerializerMethodField()
+    
+    def get_title(self, obj):
+        return 'Услуга '+str(obj.id)
 
 
 class UserOrdersSerializer(serializers.Serializer):
     ticket = UserOrderTicketsListSerializer(many=True, source="ticket_set")
     school = UserOrderSchoolListSerializer(many=True, source="schoolappform_set")
     curator = UserOrderCuratorListSerializer(many=True, source="schoolappperscuratorform_set")
+    service  = UserOrderServicesListSerializer(many=True, source="user.serv_appl_owner")
 
 class UserOrderTicketSerializer(serializers.Serializer):
     pass
