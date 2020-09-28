@@ -71,6 +71,10 @@ def send_app_payment_notify(form_id, payment_id,amount):
 
 @app.task
 def get_automatic_description(order_id,bid):
+    appOrder = AppOrder.objects.get(id=order_id)
+    if AppResultFile.objects.filter(order=appOrder).count() > 0:
+        return 0
+
     settings = AppAutoGeneratorOptions.objects.first()
     session = requests.session()
     r1 = session.get(settings.url_login)
@@ -80,7 +84,6 @@ def get_automatic_description(order_id,bid):
     r2 = session.post(settings.url_login,data=login_data)
     with tempfile.NamedTemporaryFile(delete=True) as tFile:
         tFile.write(r2.content)
-        appOrder = AppOrder.objects.get(id=order_id)
         if appOrder is None:
             return
         appFileResult = AppResultFile()

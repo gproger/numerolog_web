@@ -230,6 +230,7 @@ INSTALLED_APPS = [
 
     'modelcluster',
     'taggit',
+    'private_storage',
     #see how it work but in some time remove this - do it by react from frontend
     'el_pagination',
     'wagtailmenus',
@@ -549,3 +550,9 @@ FAIL_TINKOFF_URL = MISAGO_ADDRESS+'/pay/fail/'
 
 
 SESSION_COOKIE_AGE=1209600*26
+
+PRIVATE_STORAGE_ROOT = '/home/prod/numer/private_storage/'
+PRIVATE_STORAGE_AUTH_FUNCTION = 'private_storage.permissions.allow_superuser'
+
+PRIVATE_STORAGE_SERVER = 'nginx'
+PRIVATE_STORAGE_INTERNAL_URL = '/private-x-accel-redirect/'
