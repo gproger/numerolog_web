@@ -12,6 +12,15 @@ from private_storage.fields import PrivateFileField
 
 SERVICE_PAYMENT_DESC = 'Оплата разбора психоматрицы экспертом школы неНумерологии Ольги Перцевой'
 
+class AppAutoGeneratorOptions(models.Model):
+    url_login = models.URLField(max_length=200)
+    url_getDesc = models.URLField(max_length=200)
+    username = models.CharField(max_length=200)
+    userpass = models.CharField(max_length=200)
+    templateid = models.PositiveIntegerField(default=0)
+    serv_id = models.PositiveIntegerField(default=0)
+
+
 class AppOrder(models.Model):
 
     number = models.PositiveIntegerField()
@@ -24,6 +33,7 @@ class AppOrder(models.Model):
         related_name='serv_appl_doer',
         blank=True
     )
+    name = models.CharField(max_length=200, null=True)
     created_at = models.DateTimeField()
     created = models.DateTimeField(auto_now_add=True)
     deadline_at = models.DateTimeField()
@@ -37,7 +47,12 @@ class AppOrder(models.Model):
         new = self.pk is None
         super(AppOrder, self).save(*args, **kwargs)
         if new:
-            print('created')
+            s_id = int(self.items['serv_id'])
+            cnt_f = AppAutoGeneratorOptions.objects.filter(serv_id=s_id).count()
+            if cnt_f > 0:
+                self.items['auto']='True'
+                self.save()
+            self.create_payment()
             #self.send_create_mail_notification()
 
 
@@ -71,6 +86,8 @@ class AppOrder(models.Model):
     @property
     def doer_name(self):
         if not self.is_autogen:
+            if self.doer is None:
+                return 'Назначается'
             return self.doer.ninfo.first_name+' '+self.doer.ninfo.last_name
         else:
             return 'Автоматически'
@@ -155,12 +172,5 @@ class AppResultFile(models.Model):
         send_task('app.tasks.appResultFileAdded',
                 kwargs={"app_id": self.pk})
 
-
-class AppAutoGeneratorOptions(models.Model):
-    url_login = models.URLField(max_length=200)
-    url_getDesc = models.URLField(max_length=200)
-    username = models.CharField(max_length=200)
-    userpass = models.CharField(max_length=200)
-    templateid = models.PositiveIntegerField(default=0)
 
 

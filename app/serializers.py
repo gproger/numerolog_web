@@ -90,7 +90,9 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
 
 class AppOrderCreateSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+    owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    payment = PaymentSerializer(required=False, many=True, read_only=True)
 
     class Meta:
         model = AppOrder
-        exclude = ['payment','doer']
+        exclude = ['doer','name']

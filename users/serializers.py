@@ -81,6 +81,8 @@ class UserOrderServicesListSerializer(serializers.Serializer):
     title = serializers.SerializerMethodField()
     
     def get_title(self, obj):
+        if hasattr(obj,'name') and obj.name is not None:
+            return obj.name
         return 'Услуга '+str(obj.id)
 
 

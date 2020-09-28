@@ -46,7 +46,8 @@ class AppOrderItemView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         id = self.kwargs.get('id', None)
-        qs = AppOrder.objects.filter(Q(doer=id)|Q(owner=id)).filter(pk=id).first()
+        user = self.request.user
+        qs = AppOrder.objects.filter(Q(doer=user)|Q(owner=user)).filter(pk=id).first()
         return qs
 
 
@@ -57,7 +58,8 @@ class AppOrderItemShowUpdateURLView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         id = self.kwargs.get('id', None)
-        qs = AppOrder.objects.filter(Q(doer=id)|Q(owner=id)).filter(pk=id).first()
+        user = self.request.user
+        qs = AppOrder.objects.filter(Q(doer=user)|Q(owner=user)).filter(pk=id).first()
         return qs
 
     def put(self, request, *args, **kwargs):
