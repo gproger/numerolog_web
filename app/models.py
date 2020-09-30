@@ -9,6 +9,7 @@ from django_tinkoff_merchant.services import MerchantAPI
 from django_tinkoff_merchant.models import TinkoffSettings
 from celery.execute import send_task
 from private_storage.fields import PrivateFileField
+from blog.models import ServicePage
 
 SERVICE_PAYMENT_DESC = 'Оплата разбора психоматрицы экспертом школы неНумерологии Ольги Перцевой'
 
@@ -48,10 +49,13 @@ class AppOrder(models.Model):
         super(AppOrder, self).save(*args, **kwargs)
         if new:
             s_id = int(self.items['serv_id'])
+            service = ServicePage.objects.get(id=s_id)
             cnt_f = AppAutoGeneratorOptions.objects.filter(serv_id=s_id).count()
+            self.name = service.title
             if cnt_f > 0:
                 self.items['auto']='True'
-                self.save()
+
+            self.save()
             self.create_payment()
             #self.send_create_mail_notification()
 
