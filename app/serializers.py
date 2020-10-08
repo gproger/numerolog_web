@@ -20,6 +20,8 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
     amount = serializers.SerializerMethodField()
     order = serializers.SerializerMethodField()
     cancelUrl = serializers.SerializerMethodField()
+    confirmUrl = serializers.SerializerMethodField()
+    uploadUrl = serializers.SerializerMethodField()
 
     def get_amount(self,obj):
         total = 0
@@ -83,9 +85,50 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
     def get_cancelUrl(self, obj):
         return reverse('service_pay_view',kwargs={'id':obj.id})
 
+    def get_confirmUrl(self, obj):
+        founded = False
+        if not hasattr(obj,'workstate'):
+            return None
+        if not 'assign' in obj.workstate:
+            return None
+        if not hasattr(self.context['request'].user,'expert_rec'):
+            return None
+        if self.context['request'].user.expert_rec is None:
+            return None
+        exp_id = self.context['request'].user.expert_rec.pk
+        for item in obj.workstate['assign']:
+            if item['exp_id'] == exp_id and item['pending']==True and item['confirmed']==False:
+                founded = True
+
+        if founded:
+            return reverse('service_expert_confirm',kwargs={'id':obj.id})
+        else:
+            return None
+
+    def get_uploadUrl(self, obj):
+        founded = False
+        if not hasattr(obj,'workstate'):
+            return None
+        if not 'assign' in obj.workstate:
+            return None
+        if not hasattr(self.context['request'].user,'expert_rec'):
+            return None
+        if self.context['request'].user.expert_rec is None:
+            return None
+        exp_id = self.context['request'].user.expert_rec.pk
+        for item in obj.workstate['assign']:
+            if item['exp_id'] == exp_id and item['pending']==False and item['confirmed']==True:
+                founded = True
+
+        if founded:
+            return reverse('service_expert_upload',kwargs={'id':obj.id})
+        else:
+            return None
+
+
     class Meta:
         model = AppOrder
-        fields = ['payment','amount','order','cancelUrl']
+        fields = ['payment','amount','order','cancelUrl','confirmUrl','uploadUrl']
 
 
 class AppOrderCreateSerializer(serializers.ModelSerializer):

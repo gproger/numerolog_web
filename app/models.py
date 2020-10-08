@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
 import datetime
 import random
+import pytz
 from django_tinkoff_merchant.models import Payment
 from django_tinkoff_merchant.services import MerchantAPI
 from django_tinkoff_merchant.models import TinkoffSettings
@@ -125,7 +126,10 @@ class AppOrder(models.Model):
         if not self.is_autogen:
             if self.doer is None:
                 return 'Назначается'
-            return self.doer.ninfo.first_name+' '+self.doer.ninfo.last_name
+            for item in self.workstate['assign']:
+                if item['confirmed']==True:
+                    return self.doer.ninfo.first_name+' '+self.doer.ninfo.last_name
+            return 'Назначается'
         else:
             return 'Автоматически'
 
@@ -149,6 +153,9 @@ class AppOrder(models.Model):
         count /= 100
         if self.price == count and self.is_autogen:
             self.generate_auto_description()
+        elif self.price == count:
+            self.try_assign_expert()
+            
 
     def send_mail_notification(self):
         send_task('app.tasks.send_create_notification',
@@ -205,7 +212,69 @@ class AppOrder(models.Model):
         self.workstate['history'].append(ts)
         self.save()
 
+
+    def need_assign_expert(self):
+        if self.doer is not None or self.is_autogen:
+            return False
+        if not 'assign' in self.workstate:
+            return True
+        if not isinstance(self.workstate['assign'],list):
+            return True
+        if len(self.workstate['assign'])==0:
+            return True 
+        if self.workstate['assign'][-1]['confirmed']:
+            return False
+        if self.workstate['assign'][-1]['pending']:
+            return False
+        return True
+
+
+    def get_expert_for_assign(self):
+### returns AppExpert object for send request for order proceed
+        exp_used_set=set()
+        if self.workstate is not None:
+            if 'assign' in self.workstate:
+                for item in self.workstate['assign']:
+                    exp_used_set.add(item['exp_id'])
+        
+        qs = AppExpertUser.objects.filter(active=True).exclude(pk__in=exp_used_set).order_by('orders_in_work')
+        cnt_qs = qs.count()
+        if cnt_qs > 0:
+            qs_ind = random.randint(0,cnt_qs-1)
+        else:
+            return None
+        return qs[qs_ind]
+
+    def send_assign_request(self,expert):
+        if self.workstate is None:
+            self.workstate={}
+        if not 'assign' in self.workstate:
+            self.workstate['assign']=[]
+        ts={}
+        ts['exp_id']=expert.id
+        ts['datetime']=datetime.datetime.now().isoformat()
+        ts['confirmed']=False
+        ts['pending']=True
+        self.workstate['assign'].append(ts)
+        self.doer=expert.user
+        self.save()
+        self.send_expert_notification(expert.id)
+
+    def try_assign_expert(self):
+        tm = datetime.datetime.now(pytz.timezone('Europe/Moscow'))
+        if tm.hour>=9 and tm.hour<=24:
+            expert = self.get_expert_for_assign()
+            if not expert is None:
+                self.send_assign_request(expert)
+
+    def send_expert_notification(self, expert_id):
+### send sms and email to expert
+        send_task('app.tasks.appPendingExpertAssign',
+                kwargs={"app_id": self.pk,"exp_id": expert_id})
+
 ## TODO: add notification to email on create ( or pay? )
+    def change_expert(self):
+        self.try_assign_expert()
 
 
 class AppResultFile(models.Model):
@@ -221,6 +290,7 @@ class AppResultFile(models.Model):
             self.send_mail_notification()
 
     def send_mail_notification(self):
+        print("send file added")
         send_task('app.tasks.appResultFileAdded',
                 kwargs={"app_id": self.pk})
 

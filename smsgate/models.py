@@ -9,6 +9,7 @@ class SMSSettings(models.Model):
     expert = models.TextField(verbose_name=_("Template expert notify"))
     client_st = models.TextField(verbose_name=_("Template client notify service start"))
     client_ready = models.TextField(verbose_name=_("Template client notify service ready"))
+    expert_notify = models.TextField(verbose_name=_("Template expert work notify"))
 
 
 class SendedSMS(models.Model):

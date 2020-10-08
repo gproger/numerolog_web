@@ -9,11 +9,13 @@ from django.conf import settings
 from app.models import AppOrder
 from app.models import AppAutoGeneratorOptions
 from app.models import AppResultFile
+from app.models import AppExpertUser
 import requests,re
 from bs4 import BeautifulSoup
 import uuid
 import time
 import tempfile
+from smsgate.services import SendSMSAPI
 
 DEFAULT_SENDER = 'neNumerolog'
 
@@ -109,3 +111,27 @@ def appResultFileAdded(app_id):
 
     mail_user(form, "Школа неНумерологии",'emails/notify_apporder_payment_file_added',
                 context=context, sender=DEFAULT_SENDER)
+
+
+@app.task
+def appPendingExpertAssign(app_id, exp_id):
+    print(app_id)
+    print(exp_id)
+    order = AppOrder.objects.get(pk=app_id)
+    expert = AppExpertUser.objects.get(pk=exp_id)
+    exp_auth_user = expert.user
+    phone = exp_auth_user.ninfo.phone
+    
+    context = {
+        'user_name' : exp_auth_user.ninfo.first_name + ' ' + exp_auth_user.ninfo.last_name,
+        'url_orders' : settings.MISAGO_ADDRESS+'/profile/work/',
+        "SITE_HOST" : settings.MISAGO_ADDRESS,
+    }
+    print(context)
+    mail_user(exp_auth_user, "Услуги Школы неНумерологии",'emails/expert_pending_confirmation',
+        context=context, sender=DEFAULT_SENDER)
+
+    context={}
+
+    sms = SendSMSAPI()
+    sms.send_expert_pending_confirmation(phone, context)

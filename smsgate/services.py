@@ -178,3 +178,37 @@ class SendSMSAPI(object):
             sms.status = 0
             sms.save()
             return {'result' : sms.status, 'desc' : desc_text}
+
+
+    def get_work_notify_text(self,context):
+        c = Context(context)
+        t = Template(self._settings.expert_notify)
+        return t.render(c)
+
+
+
+
+    def send_expert_pending_confirmation(self, phone, context):
+        phone = get_phone(phone)
+        sms = NotifySMS()
+        sms.phone = phone
+        sms.text = self.get_work_notify_text(context)
+        smsc = SMSC()
+        res = smsc.send_sms(phones=sms.phone, message=sms.text)
+
+        if res[1] > "0":
+            sms.status = 1
+            sms.save()
+            return {'result' : sms.status}
+        else:
+            desc_text = ''
+            if res[1][1:] == '7':
+                desc_text = "Неправильный формат номера телефона"
+            if res[1][1:] == '8':
+                desc_text = "Сообщение не может быть доставлено"
+            if res[1][1:] == '6':
+                desc_text = "Сообщение не может быть доставлено(запрещена отправка)"
+
+            sms.status = 0
+            sms.save()
+            return {'result' : sms.status, 'desc' : desc_text}

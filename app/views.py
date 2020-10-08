@@ -12,6 +12,7 @@ from .serializers import AppOrderSerializer, AppWorkSerializer
 from .serializers import AppOrderItemExtSerializer
 from .serializers import AppOrderCreateSerializer
 from private_storage.views import PrivateStorageDetailView
+import pprint
 
 
 
@@ -50,6 +51,61 @@ class AppOrderItemView(generics.RetrieveUpdateAPIView):
         qs = AppOrder.objects.filter(Q(doer=user)|Q(owner=user)).filter(pk=id).first()
         return qs
 
+class AppOrderItemShowUpdateConfirmView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = AppOrderItemExtSerializer
+
+    def get_object(self):
+        id = self.kwargs.get('id', None)
+        user = self.request.user
+        qs = AppOrder.objects.filter(Q(doer=user)).filter(pk=id).first()
+        return qs
+
+    def patch(self, request, *args, **kwargs):
+        inst = self.get_object()
+        exp_id = request.user.expert_rec.id
+        for item in inst.workstate['assign']:
+            if item['exp_id'] == exp_id and item['pending']== True and item['confirmed']==False:
+                item['pending']=False
+                item['confirmed']=True
+        inst.save()
+
+        return super(AppOrderItemShowUpdateConfirmView,self).put(request,*args,**kwargs)
+
+    def put(self, request, *args, **kwargs):
+        inst = self.get_object()
+        exp_id = request.user.expert_rec.id
+        for item in inst.workstate['assign']:
+            if item['exp_id'] == exp_id and item['pending']== True and item['confirmed']==False:
+                item['pending']=False
+                item['confirmed']=False
+        inst.doer = None
+        inst.save()
+        inst.change_expert()
+
+        return super(AppOrderItemShowUpdateConfirmView,self).put(request,*args,**kwargs)
+
+class AppOrderItemShowUpdateFileUploadView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = AppOrderItemExtSerializer
+
+    def get_object(self):
+        id = self.kwargs.get('id', None)
+        user = self.request.user
+        qs = AppOrder.objects.filter(Q(doer=user)).filter(pk=id).first()
+        return qs
+
+    def put(self, request, *args, **kwargs):
+        inst = self.get_object()
+        exp_id = request.user.expert_rec.id
+        for f in request.FILES.getlist('file'):
+            app = AppResultFile()
+            app.title=f.name
+            app.order = inst
+            app.file = f
+            app.save()
+
+        return super(AppOrderItemShowUpdateFileUploadView,self).get(request,*args,**kwargs)
 
 class AppOrderItemShowUpdateURLView(generics.RetrieveUpdateAPIView):
 

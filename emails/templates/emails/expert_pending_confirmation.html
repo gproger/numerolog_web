@@ -1,0 +1,14 @@
+{% extends "emails/base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+{% blocktrans trimmed with user=user %}
+{{ user_name }}, Вам поступил запрос на разбор на сайте Ольги Перцевой. <br>
+У вас есть 3 часа для подтверждения, принятия заказа в работу.<br>
+Для подтверждения заказа, перейдите в раздел работа личного кабинета
+<a href="{{ url_orders }}">Перейти к работам</a>
+{% endblocktrans %}
+<br>
+
+{% endblock content %}
