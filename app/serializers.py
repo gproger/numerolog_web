@@ -95,4 +95,4 @@ class AppOrderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AppOrder
-        exclude = ['doer','name']
+        exclude = ['doer','name','workstate']

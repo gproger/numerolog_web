@@ -21,6 +21,32 @@ class AppAutoGeneratorOptions(models.Model):
     templateid = models.PositiveIntegerField(default=0)
     serv_id = models.PositiveIntegerField(default=0)
 
+class AppExpertUser(models.Model):
+    user=models.OneToOneField(get_user_model(), null=True, blank=True,on_delete=models.DO_NOTHING,related_name='expert_rec')
+    serial_no=models.CharField(max_length=200,blank=True,null=True)
+    balance = models.PositiveIntegerField(default=0)
+    percent = models.PositiveSmallIntegerField(default=70)
+    slug = models.SlugField()
+    active=models.BooleanField(default=False)
+    orders_in_work=models.PositiveIntegerField(default=0)
+    workstate = JSONField(blank=True, null=True)
+
+    def add_to_history(self, desc):
+        if self.workstate is None:
+            ws={}
+            ws['history']=[]
+            self.workstate=ws
+            self.save()
+        elif not 'history' in self.workstate:
+            self.workstate['history']=[]
+            self.save()
+
+        ts={}
+        ts['date']=datetime.datetime.now().isoformat()
+        ts['desc']=desc
+        self.workstate['history'].append(ts)
+        self.save()
+
 
 class AppOrder(models.Model):
 
@@ -34,6 +60,7 @@ class AppOrder(models.Model):
         related_name='serv_appl_doer',
         blank=True
     )
+    workstate = JSONField(blank=True, null=True)
     name = models.CharField(max_length=200, null=True)
     created_at = models.DateTimeField()
     created = models.DateTimeField(auto_now_add=True)
@@ -54,7 +81,13 @@ class AppOrder(models.Model):
             self.name = service.title
             if cnt_f > 0:
                 self.items['auto']='True'
-
+            ws={}
+            ws['history']=[]
+            ts={}
+            ts['desc']='Заказ создан'
+            ts['date']= datetime.datetime.now().isoformat()
+            ws['history'].append(ts)
+            self.workstate=ws
             self.save()
             self.create_payment()
             #self.send_create_mail_notification()
@@ -156,6 +189,21 @@ class AppOrder(models.Model):
         return (MerchantAPI().cancel(payment)).save()
 
 
+    def add_to_history(self, desc):
+        if self.workstate is None:
+            ws={}
+            ws['history']=[]
+            self.workstate=ws
+            self.save()
+        elif not 'history' in self.workstate:
+            self.workstate['history']=[]
+            self.save()
+
+        ts={}
+        ts['date']=datetime.datetime.now().isoformat()
+        ts['desc']=desc
+        self.workstate['history'].append(ts)
+        self.save()
 
 ## TODO: add notification to email on create ( or pay? )
 
