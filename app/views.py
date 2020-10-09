@@ -13,6 +13,7 @@ from .serializers import AppOrderItemExtSerializer
 from .serializers import AppOrderCreateSerializer
 from private_storage.views import PrivateStorageDetailView
 import pprint
+import datetime
 
 
 
@@ -68,6 +69,13 @@ class AppOrderItemShowUpdateConfirmView(generics.RetrieveUpdateAPIView):
             if item['exp_id'] == exp_id and item['pending']== True and item['confirmed']==False:
                 item['pending']=False
                 item['confirmed']=True
+                item['tstamp']=datetime.datetime.now().isoformat()
+                dd_line = request.data.get("dd")
+                dd_line = dd_line.split('.')
+                cc_line = request.data.get("cc")
+                cc_line = cc_line.split('.')
+                inst.deadline_at=datetime.datetime(int(dd_line[2]),int(dd_line[1]),int(dd_line[0]),18,0,0)
+                inst.consult_at=datetime.datetime(int(cc_line[2]),int(cc_line[1]),int(cc_line[0]),18,0,0)
         inst.save()
 
         return super(AppOrderItemShowUpdateConfirmView,self).put(request,*args,**kwargs)
@@ -79,6 +87,8 @@ class AppOrderItemShowUpdateConfirmView(generics.RetrieveUpdateAPIView):
             if item['exp_id'] == exp_id and item['pending']== True and item['confirmed']==False:
                 item['pending']=False
                 item['confirmed']=False
+                item['tstamp']=datetime.datetime.now().isoformat()
+                item['comment']=request.data.get("comment")
         inst.doer = None
         inst.save()
         inst.change_expert()

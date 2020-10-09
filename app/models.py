@@ -138,6 +138,16 @@ class AppOrder(models.Model):
         return self.owner.ninfo.phone
 
     @property
+    def owner_phone(self):
+        return self.owner.ninfo.phone
+
+    @property
+    def doer_phone(self):
+        if not self.doer is None:
+            return self.doer.ninfo.phone
+        else:
+            return '+79687432507'
+    @property
     def payed_amount(self):
         payed = 0
         for p in self.payment.all():

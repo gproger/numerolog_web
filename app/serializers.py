@@ -55,6 +55,15 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
         else:
             order.append({'name' : 'Заказчик:', 'value' : obj.first_name, 'type' : 'owner_name'})
 
+        contact_array=[]
+        if obj.owner.id == user.id:
+            contact_array.append({'name' : 'Исполнителю', 'value' : 'https://wa.me/'+obj.doer_phone[1:], 'type' : 'url'})
+            contact_array.append({'name' : 'В поддержку', 'value' : 'https://wa.me/79687432507', 'type' : 'url'})
+        else:
+            contact_array.append({'name' : 'Заказчику:', 'value' : 'https://wa.me/'+obj.owner_phone[1:], 'type' : 'url'})
+
+        order.append({'name':'Написать сообщение:','value':contact_array,'type':'array'})
+
         order.append({'name' : 'Создан:', 'value' : obj.created_at, 'type' : 'datetime'})
         order.append({'name' : 'Получение описания до:', 'value' : obj.deadline_at, 'type' : 'datetime'})
         order.append({'name' : 'Консультация:', 'value' : obj.consult_at, 'type' : 'datetime'})
