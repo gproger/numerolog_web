@@ -6,11 +6,12 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
 
 from django.db.models import Q
-from .models import AppOrder, AppResultFile
+from .models import AppOrder, AppResultFile, AppExpertUser
 
 from .serializers import AppOrderSerializer, AppWorkSerializer
 from .serializers import AppOrderItemExtSerializer
 from .serializers import AppOrderCreateSerializer
+from .serializers import AppExpertCheckSerializer
 from private_storage.views import PrivateStorageDetailView
 import pprint
 import datetime
@@ -167,6 +168,47 @@ class AppOrderItemShowUpdateURLView(generics.RetrieveUpdateAPIView):
                     inst.cancel_payment(k)
 
         return super(AppOrderItemShowUpdateURLView,self).get(request,*args,**kwargs)
+
+
+class AppCheckExpertView(generics.ListAPIView):
+    permission_classes=[AllowAny]
+    serializer_class = AppExpertCheckSerializer
+
+    def get_queryset(self):
+        query_params = self.request.query_params
+        first_name = query_params.get('first_name',None)
+        last_name = query_params.get('last_name',None)
+        middle_name = query_params.get('middle_name',None)
+        code = query_params.get('code',None)
+
+        ### check for mandatory params - by good practice we need return http request with 400 status
+        if first_name is None:
+            return None
+        if last_name is None:
+            return None
+        if code is None:
+            return None
+
+        first_name = first_name.lower().strip()
+        last_name = last_name.lower().strip()
+        code = code.lower().strip()
+        if middle_name is not None:
+            middle_name = middle_name.lower().strip()
+
+        print("query params for fillter is")
+        print(first_name)
+        print(last_name)
+        print(code)
+        print(middle_name)
+
+        qs = AppExpertUser.objects.all()
+        qs.filter(first_name__iexact=first_name)
+        qs.filter(last_name__iexact=last_name)
+        qs.filter(code__iexact=code)
+        if middle_name is not None:
+            qs.filter(middle_name__iexact=middle_name)
+
+        return qs
 
 
 

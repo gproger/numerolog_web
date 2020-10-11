@@ -1,6 +1,7 @@
 from django.urls import reverse
 from rest_framework import serializers
 from .models import AppOrder
+from .models import AppExpertUser
 from django_tinkoff_merchant.serializers import PaymentSerializer
 
 
@@ -148,3 +149,11 @@ class AppOrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppOrder
         exclude = ['doer','name','workstate']
+
+
+class AppExpertCheckSerializer(serializers.ModelSerializer):
+    
+
+    class Meta:
+        model = AppExpertUser
+        fields = ['desc']
