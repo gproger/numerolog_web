@@ -18,10 +18,13 @@ from django.shortcuts import render, get_object_or_404
 from promocode.models import PromoCode
 from django_tinkoff_merchant.serializers import PaymentSerializer
 import json
+from private_storage.views import PrivateStorageDetailView
+
 
 from django.http import JsonResponse
 from datetime import datetime, timezone
 from utils.phone import get_phone
+from .models import SchoolScanFile
 
 # Create your views here.
 
@@ -391,3 +394,46 @@ class SchoolAppFromFilterByPayDate(View):
         dt = datetime.strptime("24-8-2017 15:00:00","%d-%m-%Y %H:%M:%S").replace(tzinfo=timezone.utc)
         objs = SchoolAppForm.get_registered_from_date(dt)
         print(objs)
+
+
+
+class FileSchoolServeView(PrivateStorageDetailView):
+    model=SchoolScanFile
+    model_file_field='file'
+
+    def can_access_file(self, private_file):
+        obj = self.object
+        if obj.order.userinfo.user.id == self.request.user.id:
+            return True
+        return False
+
+
+class SchoolAppFormUpdateFileUploadView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = SchoolAppFormSerializer
+
+    def get_object(self):
+        id = self.kwargs.get('id', None)
+        user = self.request.user
+        qs = SchoolAppForm.objects.filter(pk=id).first()
+        if not qs is None:
+            if qs.userinfo.user == user:
+                return qs
+            else:
+                return None
+        return qs
+
+    def put(self, request, *args, **kwargs):
+        inst = self.get_object()
+        if inst is None:
+            return HttpResponseForbidden()
+
+        for f in request.FILES.getlist('file'):
+            app = SchoolScanFile()
+            app.title=f.name
+            app.order = inst
+            app.file = f
+            app.save()
+
+        return super(SchoolAppFormUpdateFileUploadView,self).get(request,*args,**kwargs)
+

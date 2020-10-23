@@ -8,6 +8,8 @@ from .views import SchoolApplyPersCurator
 from .views import SchoolApplyPersCuratorGetPayURL
 from .views import SchoolAppFlowRegisterListView
 from .views import SchoolAppFlowViewBySlug
+from .views import FileSchoolServeView
+from .views import SchoolAppFormUpdateFileUploadView
 
 urls = [
     url(r'^numer/api/flow/$', SchoolAppFlowListView.as_view()),
@@ -25,4 +27,6 @@ urls = [
     url(r'^numer/api/reg_flow/$', SchoolAppFlowRegisterListView.as_view()),
     url(r'^numer/api/school/(?P<id>[0-9]+)/$', SchoolAppFormShowUpdateView.as_view()),
     url(r'^numer/api/schoolurl/(?P<id>[0-9]+)/$', SchoolAppFormShowUpdateURLView.as_view()),
+    url('^schoolprivatefiles/(?P<pk>[0-9]+)/$', FileSchoolServeView.as_view(), name='file_download_school'),
+    url(r'^numer/api/schoolupld/(?P<id>[0-9]+)/$', SchoolAppFormUpdateFileUploadView.as_view(), name='file_upload_school'),
 ]

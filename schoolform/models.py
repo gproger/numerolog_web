@@ -10,6 +10,8 @@ from celery.execute import send_task
 import pytz
 from datetime import datetime, timedelta
 from users.models import UserInfo
+from private_storage.fields import PrivateFileField
+
 
 # Create your models here.
 
@@ -463,3 +465,23 @@ class SchoolAppWorker(models.Model):
 
     def __str__(self):
         return "{} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
+
+
+
+class SchoolScanFile(models.Model):
+    title = models.CharField("Title", max_length=200)
+    file = PrivateFileField("File", upload_to="schoolorders/")
+    order = models.ForeignKey(SchoolAppForm, on_delete=models.DO_NOTHING,related_name="files")
+
+    def save(self, *args, **kwargs):
+
+        new = self.pk is None
+        super(SchoolScanFile, self).save(*args, **kwargs)
+        if new:
+            self.send_mail_notification()
+
+    def send_mail_notification(self):
+        print("sscan file added")
+ #       send_task('app.tasks.appResultFileAdded',
+ #               kwargs={"app_id": self.pk})
+

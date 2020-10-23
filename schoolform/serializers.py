@@ -4,7 +4,7 @@ from django_tinkoff_merchant.serializers import PaymentSerializer
 
 from users.serializers import UserInfoSerializer
 from utils.phone import get_phone
-
+from django.urls import reverse
 
 class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
@@ -256,9 +256,6 @@ class SchoolPersCuratorSerializer(serializers.ModelSerializer):
         #    if obj.payed_outline > 0:
         #        order.append({'name' : 'Предоплата:', 'value' : obj.payed_outline})
 
-
-
-        #if hasattr(obj,'payed_by'):
         #    order.append({'name' : 'Оплачено на карту:', 'value' : obj.payed_outline})
         #if hasattr(obj,'payed_by'):
         #    if obj.payed_by != '':
@@ -298,6 +295,12 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
     phone_valid = serializers.BooleanField(required=False)
 
     cancelUrl = serializers.SerializerMethodField(required=False)
+
+    uploadDocumentUrl = serializers.SerializerMethodField(required=False)
+
+    files = serializers.SerializerMethodField(required=False)
+
+
 
     def get_order(self,obj):
         order = []
@@ -354,7 +357,25 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
     def get_cancelUrl(self, obj):
         return '/numer/api/schoolurl/'+str(obj.id)+'/'
 
+    def get_uploadDocumentUrl(self,obj):
+        return '/numer/api/schoolupld/'+str(obj.id)+'/'
+
+    def get_files(self,obj):
+        files_array = []
+        order = []
+
+        for p in obj.files.all():
+            files_array.append({'name':p.title,'value':reverse('file_download_school',kwargs={'pk':p.id}),'type':'url'})
+
+        if len(files_array) > 0:
+            order.append({'name':'Файлы','value':files_array,'type':'array'})
+        else:
+            order.append({'name':'Файлы','value':'Файлов нет','type':'caption'})
+
+        return order[0]
+
+
 
     class Meta:
         model = SchoolAppForm
-        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl']
+        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files']
