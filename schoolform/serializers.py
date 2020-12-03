@@ -386,16 +386,7 @@ class SchoolPersCuratorListSerializer(serializers.ModelSerializer):
 
     payment = PaymentSerializer(required=False, many = True)
     amount = serializers.SerializerMethodField(required=False)
-    order = serializers.SerializerMethodField(required=False)
-
-
-
-    def get_order(self,obj):
-        order = []
-
-        order.append({'id': obj.id, 'last_name' : obj.last_name, 'first_name' : obj.first_name,
-			'middle_name' : obj.middle_name, 'email' : obj.email, 'phone' : obj.phone, 'price' : obj.price})
-        return order
+    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
 
     def get_amount(self,obj):
         total = 0
@@ -411,19 +402,13 @@ class SchoolPersCuratorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SchoolAppPersCuratorForm
-        exclude = ['flow','accepted_toss','userinfo','accepted']
+        fields = ['first_name','last_name','middle_name','email','phone','created','amount','payment','price']
 
 
 class SchoolCuratorListSerializer(serializers.ModelSerializer):
-    details = serializers.SerializerMethodField(required=False)
+    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
 
-    def get_details(self,obj):
-        order = []
-
-        order.append({'id': obj.id, 'last_name' : obj.last_name, 'first_name' : obj.first_name,
-                        'middle_name' : obj.middle_name, 'email' : obj.email, 'phone' : obj.phone})
-        return order
 
     class Meta:
         model = SchoolAppCurator
-        exclude = ['flow','accepted_toss','userinfo']
+        fields = ['first_name','last_name','middle_name','email','phone','created','curator','expert']
