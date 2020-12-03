@@ -414,3 +414,16 @@ class SchoolPersCuratorListSerializer(serializers.ModelSerializer):
         exclude = ['flow','accepted_toss','userinfo','accepted']
 
 
+class SchoolCuratorListSerializer(serializers.ModelSerializer):
+    details = serializers.SerializerMethodField(required=False)
+
+    def get_details(self,obj):
+        order = []
+
+        order.append({'id': obj.id, 'last_name' : obj.last_name, 'first_name' : obj.first_name,
+                        'middle_name' : obj.middle_name, 'email' : obj.email, 'phone' : obj.phone})
+        return order
+
+    class Meta:
+        model = SchoolAppCurator
+        exclude = ['flow','accepted_toss','userinfo']

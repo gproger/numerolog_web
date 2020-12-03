@@ -15,6 +15,7 @@ from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializ
 from .serializers import SchoolPersCuratorSerializer
 from .serializers import SchoolAppFlowWOChoicesSerializerBySlug
 from .serializers import SchoolPersCuratorListSerializer
+from .serializers import SchoolCuratorListSerializer
 from django.shortcuts import render, get_object_or_404
 from promocode.models import PromoCode
 from django_tinkoff_merchant.serializers import PaymentSerializer
@@ -119,7 +120,7 @@ class SchoolAppCuratorsListView(generics.ListAPIView):
 
     def list(self, request):
         queryset = self.get_queryset()
-        serializer = SchoolAppFormFlowStudentsList(queryset, many=True)
+        serializer = SchoolCuratorListSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
