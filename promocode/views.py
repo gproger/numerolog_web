@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, BasePermission
 from rest_framework.exceptions import PermissionDenied
 
 from .serializers import PromoCodesSerializer
@@ -18,8 +18,23 @@ from django.http import JsonResponse
 from django.utils.crypto import get_random_string
 import json
 
+class IsCodesAdmin(BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+
+        if not request.user.is_authenticated:
+            return False
+
+        return request.user.has_perm('promocode.add_promocode') or request.user.is_superuser
+
+
 class PromoCodesListView(generics.ListAPIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsCodesAdmin]
     serializer_class = PromoCodesSerializer
 
 
@@ -50,7 +65,11 @@ class PromoCodesCreate(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         json_data = json.loads(request.body.decode('utf-8'))
-        if not request.user.is_staff:
+
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
+        if not ( request.user.has_perm('promocode.add_promocode') or request.user.is_superuser):
             return HttpResponseForbidden()
 
         if int(json_data['form']['codes_cnt']) <= 0:
@@ -61,7 +80,6 @@ class PromoCodesCreate(LoginRequiredMixin, View):
 
         flow = get_object_or_404(SchoolAppFlow,pk=json_data['form']['flow'])
 
-        print(json_data)
 
         for i in range(0,int(json_data['form']['codes_cnt'])):
             code = get_random_string(12)
@@ -112,7 +130,7 @@ class PromoTicketCodesTestTicket(View):
 
 
 class PromoTicketCodesListView(generics.ListAPIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsCodesAdmin]
     serializer_class = PromoCodesTicketSerializer
 
 
@@ -144,7 +162,9 @@ class PromoTicketCodesCreate(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         json_data = json.loads(request.body.decode('utf-8'))
-        if not request.user.is_staff:
+
+
+        if not ( request.user.has_perm('promocode.add_promocode') or request.user.is_superuser):
             return HttpResponseForbidden()
 
         if int(json_data['form']['codes_cnt']) <= 0:
@@ -154,8 +174,6 @@ class PromoTicketCodesCreate(LoginRequiredMixin, View):
             return JsonResponse({'desc' : 'Некорректное действия кода'}, status=400)
 
         event = get_object_or_404(EventTicketTemplate,pk=json_data['form']['event'])
-
-        print(json_data)
 
         for i in range(0,int(json_data['form']['codes_cnt'])):
             code = get_random_string(12)

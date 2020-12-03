@@ -34,6 +34,10 @@ class SchoolLandingPage(Page):
 class FeedBackReviewIndexBlock(blocks.StructBlock):
     header = blocks.CharBlock()
     text = blocks.TextBlock()
+    url = blocks.URLBlock()
+    image = ImageChooserBlock()
+    embed = blocks.BooleanBlock()
+    about = blocks.CharBlock()
 
 
 class SchoolTextReviewsPage(Page):

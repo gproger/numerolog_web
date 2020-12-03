@@ -14,6 +14,7 @@ from .serializers import SchoolAppFormCreateSerializer,SchoolAppFormFlowStudents
 from .serializers import SchoolAppFlowSerializer, SchoolAppFlowWOChoicesSerializer, SchoolAppCuratorCreateSerializer
 from .serializers import SchoolPersCuratorSerializer
 from .serializers import SchoolAppFlowWOChoicesSerializerBySlug
+from .serializers import SchoolPersCuratorListSerializer
 from django.shortcuts import render, get_object_or_404
 from promocode.models import PromoCode
 from django_tinkoff_merchant.serializers import PaymentSerializer
@@ -67,6 +68,60 @@ class SchoolAppFormListView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = SchoolAppFormFlowStudentsList(queryset, many=True)
         return Response(serializer.data)
+
+class SchoolAppPersCuratorListView(generics.ListAPIView):
+    permission_classes = [IsSchoolAdmin]
+# dummy empty serializer for no additional params
+    serializer_class = SchoolAppFormSerializer
+
+    def get_queryset(self):
+        query_params = self.request.query_params
+        flow_num = query_params.get('flow', None)
+        if flow_num == None:
+            try:
+                flow_num = SchoolAppFlow.objects.all().last()
+            except SchoolAppFlow.DoesNotExist:
+                return None
+        else:
+            try:
+                flow_num = SchoolAppFlow.objects.get(id=flow_num)
+            except SchoolAppFlow.DoesNotExist:
+                return None
+
+        return SchoolAppPersCuratorForm.objects.all().filter(flow=flow_num)
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = SchoolPersCuratorListSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class SchoolAppCuratorsListView(generics.ListAPIView):
+    permission_classes = [IsSchoolAdmin]
+### dummy serializer not used
+    serializer_class = SchoolAppFormSerializer
+
+    def get_queryset(self):
+        query_params = self.request.query_params
+        flow_num = query_params.get('flow', None)
+        if flow_num == None:
+            try:
+                flow_num = SchoolAppFlow.objects.all().last()
+            except SchoolAppFlow.DoesNotExist:
+                return None
+        else:
+            try:
+                flow_num = SchoolAppFlow.objects.get(id=flow_num)
+            except SchoolAppFlow.DoesNotExist:
+                return None
+
+        return SchoolAppCurator.objects.all().filter(flow=flow_num)
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = SchoolAppFormFlowStudentsList(queryset, many=True)
+        return Response(serializer.data)
+
 
 class SchoolAppFormCreateView(generics.CreateAPIView):
     serializer_class = SchoolAppFormCreateSerializer

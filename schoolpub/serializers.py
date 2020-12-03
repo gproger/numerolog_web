@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import SchoolFAQPage
 from .models import SchoolTextReviewsPage
-
+from wagtail.images.models import Image
 
 class SchoolFaqSerializer(serializers.ModelSerializer):
 
@@ -19,7 +19,13 @@ class SchoolTextReviewsSerializer(serializers.ModelSerializer):
     review = serializers.SerializerMethodField()
 
     def get_review(self, obj):
-        return obj.schooltextreviewspage.review.stream_data[0]['value']
+        val = obj.schooltextreviewspage.review.stream_data[0]['value']
+        for i in val:
+            img = Image.objects.get(pk=i['image'])
+            print(img)
+            print(img.file)
+            i['image'] = img.file.url
+        return val
 
     class Meta:
         model = SchoolTextReviewsPage

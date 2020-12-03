@@ -379,3 +379,38 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolAppForm
         fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files']
+
+
+
+class SchoolPersCuratorListSerializer(serializers.ModelSerializer):
+
+    payment = PaymentSerializer(required=False, many = True)
+    amount = serializers.SerializerMethodField(required=False)
+    order = serializers.SerializerMethodField(required=False)
+
+
+
+    def get_order(self,obj):
+        order = []
+
+        order.append({'id': obj.id, 'last_name' : obj.last_name, 'first_name' : obj.first_name,
+			'middle_name' : obj.middle_name, 'email' : obj.email, 'phone' : obj.phone, 'price' : obj.price})
+        return order
+
+    def get_amount(self,obj):
+        total = 0
+        if not hasattr(obj,'payment'):
+            return 0
+        for k in obj.payment.all():
+            if k.is_paid():
+                total += k.amount
+        if obj.payed_amount > total/100:
+            total = obj.payed_amount*100
+        return total/100
+
+
+    class Meta:
+        model = SchoolAppPersCuratorForm
+        exclude = ['flow','accepted_toss','userinfo','accepted']
+
+

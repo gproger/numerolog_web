@@ -269,6 +269,11 @@ class ServicePage(Page):
     comp_parent = models.NullBooleanField(blank=True, default=False, verbose_name="Совместимость родителей")
     impr_chld = models.NullBooleanField(blank=True, default=False, verbose_name="Влияние на ребёнка")
 
+
+    bgColor = models.CharField(max_length=255, blank=True, verbose_name="Цвет подложки")
+    textColor = models.CharField(max_length=255, blank=True, verbose_name="Цвет текста")
+    order_num = models.SmallIntegerField(blank=True, verbose_name="Номер услуги, отвечает за порядок отображения")
+
     image_light = models.ForeignKey(
         'wagtailimages.Image',
         null=True, blank=True,
@@ -312,6 +317,9 @@ class ServicePage(Page):
         FieldPanel('kids_cnt',classname='full'),
         FieldPanel('comp_parent',classname='full'),
         FieldPanel('impr_chld',classname='full'),
+        FieldPanel('bgColor',classname='full'),
+        FieldPanel('textColor',classname='full'),
+        FieldPanel('order_num',classname='full'),
         ImageChooserPanel('image_light'),
         ImageChooserPanel('image_dark'),
         StreamFieldPanel('about', classname="full")
