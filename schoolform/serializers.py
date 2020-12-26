@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm
+from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm, SchoolDiscount
 from django_tinkoff_merchant.serializers import PaymentSerializer
 
 from users.serializers import UserInfoSerializer
@@ -412,3 +412,25 @@ class SchoolCuratorListSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolAppCurator
         fields = ['first_name','last_name','middle_name','email','phone','created','curator','expert']
+
+
+class SchoolAppDiscountListSerializer(serializers.ModelSerializer):
+
+    flow = serializers.SerializerMethodField(required=False)
+
+    def get_flow(self, obj):
+        flow_name = str(obj.flow.flow) +' '+ obj.flow.flow_name
+        return flow_name
+
+    class Meta:
+        model = SchoolDiscount
+        fields = '__all__'
+
+
+class SchoolAppDiscountCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SchoolDiscount
+        fields = '__all__'
+
+

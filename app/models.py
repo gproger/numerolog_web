@@ -48,6 +48,29 @@ class AppExpertUser(models.Model):
         self.workstate['history'].append(ts)
         self.save()
 
+    @property
+    def first_name(self):
+        return self.user.ninfo.first_name
+
+    @property
+    def last_name(self):
+        return self.user.ninfo.last_name
+
+    @property
+    def middle_name(self):
+        return self.user.ninfo.middle_name
+
+    @property
+    def phone(self):
+        return self.user.ninfo.phone
+
+    @property
+    def email(self):
+        return self.user.ninfo.email
+
+
+
+
 
 class AppOrder(models.Model):
 
@@ -147,6 +170,7 @@ class AppOrder(models.Model):
             return self.doer.ninfo.phone
         else:
             return '+79687432507'
+
     @property
     def payed_amount(self):
         payed = 0

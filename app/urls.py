@@ -8,10 +8,14 @@ from .views import AppOrderCreateView
 from .views import AppOrderItemShowUpdateConfirmView
 from .views import AppOrderItemShowUpdateFileUploadView
 from .views import AppCheckExpertView
+from .views import AppOrderManagerListView
+from .views import AppOrderManagerItemView
 
 
 urls = [
     url(r'^numer/api/orders',AppOrderListViewSet.as_view()),
+    url(r'^numer/api/service/orders',AppOrderManagerListView.as_view()),
+    url(r'^numer/api/service/order/(?P<id>[0-9]+)/$',AppOrderManagerItemView.as_view()),
     url(r'^numer/api/order/create', AppOrderCreateView.as_view()),
     url(r'^numer/api/work',AppWorkListViewSet.as_view()),
     url(r'^numer/api/service/(?P<id>[0-9]+)/$',AppOrderItemView.as_view()),

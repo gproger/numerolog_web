@@ -152,8 +152,111 @@ class AppOrderCreateSerializer(serializers.ModelSerializer):
 
 
 class AppExpertCheckSerializer(serializers.ModelSerializer):
-    
 
     class Meta:
         model = AppExpertUser
-        fields = ['desc']
+        fields = ['first_name','last_name','middle_name','phone','email','active','workstate','orders_in_work']
+
+
+class AppManagerOrderSerializer(serializers.ModelSerializer):
+    doer = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
+    payment = PaymentSerializer(required=False, many=True, read_only=True)
+    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+    created_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+    deadline_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+    consult_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+
+    def get_doer(self, obj):
+        if obj.doer is None:
+            return None
+
+        res = {}
+        res['first_name'] = obj.doer.ninfo.first_name
+        res['last_name'] = obj.doer.ninfo.last_name
+        res['middle_name'] = obj.doer.ninfo.middle_name
+        res['email'] = obj.doer.ninfo.email
+        res['phone'] = obj.doer.ninfo.phone
+        return res
+
+
+    def get_owner(self, obj):
+        if obj.owner is None:
+            return None
+
+        res = {}
+        res['first_name'] = obj.owner.ninfo.first_name
+        res['last_name'] = obj.owner.ninfo.last_name
+        res['middle_name'] = obj.owner.ninfo.middle_name
+        res['email'] = obj.owner.ninfo.email
+        res['phone'] = obj.owner.ninfo.phone
+        return res
+
+
+    class Meta:
+        model = AppOrder
+        fields = '__all__'
+
+
+
+class AppOrderChangeUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AppOrder
+        fields = ['doer']
+
+
+class AppOrderChangeGetSerializer(serializers.ModelSerializer):
+
+    doer = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
+    payment = PaymentSerializer(required=False, many=True, read_only=True)
+    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+    deadline_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+    consult_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+    experts = serializers.SerializerMethodField()
+
+
+    def get_doer(self, obj):
+        if obj.doer is None:
+            return None
+
+        res = {}
+        res['first_name'] = obj.doer.ninfo.first_name
+        res['last_name'] = obj.doer.ninfo.last_name
+        res['middle_name'] = obj.doer.ninfo.middle_name
+        res['email'] = obj.doer.ninfo.email
+        res['phone'] = obj.doer.ninfo.phone
+        res['id']= obj.doer.id;
+        return res
+
+
+    def get_owner(self, obj):
+        if obj.owner is None:
+            return None
+
+        res = {}
+        res['first_name'] = obj.owner.ninfo.first_name
+        res['last_name'] = obj.owner.ninfo.last_name
+        res['middle_name'] = obj.owner.ninfo.middle_name
+        res['email'] = obj.owner.ninfo.email
+        res['phone'] = obj.owner.ninfo.phone
+        return res
+
+    def get_experts(self, obj):
+        exp_ = AppExpertUser.objects.all()
+        res = []
+        for exp_i in exp_:
+            res.append({'id':exp_i.user.pk,
+                'first_name' : exp_i.user.ninfo.first_name,
+                'last_name' : exp_i.user.ninfo.last_name,
+                'middle_name' : exp_i.user.ninfo.middle_name,
+                'email' : exp_i.user.ninfo.email,
+                'phone' : exp_i.user.ninfo.phone,
+                'active': exp_i.active
+            })
+        return res
+
+    class Meta:
+        model = AppOrder
+        fields = ['owner','doer','created','consult_at','deadline_at','experts','payment','items']

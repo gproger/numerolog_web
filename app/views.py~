@@ -6,15 +6,11 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
 
 from django.db.models import Q
-from .models import AppOrder, AppResultFile, AppExpertUser
+from .models import AppOrder, AppResultFile
 
 from .serializers import AppOrderSerializer, AppWorkSerializer
 from .serializers import AppOrderItemExtSerializer
 from .serializers import AppOrderCreateSerializer
-from .serializers import AppExpertCheckSerializer
-from .serializers import AppManagerOrderSerializer
-from .serializers import AppOrderChangeGetSerializer
-from .serializers import AppOrderChangeUpdateSerializer
 from private_storage.views import PrivateStorageDetailView
 import pprint
 import datetime
@@ -43,18 +39,6 @@ class AppWorkListViewSet(generics.ListCreateAPIView):
         queryset = AppOrder.objects.filter(doer=request.user)
         serializer = AppWorkSerializer(queryset, many=True)
         return Response(serializer.data)
-
-
-class AppOrderManagerListView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = AppOrderSerializer
-
-    def list(self, request):
-        queryset = AppOrder.objects.filter(items__auto__isnull=True)
-        serializer = AppManagerOrderSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
 
 
 class AppOrderItemView(generics.RetrieveUpdateAPIView):
@@ -90,8 +74,8 @@ class AppOrderItemShowUpdateConfirmView(generics.RetrieveUpdateAPIView):
                 dd_line = dd_line.split('.')
                 cc_line = request.data.get("cc")
                 cc_line = cc_line.split('.')
-                inst.deadline_at=datetime.datetime(int(dd_line[2]),int(dd_line[1]),int(dd_line[0]),18,0,0)
-                inst.consult_at=datetime.datetime(int(cc_line[2]),int(cc_line[1]),int(cc_line[0]),18,0,0)
+                inst.deadline_at=datetime.datetime(int(dd_line[2]),int(dd_line[1]),int(dd_line[0],18,0,0)
+                inst.consult_at=datetime.datetime(int(cc_line[2]),int(cc_line[1]),int(cc_line[0],18,0,0)
         inst.save()
 
         return super(AppOrderItemShowUpdateConfirmView,self).put(request,*args,**kwargs)
@@ -185,35 +169,6 @@ class AppOrderItemShowUpdateURLView(generics.RetrieveUpdateAPIView):
         return super(AppOrderItemShowUpdateURLView,self).get(request,*args,**kwargs)
 
 
-class AppCheckExpertView(generics.ListAPIView):
-    permission_classes=[AllowAny]
-    serializer_class = AppExpertCheckSerializer
-
-    def get_queryset(self):
-        query_params = self.request.query_params
-        first_name = query_params.get('first_name',None)
-        last_name = query_params.get('last_name',None)
-        middle_name = query_params.get('middle_name',None)
-        code = query_params.get('code',None)
-
-        ### check for mandatory params - by good practice we need return http request with 400 status
-
-        qs = AppExpertUser.objects.all()
-        if first_name is not None:
-            qs.filter(first_name__iexact=first_name)
-        
-        if last_name is not None:
-            qs.filter(last_name__iexact=last_name)
-        
-        if code is not None:
-            qs.filter(code__iexact=code)
-        
-        if middle_name is not None:
-            qs.filter(middle_name__iexact=middle_name)
-
-        return qs
-
-
 
 from pprint import pprint
 
@@ -228,24 +183,3 @@ class FileServeView(PrivateStorageDetailView):
         if obj.order.doer.id == self.request.user.id:
             return True
         return False
-
-
-
-
-
-class AppOrderManagerItemView(generics.RetrieveUpdateAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = AppOrderChangeGetSerializer
-
-    def get_object(self):
-        id = self.kwargs.get('id', None)
-        qs = AppOrder.objects.get(pk=id)
-        return qs
-
-
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return AppOrderChangeGetSerializer
-        else:
-            return AppOrderChangeUpdateSerializer
-

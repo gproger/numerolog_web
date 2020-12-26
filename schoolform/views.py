@@ -16,6 +16,8 @@ from .serializers import SchoolPersCuratorSerializer
 from .serializers import SchoolAppFlowWOChoicesSerializerBySlug
 from .serializers import SchoolPersCuratorListSerializer
 from .serializers import SchoolCuratorListSerializer
+from .serializers import SchoolAppDiscountListSerializer
+from .serializers import SchoolAppDiscountCreateSerializer
 from django.shortcuts import render, get_object_or_404
 from promocode.models import PromoCode
 from django_tinkoff_merchant.serializers import PaymentSerializer
@@ -27,6 +29,7 @@ from django.http import JsonResponse
 from datetime import datetime, timezone
 from utils.phone import get_phone
 from .models import SchoolScanFile
+from .models import SchoolDiscount
 
 # Create your views here.
 
@@ -493,3 +496,14 @@ class SchoolAppFormUpdateFileUploadView(generics.RetrieveUpdateAPIView):
 
         return super(SchoolAppFormUpdateFileUploadView,self).get(request,*args,**kwargs)
 
+
+class SchoolAppDiscountsListAPView(generics.ListCreateAPIView):
+    permission_classes = [IsSchoolAdmin]
+    serializer_class = SchoolAppDiscountCreateSerializer
+
+    queryset = SchoolDiscount.objects.all()
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = SchoolAppDiscountListSerializer(queryset, many=True)
+        return Response(serializer.data)
