@@ -315,6 +315,13 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order.append({'name' : 'Заказ №', 'value' : obj.id, 'type' : 'id'})
         order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow, 'type' : 'flow_id'})
         order.append({'name' : 'Курс обучения:', 'value' : obj.flow.flow_name, 'type' : 'flow_name'})
+        date_access = obj.flow.education_stop
+        if hasattr(obj,'access_till') and obj.access_till is not None:
+            date_access = obj.access_till
+
+        date_access = '{}.{}.{}'.format(date_access.day,date_access.month, date_access.year)
+
+        order.append({'name' : 'Доступ к материалам до:', 'value' : date_access, 'type' : 'date_access'})
         order.append({'name' : 'Фамилия:', 'value' : obj.last_name, 'type' : 'last_name'})
         order.append({'name' : 'Имя:', 'value' : obj.first_name, 'type' : 'first_name'})
         order.append({'name' : 'E-mail:', 'value' : obj.email, 'type' : 'email'})
