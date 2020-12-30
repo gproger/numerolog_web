@@ -16,6 +16,7 @@ from private_storage.fields import PrivateFileField
 # Create your models here.
 
 PERS_CURATOR_DESC = 'Услуга персонального куратора в школе неНумерологии Ольги Перцевой'
+ACCESS_EXTEND_DESC = 'Услуга продления доступа к учебным материалам в школе неНумерологии Ольги Перцевой'
 SCHOOL_PAYMENT_DESC = 'Оплата обучения в школе неНумерологии Ольги Перцевой'
 
 class PriceField(models.Model):
@@ -485,4 +486,64 @@ class SchoolScanFile(models.Model):
         print("sscan file added")
  #       send_task('app.tasks.appResultFileAdded',
  #               kwargs={"app_id": self.pk})
+
+
+
+
+class SchoolExtendAccessService(models.Model):
+    form = models.ForeignKey(SchoolAppForm, related_name='extends')
+    payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
+
+
+
+    @property
+    def email(self):
+        return self.form.userinfo.email
+
+    @property
+    def phone(self):
+        return self.form.userinfo.phone
+
+
+    def create_payment(self, *args, **kwargs):
+        order_obj = str(self.pk)
+        order_plural="Школа "
+        amount = self.price*100
+        if 'amount' in kwargs:
+            amount = kwargs.get('amount')
+
+        items = [
+            {'name': 'Услуга продления доступа к материалам школы неНумерологии', 'price': amount, 'quantity': 1},
+        ]
+
+
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description=ACCESS_EXTEND_DESC,terminal=self.flow.get_payment_terminal()) \
+            .with_receipt(email=self.email,phone=self.phone) \
+            .with_items(items)
+
+        payment = MerchantAPI().init(payment)
+
+        payment.save()
+
+        self.payment.add(payment)
+        self.save()
+
+
+    def get_payment_status(self):
+        for payment in self.payment.all():
+             if not payment.is_paid():
+                 MerchantAPI().status(payment).save()
+
+    def cancel_payment(self):
+        return MerchantAPI().cancel(self.payment)
+
+    def is_payed(self):
+        total = 0
+        for payment in self.payment.all():
+            if payment.is_paid():
+                total += payment.amount
+        if total == self.flow.pers_cur_price*100:
+            return True
+        else:
+            return False
 
