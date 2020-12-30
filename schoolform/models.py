@@ -199,6 +199,7 @@ class SchoolAppForm(models.Model):
     comment = models.TextField(null=True, blank=True)
 
     userinfo = models.ForeignKey(UserInfo, on_delete=models.DO_NOTHING, blank=True, null=True)
+    access_till = models.DateField(null=True, blank=True)
 
 
 
