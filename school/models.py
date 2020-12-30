@@ -8,7 +8,7 @@ from schoolform.models import SchoolAppFlow
 
 
 class SchoolTraining(models.Model):
-    curators = models.ManyToManyField(SchoolAppCurator, related_name='active_training')
+    curators = models.ManyToManyField(SchoolAppCurator, related_name='active_training', blank=True)
     flow = models.ForeignKey(SchoolAppFlow,related_name='trainings')
     name = models.CharField(max_length=250)
 
@@ -19,7 +19,7 @@ class SchoolLesson(models.Model):
     training = models.ForeignKey(SchoolTraining, related_name='lessons')
     name = models.CharField(max_length=250)
     descr = models.TextField(blank=True)
-    time_start = models.DateTimeField()
+    time_start = models.DateTimeField(blank=True, null=True)
     has_homework = models.BooleanField(default=False)
     homework_html = models.TextField(blank=True)
     lesson_content = models.TextField(blank=True)

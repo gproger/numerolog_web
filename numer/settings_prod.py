@@ -260,6 +260,7 @@ INSTALLED_APPS = [
     'events',
     'schoolpub',
     'users',
+    'school',
 # push
     'push_notifications',
 ]

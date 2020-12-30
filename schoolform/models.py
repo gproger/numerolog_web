@@ -434,7 +434,7 @@ class SchoolAppCurator(models.Model):
             return "Эксперт {} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
         if self.expert and self.curator:
             return "Эксперт и куратор {} {} {} {} {} {}".format(self.flow.flow, self.pk, self.email, self.phone, self.last_name, self.first_name)
-
+        return 'Some strange {}'.format(self.id)
 
 #### NOT USED MODEL!!!!
 class SchoolAppWorker(models.Model):

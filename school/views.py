@@ -8,6 +8,8 @@ from django.shortcuts import render, get_object_or_404
 from .serializers import SchoolTraingListSerializer
 from .serializers import SchoolTraingSerializer
 from .serializers import SchoolLessonListSerializer
+from .serializers import SchoolLessonSerializer
+from .serializers import SchoolLessonCreateSerializer
 from .models import SchoolTraining
 from .models import SchoolLesson
 
@@ -40,10 +42,8 @@ class SchoolTrainingDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-
-
 class SchoolLessonList(generics.ListCreateAPIView):
-    serializer_class = SchoolLessonListSerializer
+    serializer_class = SchoolLessonCreateSerializer
     queryset = SchoolLesson.objects.all()
 
     def list(self, request):
@@ -61,3 +61,9 @@ class SchoolLessonList(generics.ListCreateAPIView):
 
 
 
+class SchoolLessonDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = SchoolLessonSerializer
+
+    def get_object(self):
+        id = self.kwargs.get('id', None)
+        return get_object_or_404(SchoolLesson,pk=id)
