@@ -6,9 +6,14 @@ from schoolform.models import SchoolAppCurator
 
 class SchoolTraingListSerializer(serializers.ModelSerializer):
     
+    flow = serializers.SerializerMethodField(required=False)
+
+    def get_flow(self, obj):
+        return ' ' + str(obj.flow.flow) + ' ' + obj.flow.flow_name
+
     class Meta:
         model = SchoolTraining
-        fields = ['name','id']
+        fields = ['name','id','flow']
 
 
 class SchoolTraingSerializer(serializers.ModelSerializer):
