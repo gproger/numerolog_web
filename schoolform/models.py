@@ -538,8 +538,8 @@ class SchoolExtendAccessService(models.Model):
              if not payment.is_paid():
                  MerchantAPI().status(payment).save()
 
-    def cancel_payment(self):
-        return MerchantAPI().cancel(self.payment)
+    def cancel_payment(self,payment):
+        return (MerchantAPI().cancel(payment)).save()
 
     def is_payed(self):
         total = 0
