@@ -8,6 +8,7 @@ from schoolform.tasks import send_pay_notify_sms, send_payed_notify_task
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .forms import RefundForm
+from .models import SchoolExtendAccessService
 
 def flow_name(obj):
     return obj.flow.flow_name
@@ -221,3 +222,5 @@ class SchoolAppFormAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
+
+admin.site.register(SchoolExtendAccessService)

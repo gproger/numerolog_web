@@ -9,6 +9,8 @@ def payment_check_callback(sender, **kwargs):
         schoolappform = payment.schoolappform_set.first()
         schoolappform.check_full_payment()
         send_school_payment_notify.delay(schoolappform.pk,payment.pk, amount)
-
+    if payment.schoolextendaccessservice_set.count() != 0:
+        schoolextend = payment.schoolextendaccessservice_set.first()
+        schoolextend.check_full_payment()
 
 payment_update.connect(payment_check_callback)

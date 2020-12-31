@@ -62,6 +62,7 @@ class SchoolAppFlow(models.Model):
     terminal = models.ManyToManyField(TinkoffSettings, blank=True, related_name='used_in+')
 
     program_html = models.TextField(blank=True, null=True)
+    extend_price = models.PositiveIntegerField(default=5000)
 
     def __str__(self):
         return str(self.flow) + ' ' + str(self.flow_name)
@@ -493,8 +494,11 @@ class SchoolScanFile(models.Model):
 class SchoolExtendAccessService(models.Model):
     form = models.ForeignKey(SchoolAppForm, related_name='extends')
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
-
-
+    price = models.PositiveIntegerField(default = 0)
+    access_till = models.DateField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    userinfo = models.ForeignKey(UserInfo, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='schoolextend')
+    payed = models.BooleanField(default=False)
 
     @property
     def email(self):
@@ -517,7 +521,7 @@ class SchoolExtendAccessService(models.Model):
         ]
 
 
-        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description=ACCESS_EXTEND_DESC,terminal=self.flow.get_payment_terminal()) \
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description=ACCESS_EXTEND_DESC,terminal=self.form.flow.get_payment_terminal()) \
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 
@@ -547,3 +551,37 @@ class SchoolExtendAccessService(models.Model):
         else:
             return False
 
+
+    @property
+    def payed_amount(self):
+        total = 0
+        for payment in self.payment.all():
+            if payment.is_paid():
+                total += payment.amount
+        total /= 100
+        return total 
+
+
+    def check_full_payment(self):
+        if self.payed_amount == self.price and not self.payed:
+            self.update_access_date()
+
+
+    def update_access_date(self):
+        date_form = self.form.flow.education_stop
+        if self.form.access_till is not None:
+            if self.form.access_till > date_form:
+                date_form = self.form.access_till
+
+        for payment in self.payment.all():
+            if payment.is_paid():
+                date_p = payment.date_updated.date()
+                if date_p > date_form:
+                    date_form = date_p
+
+        date_res = date_form + timedelta(days=31)
+        self.access_till = date_res
+        self.payed=True
+        self.save()
+        self.form.access_till = date_res
+        self.form.save()

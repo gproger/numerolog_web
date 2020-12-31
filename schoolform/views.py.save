@@ -7,7 +7,6 @@ from django.views import View
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, PriceField, SchoolAppPersCuratorForm
-from .models import SchoolExtendAccessService
 from blog.models import TermsOfServicePage
 
 from .serializers import SchoolAppFormSerializer, SchoolAppFlowListSerializer
@@ -20,7 +19,6 @@ from .serializers import SchoolCuratorListSerializer
 from .serializers import SchoolAppDiscountListSerializer
 from .serializers import SchoolAppDiscountCreateSerializer
 from .serializers import SchoolExtendAccessServiceCreateSerializer
-from .serializers import SchoolExtendAccessServiceSerializer
 from django.shortcuts import render, get_object_or_404
 from promocode.models import PromoCode
 from django_tinkoff_merchant.serializers import PaymentSerializer
@@ -524,82 +522,18 @@ class SchoolExtendCreateView(generics.CreateAPIView):
 
             cc_flow = request.data.get('form')
 
+
             c_flow = get_object_or_404(SchoolAppForm,id=cc_flow)
             if c_flow.userinfo.id != request.user.ninfo.id:
                 raise PermissionDenied({"message":"Нет доступа" })
 
             objs = ser.save()
-            objs.price = objs.form.flow.extend_price
-            objs.userinfo = request.user.ninfo
-            objs.save()
 
-            ret_ser = SchoolExtendAccessServiceSerializer(objs)
-            return JsonResponse(ret_ser.data)
+            return Response(ser.data)
 
 
-class SchoolExtendShowUpdateURL(generics.UpdateAPIView):
+class SchoolExtendShowUpdateURL
 
-    serializer_class = SchoolExtendAccessServiceSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        id = self.kwargs.get('id', None)
-
-        return get_object_or_404(SchoolExtendAccessService,pk=id)
-
-    def put(self, request, *args, **kwargs):
-        inst = self.get_object()
-
-        if request.data['amount']  <= 0:
-            return Response({"amount" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
-#        if request.data['amount'] % 100000 != 0:
-#            return Response({"amount" : "Некорректное значение"},status=status.HTTP_400_BAD_REQUEST)
-        if request.data['amount'] > inst.price*100:
-            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
-
-
-        total = 0
-        for k in inst.payment.all():
-            if k.is_paid():
-                total += k.amount
-
-        if request.data['amount'] > inst.price*100-total:
-            return Response({"amount" : "Введенная сумма слишком велика"},status=status.HTTP_400_BAD_REQUEST)
-
-        inst.create_payment(amount=request.data['amount'])
-        inst.save()
-
-        return super(SchoolExtendShowUpdateURL,self).put(request,*args,**kwargs)
-
-
-    def patch(self, request, *args, **kwargs):
-        inst = self.get_object()
-
-        for k in inst.payment.all():
-            if not k.is_paid():
-                if k.status == 'NEW' or k.status == 'FORM_SHOWED' or k.status == 'AUTH_FAIL' and k.error_code == 0:
-                    inst.cancel_payment(k)
-
-        return super(SchoolExtendShowUpdateURL,self).put(request,*args,**kwargs)
-
-
-
-class SchoolExtendShowUpdateView(generics.RetrieveAPIView):
-
-    serializer_class = SchoolExtendAccessServiceSerializer
-    permisiion_classes = [IsAuthenticated]
-
-    def get_object(self):
-
-        id = self.kwargs.get('id', None)
-
-        return get_object_or_404(SchoolExtendAccessService,pk=id)
-
-
-    def get(self, request, *args, **kwargs):
-        obj = self.get_object()
-        if obj.form.userinfo != request.user.ninfo:
-             raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
-
-        return super(SchoolExtendShowUpdateView,self).get(request,*args,**kwargs)
+from .views import SchoolExtendShowUpdateURL
+from .views import SchoolExtendShowUpdateView
 

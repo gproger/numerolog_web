@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import SchoolAppForm, SchoolAppFlow, SchoolAppCurator, SchoolAppPersCuratorForm, SchoolDiscount
+from .models import SchoolExtendAccessService
 from django_tinkoff_merchant.serializers import PaymentSerializer
 
 from users.serializers import UserInfoSerializer
@@ -300,6 +301,7 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     files = serializers.SerializerMethodField(required=False)
 
+    prolong = serializers.SerializerMethodField()
 
 
     def get_order(self,obj):
@@ -382,10 +384,20 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         return order[0]
 
 
+    def get_prolong(self, obj):
+
+        date_access = obj.flow.education_stop
+        if hasattr(obj,'access_till') and obj.access_till is not None:
+            date_access = obj.access_till
+
+        date_access = '{}.{}.{}'.format(date_access.day,date_access.month, date_access.year)
+
+        return {'price':obj.flow.extend_price,'access_date':date_access}
+
 
     class Meta:
         model = SchoolAppForm
-        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files']
+        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files','prolong']
 
 
 
@@ -441,3 +453,61 @@ class SchoolAppDiscountCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SchoolExtendAccessServiceCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SchoolExtendAccessService
+        fields = ['form']
+
+class SchoolExtendAccessServiceSerializer(serializers.ModelSerializer):
+
+    order = serializers.SerializerMethodField(required=False)
+
+    payment = PaymentSerializer(required=False, many = True)
+
+    amount = serializers.SerializerMethodField()
+
+    cancelUrl = serializers.SerializerMethodField(required=False)
+
+    def get_order(self,obj):
+        order = []
+        if not hasattr(obj,'id'):
+            return order
+
+        order.append({'name' : 'Заказ №', 'value' : obj.id, 'type' : 'id'})
+        order.append({'name' : 'Поток обучения:', 'value' : obj.form.flow.flow, 'type' : 'flow_id'})
+        order.append({'name' : 'Курс обучения:', 'value' : obj.form.flow.flow_name, 'type' : 'flow_name'})
+        order.append({'name' : 'Анкета студента:', 'value' : obj.form.id, 'type' : 'form_id'})
+ 
+        date_access = obj.form.flow.education_stop
+        if hasattr(obj,'access_till') and obj.access_till is not None:
+            date_access = obj.access_till
+
+        date_access = '{}.{}.{}'.format(date_access.day,date_access.month, date_access.year)
+
+        order.append({'name' : 'Доступ к материалам до:', 'value' : date_access, 'type' : 'date_access'})
+        order.append({'name' : 'Фамилия:', 'value' : obj.form.last_name, 'type' : 'last_name'})
+        order.append({'name' : 'Имя:', 'value' : obj.form.first_name, 'type' : 'first_name'})
+        order.append({'name' : 'E-mail:', 'value' : obj.email, 'type' : 'email'})
+        order.append({'name' : 'Телефон:', 'value' : obj.phone, 'type' : 'phone'})
+        order.append({'name' : 'Стоимость услуги:', 'value' : obj.price, 'type' : 'price'})
+
+
+        return order
+
+    def get_amount(self,obj):
+        total = 0
+        if not hasattr(obj,'payment'):
+            return 0
+        for k in obj.payment.all():
+            if k.is_paid():
+                total += k.amount
+
+        return total/100
+
+    def get_cancelUrl(self, obj):
+        return '/numer/api/schoolextendurl/'+str(obj.id)+'/'
+
+    class Meta:
+        model = SchoolExtendAccessService
+        fields = ['order','payment','amount','cancelUrl','id']

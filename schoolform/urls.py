@@ -13,6 +13,9 @@ from .views import SchoolAppFormUpdateFileUploadView
 from .views import SchoolAppCuratorsListView
 from .views import SchoolAppPersCuratorListView
 from .views import SchoolAppDiscountsListAPView
+from .views import SchoolExtendCreateView
+from .views import SchoolExtendShowUpdateURL
+from .views import SchoolExtendShowUpdateView
 
 
 urls = [
@@ -36,4 +39,8 @@ urls = [
     url(r'^numer/api/schoolurl/(?P<id>[0-9]+)/$', SchoolAppFormShowUpdateURLView.as_view()),
     url('^schoolprivatefiles/(?P<pk>[0-9]+)/$', FileSchoolServeView.as_view(), name='file_download_school'),
     url(r'^numer/api/schoolupld/(?P<id>[0-9]+)/$', SchoolAppFormUpdateFileUploadView.as_view(), name='file_upload_school'),
+    url(r'^numer/api/schoolextendapply/', SchoolExtendCreateView.as_view()),
+    url(r'^numer/api/schoolextendurl/(?P<id>[0-9]+)/$', SchoolExtendShowUpdateURL.as_view()),
+    url(r'^numer/api/schoolextend/(?P<id>[0-9]+)/$', SchoolExtendShowUpdateView.as_view()),
+
 ]

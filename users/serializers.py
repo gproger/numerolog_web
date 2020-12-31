@@ -62,6 +62,17 @@ class UserOrderSchoolListSerializer(serializers.Serializer):
         return 'Обучение в школе на '+obj.flow.flow_name
 
 
+class UserOrderSchoolExtendListSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    price = serializers.IntegerField(read_only=True)
+    payed_amount = serializers.IntegerField(read_only=True)
+    created = serializers.DateTimeField(read_only=True,format="%d.%m.%Y %H:%M")
+    title = serializers.SerializerMethodField()
+
+    def get_title(self, obj):
+        return 'Продление доступа к материалам обучения на '+obj.form.flow.flow_name
+
+
 class UserOrderCuratorListSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     price = serializers.IntegerField(read_only=True)
@@ -91,6 +102,7 @@ class UserOrdersSerializer(serializers.Serializer):
     school = UserOrderSchoolListSerializer(many=True, source="schoolappform_set")
     curator = UserOrderCuratorListSerializer(many=True, source="schoolappperscuratorform_set")
     service  = UserOrderServicesListSerializer(many=True, source="user.serv_appl_owner")
+    schoolextend = UserOrderSchoolExtendListSerializer(many=True)
 
 class UserOrderTicketSerializer(serializers.Serializer):
     pass
