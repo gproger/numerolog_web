@@ -24,10 +24,20 @@ class FeedBackVideo(blocks.StructBlock):
 
 class SchoolLandingPage(Page):
 
+    link_1_stage = models.URLField(verbose_name='Ссылка на 1 ступень',default='/')
+    link_1_2_stage = models.URLField(verbose_name='Ссылка на 1 и 2 ступень',default='/')
+    link_2_stage = models.URLField(verbose_name='Ссылка на 2 ступень',default='/')
+    link_all = models.URLField(verbose_name='Ссылка на все открытые потоки',default='/schoolp/apply/')
+
     feedback = StreamField([('video',blocks.ListBlock(FeedBackVideo, template='blocks/feedbackvideo_list.html'))],null=True,blank=True)
 
     content_panels = Page.content_panels + [
-        StreamFieldPanel('feedback', classname="full")
+        StreamFieldPanel('feedback', classname="full"),
+        FieldPanel('link_1_stage'),
+        FieldPanel('link_1_2_stage'),
+        FieldPanel('link_2_stage'),
+        FieldPanel('link_all'),
+
     ]
 
 
