@@ -86,7 +86,7 @@ def send_school_payment_notify(form_id, payment_id,amount):
         'user_name' : form.first_name + ' ' + form.last_name,
         'flow_num' : form.flow.flow,
         'flow_name' : form.flow.flow_name,
-        'recr_end' : form.flow.education_start,
+        'recr_end' : form.flow.recruitment_stop,
         'price' : form.price,
         'total_amount' : form.payed_amount,
         'amount' : amount//100,
