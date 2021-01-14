@@ -11,7 +11,7 @@
 
 {% blocktrans trimmed %}
 Если у Вас остались вопросы или есть сложности, пожалуйста, свяжитесь с нашим администратором в WhatsApp, Viber, Telegram.
-+79687432507
++79856984225
 {% endblocktrans %}
 
 {% endblock content %}
