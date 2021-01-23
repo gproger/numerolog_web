@@ -213,7 +213,7 @@ class UserOfferList(View):
             if form.flow.id in set_can:
                 obj = {'title':'Сопровождение личным куратором на обучении на потоке '+form.flow.flow_name,
                         'price':form.flow.pers_cur_price,
-                        'url':'/schoolp/schoolp/perscurator/?flow='+form.flow.slug}
+                        'url':'/schoolp/perscurator/?flow='+form.flow.slug+'&form='+str(form.id)}
                 ret.append(obj)
         return ret
 
@@ -222,7 +222,7 @@ class UserOfferList(View):
         for form in forms:
             obj = {'title':'Продление доступа к файлам и материалам лекций на 1 месяц '+form.flow.flow_name,
                     'price':form.flow.extend_price,
-                    'url':'/schoolp/schoolp/extend/?form='+str(form.id)+'&flow='+form.flow.slug}
+                    'url':'/schoolp/extend/?form='+str(form.id)+'&flow='+form.flow.slug}
             ret.append(obj)
         return ret
 
@@ -256,6 +256,7 @@ class UserOfferList(View):
         offers += self.get_pers_curator_offer(qs_schoolform,qs_pers_cur_app)
         offers += self.get_extend_service_offer(qs_schoolform)
         offers += self.get_applications_offer(userinfo)
+
         return JsonResponse(offers,status=200, safe=False)
 ###     qs_schoolfrom = active schoolform set - add extend application
 
