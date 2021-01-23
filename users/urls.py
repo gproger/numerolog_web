@@ -13,6 +13,7 @@ from .views import UserOrderSchoolDetail
 from .views import UserOrderCuratorDetail
 from .views import UserOrderServicesDetail
 from .views import UserWorksList
+from .views import UserOfferList
 
 urls = [
     url(r'^numer/api/user/$', UserInfoDetail.as_view(), name="users:info"),
@@ -20,6 +21,7 @@ urls = [
     url(r'^numer/api/user/validate/send/$', UserInfoValidateSend.as_view(), name="users:validate:send"),
     url(r'^numer/api/user/works/$',UserWorksList.as_view(), name="users:works"),
     url(r'^numer/api/user/orders/$',UserOrderList.as_view(), name="users:orders"),
+    url(r'^numer/api/user/offers/$',UserOfferList.as_view(), name="users:offers"),
     url(r'^numer/api/user/orders/ticket/$', UserOrderTicketList.as_view(), name="users:orders:tickets"),
     url(r'^numer/api/user/orders/school/$', UserOrderSchoolList.as_view(), name="users:orders:schools"),
     url(r'^numer/api/user/orders/curator/$', UserOrderCuratorList.as_view(), name="users:orders:curators"),

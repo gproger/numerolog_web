@@ -32,6 +32,8 @@ from .models import UserInfo
 import json
 
 
+from django.db.models import F
+
 class UserInfoDetail(generics.RetrieveUpdateAPIView):
     serializer_class = UserInfoSerializer
     queryset = UserInfo.objects.all()
@@ -200,3 +202,61 @@ class UserOrderCuratorDetail(generics.RetrieveAPIView):
 
 class UserOrderServicesDetail(generics.RetrieveAPIView):
     pass
+
+
+class UserOfferList(View):
+
+
+    def get_pers_curator_offer(self, forms, set_can):
+        ret = []
+        for form in forms:
+            if form.flow.id in set_can:
+                obj = {'title':'Сопровождение личным куратором на обучении на потоке '+form.flow.flow_name,
+                        'price':form.flow.pers_cur_price,
+                        'url':'/schoolp/schoolp/perscurator/?flow='+form.flow.slug}
+                ret.append(obj)
+        return ret
+
+    def get_extend_service_offer(self, forms):
+        ret = []
+        for form in forms:
+            obj = {'title':'Продление доступа к файлам и материалам лекций на 1 месяц '+form.flow.flow_name,
+                    'price':form.flow.extend_price,
+                    'url':'/schoolp/schoolp/extend/?form='+str(form.id)+'&flow='+form.flow.slug}
+            ret.append(obj)
+        return ret
+
+    def get_applications_offer(self, userinfo):
+        ret = []
+        return ret
+
+    def get(self, request, *args, **kwargs):
+        userinfo = request.user.ninfo
+        qs_sf_set = set()
+        qs_pc_set = set()
+        qs_pers_cur_app = set()
+        offers = []
+### get queryset of all schoolforms
+        if userinfo is not None:
+            qs_schoolform = userinfo.schoolappform_set.filter(payed_amount=F('price')).values_list('flow__id',flat=True)
+            if qs_schoolform:
+                qs_sf_set = set(qs_schoolform)
+
+### for every form in schoolforms we need test if curator form is already created
+        if userinfo is not None:
+            qs_perscur = userinfo.schoolappperscuratorform_set.all().values_list('flow__id',flat=True)
+            if qs_perscur:
+                qs_pc_set = set(qs_perscur)
+
+        qs_pers_cur_app = qs_sf_set - qs_pc_set
+
+        if userinfo is not None:
+            qs_schoolform = userinfo.schoolappform_set.filter(payed_amount=F('price'))
+
+        offers += self.get_pers_curator_offer(qs_schoolform,qs_pers_cur_app)
+        offers += self.get_extend_service_offer(qs_schoolform)
+        offers += self.get_applications_offer(userinfo)
+        return JsonResponse(offers,status=200, safe=False)
+###     qs_schoolfrom = active schoolform set - add extend application
+
+        

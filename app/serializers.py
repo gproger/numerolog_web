@@ -90,6 +90,10 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
         else:
             order.append({'name':'Файлы','value':'Файлов нет','type':'caption'})
 
+        if obj.owner.id != user.id:
+            order.append({'name' : 'Комментарий:', 'value' : obj.comment, 'type' : 'comment'})
+
+
         return order
 
     def get_cancelUrl(self, obj):
@@ -203,7 +207,7 @@ class AppOrderChangeUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AppOrder
-        fields = ['doer']
+        fields = ['doer','comment']
 
 
 class AppOrderChangeGetSerializer(serializers.ModelSerializer):
@@ -259,4 +263,4 @@ class AppOrderChangeGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AppOrder
-        fields = ['owner','doer','created','consult_at','deadline_at','experts','payment','items']
+        fields = ['owner','doer','created','consult_at','deadline_at','experts','payment','items','comment']

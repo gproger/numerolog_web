@@ -136,19 +136,15 @@ class UserWorkSerializer(serializers.Serializer):
 
     def get_pended(self,obj):
         if not hasattr(obj,'workstate'):
-            print(1)
             return False
         if not 'assign' in obj.workstate:
             return False
         if not hasattr(self.context['request'].user,'expert_rec'):
-            print(3)
             return False
         if self.context['request'].user.expert_rec is None:
-            print(4)
             return False
         exp_id = self.context['request'].user.expert_rec.pk
         for item in obj.workstate['assign']:
             if item['exp_id'] == exp_id and item['confirmed'] == False and item['pending']== True:
                 return True
-        print(5)
         return False
