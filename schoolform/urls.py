@@ -16,6 +16,7 @@ from .views import SchoolAppDiscountsListAPView
 from .views import SchoolExtendCreateView
 from .views import SchoolExtendShowUpdateURL
 from .views import SchoolExtendShowUpdateView
+from .views import SchoolSaleUpdateURL
 
 
 urls = [
@@ -41,6 +42,7 @@ urls = [
     url(r'^numer/api/schoolupld/(?P<id>[0-9]+)/$', SchoolAppFormUpdateFileUploadView.as_view(), name='file_upload_school'),
     url(r'^numer/api/schoolextendapply/', SchoolExtendCreateView.as_view()),
     url(r'^numer/api/schoolextendurl/(?P<id>[0-9]+)/$', SchoolExtendShowUpdateURL.as_view()),
+    url(r'^numer/api/schoolapplycode/(?P<id>[0-9]+)/$', SchoolSaleUpdateURL.as_view(), name='saleApply'),
     url(r'^numer/api/schoolextend/(?P<id>[0-9]+)/$', SchoolExtendShowUpdateView.as_view()),
 
 ]

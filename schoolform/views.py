@@ -21,6 +21,7 @@ from .serializers import SchoolAppDiscountListSerializer
 from .serializers import SchoolAppDiscountCreateSerializer
 from .serializers import SchoolExtendAccessServiceCreateSerializer
 from .serializers import SchoolExtendAccessServiceSerializer
+from .serializers import SchoolSaleFormSerializer
 from django.shortcuts import render, get_object_or_404
 from promocode.models import PromoCode
 from django_tinkoff_merchant.serializers import PaymentSerializer
@@ -602,4 +603,48 @@ class SchoolExtendShowUpdateView(generics.RetrieveAPIView):
              raise PermissionDenied({"message":"У вас нет прав доступа для просмотра данных" })
 
         return super(SchoolExtendShowUpdateView,self).get(request,*args,**kwargs)
+
+
+class SchoolSaleUpdateURL(generics.UpdateAPIView):
+
+    serializer_class = SchoolAppFormSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        id = self.kwargs.get('id', None)
+
+        return get_object_or_404(SchoolAppForm,pk=id)
+
+
+
+
+    def put(self, request, *args, **kwargs):
+        inst = self.get_object()
+
+
+        if request.data['saleCode'] == '':
+            return Response({"saleCode" : "Интересная попытка :)"},status=status.HTTP_400_BAD_REQUEST)
+
+        cccode= request.data['saleCode']
+
+        cc_code = PromoCode.objects.filter(code=cccode)
+
+        if cc_code is None:
+            return Response({"saleCode" : "Код неактивен"},status=status.HTTP_400_BAD_REQUEST)
+
+        cc_code = cc_code.first()
+
+        if cc_code is None:
+            return Response({"saleCode" : "Код неактивен"},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+        res = inst.apply_promocode(cc_code)
+
+        if not res:
+            return Response({"saleCode" : "Код неактивен"},status=status.HTTP_400_BAD_REQUEST)
+
+
+        return super(SchoolSaleUpdateURL,self).put(request,*args,**kwargs)
 

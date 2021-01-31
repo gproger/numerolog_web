@@ -12,7 +12,6 @@ from datetime import datetime, timedelta
 from users.models import UserInfo
 from private_storage.fields import PrivateFileField
 
-
 # Create your models here.
 
 PERS_CURATOR_DESC = 'Услуга персонального куратора в школе неНумерологии Ольги Перцевой'
@@ -318,6 +317,28 @@ class SchoolAppForm(models.Model):
         if forms.count() != 0:
             return forms.first()
         return None
+
+
+    def test_promocode(self, code):
+        cc_code = PromoCode.objects.filter(code=code)
+        if cc_code is None:
+            return 0
+
+        cc_code = cc_code.first()
+  
+        if cc_code.flow != self.flow:
+            return -1
+
+        if cc_code.elapsed_count < 1:
+            return -2
+
+        res = self.apply_promocode(cc_code)
+        if not res:
+            return -3
+
+        if res:
+            return 1
+
 
     def apply_promocode(self, cc_code):
         # check if code already exist

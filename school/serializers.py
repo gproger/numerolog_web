@@ -3,6 +3,7 @@ from .models import SchoolTraining
 from .models import SchoolLesson
 from django.urls import reverse
 from schoolform.models import SchoolAppCurator
+from schoolform.models import SchoolAppFlow
 
 class SchoolTraingListSerializer(serializers.ModelSerializer):
     
@@ -20,6 +21,7 @@ class SchoolTraingSerializer(serializers.ModelSerializer):
 
     curators_list = serializers.SerializerMethodField(required=False)
     curators = serializers.PrimaryKeyRelatedField(queryset=SchoolAppCurator.objects.all(),many=True)
+    flow = serializers.PrimaryKeyRelatedField(queryset=SchoolAppFlow.objects.all())
 
     def get_curators_list(self,obj):
         result = []

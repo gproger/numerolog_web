@@ -301,6 +301,9 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     files = serializers.SerializerMethodField(required=False)
 
+
+    saleUrl  = serializers.SerializerMethodField(required=False)
+
     prolong = serializers.SerializerMethodField()
 
 
@@ -394,10 +397,19 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
         return {'price':obj.flow.extend_price,'access_date':date_access}
 
+    def get_saleUrl(self, obj):
+
+        if obj.price_f is not None:
+            return None
+
+        if obj.payed_amount == obj.price:
+            return None
+
+        return reverse('saleApply',kwargs={'id':obj.id})
 
     class Meta:
         model = SchoolAppForm
-        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files','prolong']
+        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files','prolong','saleUrl']
 
 
 
@@ -507,6 +519,14 @@ class SchoolExtendAccessServiceSerializer(serializers.ModelSerializer):
 
     def get_cancelUrl(self, obj):
         return '/numer/api/schoolextendurl/'+str(obj.id)+'/'
+
+    class Meta:
+        model = SchoolExtendAccessService
+        fields = ['order','payment','amount','cancelUrl','id']
+
+
+class SchoolSaleFormSerializer(serializers.ModelSerializer):
+
 
     class Meta:
         model = SchoolExtendAccessService
