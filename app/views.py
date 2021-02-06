@@ -19,7 +19,8 @@ from .serializers import AppOrderChangeUpdateSerializer
 from private_storage.views import PrivateStorageDetailView
 import pprint
 import datetime
-
+from promocode.models import PromoCode
+from schoolform.models import PriceField
 
 
 class AppOrderListViewSet(generics.ListCreateAPIView):
@@ -74,6 +75,33 @@ class AppOrderItemView(generics.RetrieveUpdateAPIView):
         code = request.data.get('code',None)
         if code:
             print(code)
+            c_model = PromoCode.objects.filter(code=code,services=True,elapsed_count__gte=1)
+            if not c_model:
+                return HttpResponseBadRequest()
+
+            if inst.price_f:
+                return HttpResponseBadRequest()
+
+            pr_field = PriceField()
+            pr_field.price = inst.price
+            c_model = c_model.first()
+
+            if not c_model:
+                return HttpResponseBadRequest()
+
+            if c_model.is_percent:
+                pr_field.discount = pr_field.price*c_model.discount/100
+            else:
+                pr_field.discount = c_model.discount
+
+            inst.price = pr_field.price - pr_field.discount
+            pr_field.save()
+            inst.price_f = pr_field
+            inst.save()
+            c_model.price.add(pr_field)
+            c_model.elapsed_count = c_model.elapsed_count - 1
+            c_model.save()
+            return super(AppOrderItemView,self).put(request,*args,**kwargs)
         else:
             print("code not available")
         return HttpResponseForbidden()
