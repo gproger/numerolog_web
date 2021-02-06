@@ -97,6 +97,7 @@ class AppOrderItemView(generics.RetrieveUpdateAPIView):
             inst.price = pr_field.price - pr_field.discount
             pr_field.save()
             inst.price_f = pr_field
+            inst.add_to_history("Активирован код скидки {} на {} {}".format(code,c_model.discount," процентов" if c_model.is_percent else  "  рублей"))
             inst.save()
             c_model.price.add(pr_field)
             c_model.elapsed_count = c_model.elapsed_count - 1

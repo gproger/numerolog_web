@@ -79,7 +79,13 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
 
         order.append({'name':'Детали заказа:', 'value' : it_array, 'type': 'array'})
 
+        if obj.price_f:
+            order.append({'name' : 'Промокод:', 'value' : obj.price_f.promocode_set.first().code, 'type' : 'caption'})
+            order.append({'name' : 'Скидка:', 'value' : str(obj.price_f.discount) + ' Руб.', 'type' : 'caption'})
+
         order.append({'name' : 'Стоимость услуги:', 'value' : obj.price, 'type' : 'price'})
+
+
 
         files_array = []
 
