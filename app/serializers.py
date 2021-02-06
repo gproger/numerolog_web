@@ -90,8 +90,10 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
         else:
             order.append({'name':'Файлы','value':'Файлов нет','type':'caption'})
 
+        order.append({'name' : 'Комментарий к заказу:', 'value' : obj.comment, 'type' : 'comment'})
+
         if obj.owner.id != user.id:
-            order.append({'name' : 'Комментарий:', 'value' : obj.comment, 'type' : 'comment'})
+            order.append({'name' : 'Личный комментарий(заметки):', 'value' : obj.expertcomment, 'type' : 'comment'})
 
 
         return order
@@ -263,4 +265,4 @@ class AppOrderChangeGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AppOrder
-        fields = ['owner','doer','created','consult_at','deadline_at','experts','payment','items','comment']
+        fields = ['owner','doer','created','consult_at','deadline_at','experts','payment','items','comment','expertcomment','admincomment']

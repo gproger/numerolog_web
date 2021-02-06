@@ -93,7 +93,9 @@ class AppOrder(models.Model):
     items = JSONField()
     payment = models.ManyToManyField(to=Payment, verbose_name='Payment', blank=True, null=True)
     price = models.PositiveIntegerField(default=0)
-    comment = models.TextField(blank=True, default='', verbose_name='Private Comments')
+    comment = models.TextField(blank=True, default='', verbose_name='User Order Comments')
+    expertcomment = models.TextField(blank=True, default='', verbose_name='Private expert Comments')
+    admincomment = models.TextField(blank=True, default='', verbose_name='Private Admin Comments')
 
     def save(self, *args, **kwargs):
         """ Add Slug creating/checking to save method.  """

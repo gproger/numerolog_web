@@ -15,4 +15,5 @@ class PromoCode(models.Model):
     flow = models.ForeignKey(SchoolAppFlow, null=True, blank=True)
     evticket = models.ForeignKey(EventTicketTemplate, null=True,blank=True)
     price = models.ManyToManyField(PriceField, null=True, blank=True)
+    services = models.NullBooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
