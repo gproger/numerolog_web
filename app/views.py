@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 
 from django.db.models import Q
 from .models import AppOrder, AppResultFile, AppExpertUser
@@ -67,6 +68,19 @@ class AppOrderItemView(generics.RetrieveUpdateAPIView):
         user = self.request.user
         qs = AppOrder.objects.filter(Q(doer=user)|Q(owner=user)).filter(pk=id).first()
         return qs
+
+    def put(self, request, *args, **kwargs):
+        inst = self.get_object()
+        code = request.data.get('code',None)
+        if code:
+            print(code)
+        else:
+            print("code not available")
+        return HttpResponseForbidden()
+
+    def patch(self, request, *args, **kwargs):
+
+        return HttpResponseForbidden
 
 class AppOrderItemShowUpdateConfirmView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]

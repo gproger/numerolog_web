@@ -23,6 +23,7 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
     cancelUrl = serializers.SerializerMethodField()
     confirmUrl = serializers.SerializerMethodField()
     uploadUrl = serializers.SerializerMethodField()
+    saleUrl = serializers.SerializerMethodField()
 
     def get_amount(self,obj):
         total = 0
@@ -96,6 +97,8 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
             order.append({'name' : 'Личный комментарий(заметки):', 'value' : obj.expertcomment, 'type' : 'comment'})
 
 
+
+
         return order
 
     def get_cancelUrl(self, obj):
@@ -142,9 +145,19 @@ class AppOrderItemExtSerializer(serializers.ModelSerializer):
             return None
 
 
+    def get_saleUrl(self, obj):
+
+        if obj.price_f is not None:
+            return None
+
+        if obj.payed_amount == obj.price:
+            return None
+
+        return reverse('serv_view_url',kwargs={'id':obj.id})
+
     class Meta:
         model = AppOrder
-        fields = ['payment','amount','order','cancelUrl','confirmUrl','uploadUrl']
+        fields = ['payment','amount','order','cancelUrl','confirmUrl','uploadUrl','saleUrl']
 
 
 class AppOrderCreateSerializer(serializers.ModelSerializer):

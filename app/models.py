@@ -11,6 +11,7 @@ from django_tinkoff_merchant.models import TinkoffSettings
 from celery.execute import send_task
 from private_storage.fields import PrivateFileField
 from blog.models import ServicePage
+from schoolform.models import PriceField
 
 SERVICE_PAYMENT_DESC = 'Оплата разбора психоматрицы экспертом школы неНумерологии Ольги Перцевой'
 
@@ -96,6 +97,7 @@ class AppOrder(models.Model):
     comment = models.TextField(blank=True, default='', verbose_name='User Order Comments')
     expertcomment = models.TextField(blank=True, default='', verbose_name='Private expert Comments')
     admincomment = models.TextField(blank=True, default='', verbose_name='Private Admin Comments')
+    price_f = models.ForeignKey(PriceField,blank=True, null=True)
 
     def save(self, *args, **kwargs):
         """ Add Slug creating/checking to save method.  """
