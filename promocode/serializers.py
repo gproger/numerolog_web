@@ -7,8 +7,10 @@ class PromoCodesSerializer(serializers.ModelSerializer):
 
 
     def get_flow(self, obj):
-        return '{} {}'.format(obj.flow.flow, obj.flow.flow_name)
-
+        if obj.flow:
+            return '{} {}'.format(obj.flow.flow, obj.flow.flow_name)
+        else:
+            return None
     class Meta:
         model = PromoCode
         exclude = ['evticket']

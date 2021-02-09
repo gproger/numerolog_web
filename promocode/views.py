@@ -42,17 +42,19 @@ class PromoCodesListView(generics.ListAPIView):
         query_params = self.request.query_params
         flow_num = query_params.get('flow', None)
         if flow_num == None:
-            try:
-                flow_num = SchoolAppFlow.objects.all().last()
-            except SchoolAppFlow.DoesNotExist:
+            service = query_params.get('service', None)
+            if service:
+                return PromoCode.objects.all().filter(services=True)
+            else:
                 return None
         else:
             try:
                 flow_num = SchoolAppFlow.objects.get(id=flow_num)
+                return PromoCode.objects.all().filter(flow=flow_num)
             except SchoolAppFlow.DoesNotExist:
                 return None
 
-        return PromoCode.objects.all().filter(flow=flow_num)
+        return None
 
     def list(self, request):
         queryset = self.get_queryset()
