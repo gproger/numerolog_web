@@ -6,6 +6,8 @@ from django_tinkoff_merchant.serializers import PaymentSerializer
 from users.serializers import UserInfoSerializer
 from utils.phone import get_phone
 from django.urls import reverse
+from dateutil.relativedelta import *
+
 
 class SchoolAppFormCreateSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
@@ -322,7 +324,17 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
         order.append({'name' : 'Заказ №', 'value' : obj.id, 'type' : 'id'})
         order.append({'name' : 'Поток обучения:', 'value' : obj.flow.flow, 'type' : 'flow_id'})
         order.append({'name' : 'Курс обучения:', 'value' : obj.flow.flow_name, 'type' : 'flow_name'})
+
+        date_started = obj.flow.education_start
+        date_started = '{}.{}.{}'.format(date_started.day,date_started.month, date_started.year)
+        date_end = obj.flow.education_stop
+        date_end = '{}.{}.{}'.format(date_end.day,date_end.month, date_end.year)
+        order.append({'name' : 'Начало обучения:', 'value' : date_started, 'type' : 'date_start'})
+        order.append({'name' : 'Окончание обучения:', 'value' : date_end, 'type' : 'date_end'})
+
         date_access = obj.flow.education_stop
+        date_access = date_access + relativedelta(months=+6)
+
         if hasattr(obj,'access_till') and obj.access_till is not None:
             date_access = obj.access_till
 
