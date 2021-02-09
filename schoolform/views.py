@@ -627,7 +627,7 @@ class SchoolSaleUpdateURL(generics.UpdateAPIView):
 
         cccode= request.data['saleCode']
 
-        cc_code = PromoCode.objects.filter(code=cccode)
+        cc_code = PromoCode.objects.filter(code=cccode,flow=inst.flow)
 
         if cc_code is None:
             return Response({"saleCode" : "Код неактивен"},status=status.HTTP_400_BAD_REQUEST)

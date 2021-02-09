@@ -306,6 +306,8 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     prolong = serializers.SerializerMethodField()
 
+    flow_id = serializers.SerializerMethodField()
+
 
     def get_order(self,obj):
         order = []
@@ -407,9 +409,12 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
         return reverse('saleApply',kwargs={'id':obj.id})
 
+    def get_flow_id(self, obj):
+        return obj.flow.id
+
     class Meta:
         model = SchoolAppForm
-        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files','prolong','saleUrl']
+        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files','prolong','saleUrl','flow_id']
 
 
 
