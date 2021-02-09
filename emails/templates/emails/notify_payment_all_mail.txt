@@ -16,6 +16,8 @@
 принять участие в этом потоке обучения, свяжитесь с нашим администратором в WhatsApp, Viber или Telegram.
 
 +79856984225
+
+https://t.me/annakarpova14
 {% endblocktrans %}
 
 {% endblock content %}

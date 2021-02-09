@@ -10,6 +10,8 @@
 {% endblocktrans %}
 {% if price == total_amount %}
 Вы полностью оплатили обучение и мы благодарим Вас!
+
+
 {% endif %}
 <br>
 <br>
