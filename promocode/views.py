@@ -82,9 +82,9 @@ class PromoCodesCreate(LoginRequiredMixin, View):
         if int(json_data['form']['elapsed_count']) <= 0:
             return JsonResponse({'desc' : 'Некорректное действия кода'}, status=400)
 
-        if flow in json_data['form']:
+        if 'flow' in json_data['form']:
             flow = get_object_or_404(SchoolAppFlow,pk=json_data['form']['flow'])
-        if service in json_data['form']:
+        if 'service' in json_data['form']:
             service=True
 
         if not service and not flow:
@@ -97,7 +97,7 @@ class PromoCodesCreate(LoginRequiredMixin, View):
                 while PromoCode.objects.filter(flow=flow,code=code).count() > 0:
                     code = get_random_string(12)
             elif service:
-                while PromoCode.objects.filter(service=True,code=code).count() > 0:
+                while PromoCode.objects.filter(services=True,code=code).count() > 0:
                     code = get_random_string(12)
 
             pr = PromoCode()
@@ -107,7 +107,7 @@ class PromoCodesCreate(LoginRequiredMixin, View):
             if flow:
                 pr.flow = flow
             elif service:
-                pr.service=True
+                pr.services=True
             pr.emitter = request.user
             pr.elapsed_count = json_data['form']['elapsed_count']
             pr.save()
