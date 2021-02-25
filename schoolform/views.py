@@ -22,6 +22,7 @@ from .serializers import SchoolAppDiscountCreateSerializer
 from .serializers import SchoolExtendAccessServiceCreateSerializer
 from .serializers import SchoolExtendAccessServiceSerializer
 from .serializers import SchoolSaleFormSerializer
+from .serializers import SchoolAppExtendFormListSerializer
 from django.shortcuts import render, get_object_or_404
 from promocode.models import PromoCode
 from django_tinkoff_merchant.serializers import PaymentSerializer
@@ -34,6 +35,7 @@ from datetime import datetime, timezone
 from utils.phone import get_phone
 from .models import SchoolScanFile
 from .models import SchoolDiscount
+from .models import SchoolExtendAccessService
 
 # Create your views here.
 
@@ -104,6 +106,32 @@ class SchoolAppPersCuratorListView(generics.ListAPIView):
         return Response(serializer.data)
 
 
+class SchoolExtendListView(generics.ListAPIView):
+    permission_classes = [IsSchoolAdmin]
+# dummy empty serializer for no additional params
+    serializer_class = SchoolAppFormSerializer
+
+    def get_queryset(self):
+        query_params = self.request.query_params
+        flow_num = query_params.get('flow', None)
+        if flow_num == None:
+            try:
+                flow_num = SchoolAppFlow.objects.all().last()
+            except SchoolAppFlow.DoesNotExist:
+                return None
+        else:
+            try:
+                flow_num = SchoolAppFlow.objects.get(id=flow_num)
+            except SchoolAppFlow.DoesNotExist:
+                return None
+
+        return SchoolExtendAccessService.objects.all().filter(form__flow=flow_num)
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = SchoolAppExtendFormListSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 class SchoolAppCuratorsListView(generics.ListAPIView):
     permission_classes = [IsSchoolAdmin]
 ### dummy serializer not used
@@ -152,7 +180,21 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                                                 code=cc_code,
                                                 elapsed_count__gte=1)
 
-            if c_flow.avail_by_code:
+            forms = SchoolAppForm.objects.filter(userinfo=request.user.ninfo)
+            all_discounts = c_flow.discounts_by_orders.all()
+            max_discount = 0
+            founded_form = False
+            for form in forms:
+                if form.payed_amount != form.price:
+                    continue
+                for t in all_discounts:
+                    if t.flow == form.flow:
+                        founded_form = True
+                        if t.discount > max_discount:
+                            max_discount = t.discount
+
+
+            if c_flow.avail_by_code and not founded_form:
                 if code is not None and code.count() <= 0:
                     raise PermissionDenied({"message":
                                      "Код для записи на курс не корректен" })
@@ -182,16 +224,7 @@ class SchoolAppFormCreateView(generics.CreateAPIView):
                     code_item.price.add(pr_field)
                     code_item.elapsed_count = code_item.elapsed_count - 1
                     code_item.save()
-                forms = SchoolAppForm.objects.filter(userinfo=objs.userinfo)
-                all_discounts = objs.flow.discounts_by_orders.all()
-                max_discount = 0
-                for form in forms:
-                    if form.payed_amount != form.price:
-                        continue
-                    for t in all_discounts:
-                        if t.flow == form.flow:
-                            if t.discount > max_discount:
-                                max_discount = t.discount
+
                 if max_discount > 0:
                     objs.price = objs.price - max_discount
                     objs.save()

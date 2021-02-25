@@ -529,6 +529,19 @@ class SchoolExtendAccessService(models.Model):
     def phone(self):
         return self.form.userinfo.phone
 
+    @property
+    def first_name(self):
+        return self.form.userinfo.first_name
+
+    @property
+    def last_name(self):
+        return self.form.userinfo.last_name
+
+    @property
+    def middle_name(self):
+        return self.form.userinfo.middle_name
+
+
 
     def create_payment(self, *args, **kwargs):
         order_obj = str(self.pk)

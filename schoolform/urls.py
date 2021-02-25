@@ -17,7 +17,7 @@ from .views import SchoolExtendCreateView
 from .views import SchoolExtendShowUpdateURL
 from .views import SchoolExtendShowUpdateView
 from .views import SchoolSaleUpdateURL
-
+from .views import SchoolExtendListView
 
 urls = [
     url(r'^numer/api/flow/$', SchoolAppFlowListView.as_view()),
@@ -26,6 +26,7 @@ urls = [
     url(r'^numer/api/schooldiscounts/$', SchoolAppDiscountsListAPView.as_view()),
     url(r'^numer/api/curatorsflow/$', SchoolAppCuratorsListView.as_view()),
     url(r'^numer/api/perscurrflow/$', SchoolAppPersCuratorListView.as_view()),
+    url(r'^numer/api/extendflow/$', SchoolExtendListView.as_view()),
 #    url(r'^numer/api/schoolcurators', SchoolAppCuratorsListView.as_view()),
     url(r'^numer/api/addrecord/$', SchoolAppFormCreateView.as_view()),
     url(r'^numer/api/addcurator/$', SchoolAppCuratorCreateView.as_view()),

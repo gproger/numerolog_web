@@ -453,6 +453,29 @@ class SchoolPersCuratorListSerializer(serializers.ModelSerializer):
         fields = ['first_name','last_name','middle_name','email','phone','created','amount','payment','price']
 
 
+class SchoolAppExtendFormListSerializer(serializers.ModelSerializer):
+
+    payment = PaymentSerializer(required=False, many = True)
+    amount = serializers.SerializerMethodField(required=False)
+    created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
+
+    def get_amount(self,obj):
+        total = 0
+        if not hasattr(obj,'payment'):
+            return 0
+        for k in obj.payment.all():
+            if k.is_paid():
+                total += k.amount
+        if obj.payed_amount > total/100:
+            total = obj.payed_amount*100
+        return total/100
+
+
+    class Meta:
+        model = SchoolExtendAccessService
+        fields = ['first_name','last_name','middle_name','email','phone','created','amount','payment','price']
+
+
 class SchoolCuratorListSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S",input_formats=['%d.%m.%Y'], required=False)
 
