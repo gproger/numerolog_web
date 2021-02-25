@@ -223,4 +223,16 @@ class SchoolAppFormAdmin(admin.ModelAdmin):
 
 # Register your models here.
 
-admin.site.register(SchoolExtendAccessService)
+#admin.site.register(SchoolExtendAccessService)
+
+def flow_name_ext(obj):
+    return obj.form.flow.flow_name
+
+
+
+@admin.register(SchoolExtendAccessService)
+class SchoolExtendAccessServiceAdmin(admin.ModelAdmin):
+    list_display = ['id', 'email','phone','first_name',
+        'middle_name', 'last_name',flow_name_ext,'payed_amount','price',payed]
+    actions = [ refund_payments ]
+    search_fields = ['id', 'userinfo__phone','userinfo__email','userinfo__first_name','userinfo__middle_name','userinfo__last_name']
