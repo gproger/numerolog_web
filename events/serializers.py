@@ -93,7 +93,7 @@ class TicketCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = '__all__'
+        fields = ['accepted_toss','eventticket','id']
 
 class EventTicketSaleSerializer(serializers.ModelSerializer):
 

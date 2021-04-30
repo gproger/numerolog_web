@@ -3,6 +3,7 @@ from schoolform.models import PriceField
 # Create your models here.
 from blog.models import TermsOfServicePage
 from django_tinkoff_merchant.models import Payment
+from django_tinkoff_merchant.models import TinkoffSettings
 from django_tinkoff_merchant.services import MerchantAPI
 import datetime
 from django.utils.timezone import utc
@@ -22,6 +23,13 @@ class OfflineEvent(models.Model):
     ticket_sale_stop = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     toss = models.ManyToManyField(TermsOfServicePage, null=True, blank=True, related_name='oetoss+')
+    terminal = models.ManyToManyField(TinkoffSettings, blank=True, related_name='used_inev+')
+
+    def get_payment_terminal(self):
+        if self.terminal.count() > 0:
+            return self.terminal.all()[0]
+        else:
+            return TinkoffSettings.get_services_terminal()
 
 
 class EventTicketTemplate(models.Model):
@@ -109,7 +117,7 @@ class Ticket(models.Model):
         ]
 
 
-        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Встреча с Ольгой Перцевой',terminal=TinkoffSettings.get_services_terminal()) \
+        payment = Payment(order_obj=order_obj,order_plural=order_plural, amount=amount, description='Встреча с Ольгой Перцевой',terminal=self.eventticket.event.get_payment_terminal()) \
             .with_receipt(email=self.email,phone=self.phone) \
             .with_items(items)
 

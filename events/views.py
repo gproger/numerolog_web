@@ -134,6 +134,12 @@ class TicketAddView(generics.CreateAPIView):
                 code_item.elapsed_count = code_item.elapsed_count - 1
                 code_item.save()
             objs.userinfo = request.user.ninfo
+            objs._email = request.user.ninfo.email
+            objs._phone = request.user.ninfo.phone
+            objs._first_name = request.user.ninfo.first_name
+            objs._last_name = request.user.ninfo.last_name
+            objs._middle_name = request.user.ninfo.middle_name
+
             objs.save()
 
             return Response(ser.data)
