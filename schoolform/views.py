@@ -36,6 +36,11 @@ from utils.phone import get_phone
 from .models import SchoolScanFile
 from .models import SchoolDiscount
 from .models import SchoolExtendAccessService
+from .models import SchoolAppFlow
+from tinkoff_credit.models import *
+from tinkoff_credit.service import *
+from users.models import UserInfo
+import locale
 
 # Create your views here.
 
@@ -362,6 +367,56 @@ class SchoolAppFormShowUpdateURLView(generics.UpdateAPIView):
         return super(SchoolAppFormShowUpdateURLView,self).put(request,*args,**kwargs)
         
 
+class SchoolAppFormCreateCreditPayURLView(View):
+
+    def post(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
+        id = self.kwargs.get('id', None)
+        
+        if id is None:
+            return HttpResponseBadRequest()
+
+
+        form = get_object_or_404(SchoolAppForm,pk=id)
+
+        if request.user.ninfo != form.userinfo:
+            return HttpResponseForbidden()
+
+        if not hasattr(form,'credit'):
+            cr_app = CreditApplication()
+            cr_app.schoolappform = form
+            cr_app.order_obj = str(form.id)
+            cr_app.order_type ='Обучение в школе'
+            cr_app.settings=TinkoffCreditSettings.objects.first()
+            cr_app.first_name = request.user.ninfo.first_name
+            cr_app.last_name = request.user.ninfo.last_name
+            cr_app.middle_name = request.user.ninfo.middle_name
+            cr_app.phone = request.user.ninfo.phone
+            cr_app.email = request.user.ninfo.email
+            cr_app.save()
+        
+            cr_arr = CreditApplicationItemsArray()
+            cr_arr.application = cr_app
+            cr_arr.save()
+        
+            cr_item = CreditApplicationItemsItem()
+            cr_item.quantity = 1
+            cr_item.name = 'Обучение в школе неНумерологии Ольги Перцевой'
+            cr_item.price = form.price - form.payed_amount
+            cr_item.array = cr_arr
+            cr_item.save()
+            
+            tch = TinkoffCreditAPI()
+            tch.create(cr_app)
+        data = {
+            'tcb_url': form.credit.link_url
+        }
+        return JsonResponse(data)
+        
+
 class SchoolPersCuratorPayView(generics.CreateAPIView):
 
     serializer_class = SchoolPersCuratorSerializer
@@ -680,4 +735,35 @@ class SchoolSaleUpdateURL(generics.UpdateAPIView):
 
 
         return super(SchoolSaleUpdateURL,self).put(request,*args,**kwargs)
+
+class SchoolExtendTestView(View):
+
+    def get(self, request, *args, **kwargs):
+        user_email  = request.GET.get('email',None)
+        user_phone  = request.GET.get('phone',None)
+        end_time = request.GET.get('endtime',None)
+        link = request.GET.get('link',None)
+        flow = SchoolAppFlow.objects.filter(getcourse_url=link)
+        if not flow:
+            return HttpResponseForbidden()
+        flow = flow.first()
+        locale.setlocale(locale.LC_ALL, 'ru_RU')
+        datetime_object = datetime.strptime(end_time, '%d %b %Y').date()
+        userinfo = UserInfo.objects.filter(phone=user_phone, email=user_email)
+        sc_ext = None
+        if userinfo:
+            sc_ext = SchoolAppForm.objects.filter(userinfo=userinfo.first(),flow=flow)
+        if not sc_ext:
+            return HttpResponseForbidden()
+        sc = sc_ext.first()
+        if sc.access_till is None:
+            return HttpResponseBadRequest()
+        diff_date = sc.access_till - datetime_object
+        print(diff_date)
+        print(diff_date.days)
+        if diff_date.days > 0:
+            return JsonResponse(True,safe=False)
+        else:
+            return JsonResponse(False, safe=False)
+
 

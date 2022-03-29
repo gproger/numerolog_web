@@ -310,6 +310,9 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     flow_id = serializers.SerializerMethodField()
 
+    buyCreditURL = serializers.SerializerMethodField(required=False)
+
+    credit = serializers.SerializerMethodField()
 
     def get_order(self,obj):
         order = []
@@ -364,12 +367,21 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
     def get_amount(self,obj):
         total = 0
         if not hasattr(obj,'payment'):
-            return 0
+            if not hasattr(obj,'credit'):
+                return 0
+            else:
+                if obj.credit.status == 'signed':
+                    return obj.price
         for k in obj.payment.all():
             if k.is_paid():
                 total += k.amount
         if obj.payed_amount > total/100:
             total = obj.payed_amount*100
+
+        if hasattr(obj,'credit'):
+            if obj.credit.status == 'signed':
+                total = total + obj.credit.items.summ*100
+
         return total/100
 
     def get_curator(self,obj):
@@ -382,6 +394,11 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
 
     def get_cancelUrl(self, obj):
         return '/numer/api/schoolurl/'+str(obj.id)+'/'
+
+    def get_buyCreditURL(self, obj):
+        if self.get_amount(obj) == obj.price:
+            return None
+        return '/numer/api/schooltcburl/'+str(obj.id)+'/'
 
     def get_uploadDocumentUrl(self,obj):
         return '/numer/api/schoolupld/'+str(obj.id)+'/'
@@ -424,9 +441,29 @@ class SchoolAppFormSerializer(serializers.ModelSerializer):
     def get_flow_id(self, obj):
         return obj.flow.id
 
+    def get_credit(self,obj):
+        order = []
+        status = ''
+        if obj.credit.status == 'approved':
+            status = 'Заявка одобрена'
+        elif obj.credit.status == 'rejected':
+            status = 'Отказ в выдаче кредита'
+        elif obj.credit.status == 'canceled':
+            status = 'Вы отменили заявку на кредит'
+        elif obj.credit.status == 'signed':
+            status = 'Кредитный договор подписан'
+
+        order.append({'name' : 'Кредит для оплаты в системе №', 'value' : obj.credit.id, 'type' : 'id'})
+        order.append({'name' : 'Сумма', 'value' : obj.credit.items.summ, 'type' : 'amount'})
+        order.append({'name' : 'Статус', 'value' : status, 'type' : 'status'})
+        order.append({'name' : 'Ссылка на анкету', 'value' : obj.credit.link_url, 'type' : 'link'})
+
+
+        return order
+
     class Meta:
         model = SchoolAppForm
-        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files','prolong','saleUrl','flow_id']
+        fields = ['order','payment','amount','cform','curator','phone_valid','cancelUrl','uploadDocumentUrl','files','prolong','saleUrl','flow_id','buyCreditURL','credit']
 
 
 

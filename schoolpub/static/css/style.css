@@ -1745,3 +1745,37 @@ button{
 .footer__year{
     font-size: 18px;
 }
+
+
+.youtube {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: inline-block;
+    overflow: hidden;
+    transition: all 200ms ease-out;
+    cursor: pointer;
+    position : absolute;
+    top : 0;
+    left : 0;
+    width: 100%;
+    height: 100%;
+}
+.youtube .play {
+    background: url('/static/images/youtube-play-btn.png') no-repeat; 
+    background-position: 0 -50px;
+    -webkit-background-size: 100% auto;
+    background-size: 100% auto;
+    position: absolute;
+    height: 50px;
+    width: 69px;
+    transition: none;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+}
+.youtube:hover .play {
+    background-position: 0 0;
+}

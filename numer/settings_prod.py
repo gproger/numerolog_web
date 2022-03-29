@@ -263,6 +263,7 @@ INSTALLED_APPS = [
     'school',
 # push
     'push_notifications',
+    'offers',
 ]
 
 

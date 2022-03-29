@@ -7,7 +7,7 @@ from celery import Celery
 # set the default Django settings module for the 'celery' program.
 # если мы запускаем celery из коммандной строки без указания файла настроек
 # в случае деполя в продакшне, celery запускается как демон с указанием файла настроек
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'numer.settings_prod')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'numer.settings')
 
 app = Celery('numer')
 

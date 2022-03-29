@@ -1,0 +1,19 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+    {% for field in form %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+        {% if field.help_text %}
+        <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <p>Письмо будет выслано следующим пользователям:</p>
+    <ul>{{ items|unordered_list }}</ul>
+    <input type="hidden" name="action" value="send_random_text_email" />
+    <input type="submit" name="apply" value="Сделать рассылку" />
+</form>
+{% endblock %}

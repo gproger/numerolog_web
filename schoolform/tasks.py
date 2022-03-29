@@ -1,5 +1,5 @@
 
-from emails.emails import mail_user
+from emails.emails import mail_user, mail_user_ctemplate
 from django.template.loader import render_to_string
 from django.template import Template
 from django.template import Context
@@ -7,8 +7,9 @@ from weasyprint import HTML
 
 from numer.celery import app
 from django.conf import settings
-from schoolform.models import SchoolAppForm, SchoolAppCurator
+from schoolform.models import SchoolAppForm, SchoolAppCurator, RandomMail
 from smsgate.services import SendSMSAPI
+
 
 DEFAULT_SENDER = 'neNumerolog'
 
@@ -120,3 +121,17 @@ def send_payed_notify_task(form_id):
         mail_user(form, "Школа неНумерологии",'emails/notify_payment_all_mail',
                 context=context, sender=DEFAULT_SENDER)
 
+@app.task
+def send_school_random_mail(form_id, random_t_id):
+    form = SchoolAppForm.objects.get(pk=form_id)
+    templ = RandomMail.objects.get(pk=random_t_id)
+
+    context = {
+        'user_name' : form.first_name + ' ' + form.last_name,
+        'flow_num' : form.flow.flow,
+        'flow_name' : form.flow.flow_name,
+        "SITE_HOST" : settings.MISAGO_ADDRESS,  
+    }
+
+    mail_user_ctemplate(form, "Школа неНумерологии",templ.text,
+             context=context, sender=DEFAULT_SENDER)

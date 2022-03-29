@@ -63,6 +63,9 @@ class SchoolAppFlow(models.Model):
     program_html = models.TextField(blank=True, null=True)
     extend_price = models.PositiveIntegerField(default=5000)
 
+    getcourse_url = models.URLField(blank=True, null=True)
+    getcourse_ext_url = models.URLField(blank=True, null=True)
+
     def __str__(self):
         return str(self.flow) + ' ' + str(self.flow_name)
 
@@ -301,6 +304,10 @@ class SchoolAppForm(models.Model):
     def send_mail_notification(self):
         send_task('schoolform.tasks.send_school_form_pay_url',
                 kwargs={"form_id": self.pk})
+
+    def send_mail_random_template(self, f_id):
+        send_task('schoolform.tasks.send_school_random_mail',
+                kwargs={"form_id": self.pk,"random_t_id":f_id})
 
 
     def check_full_payment(self):
@@ -619,3 +626,7 @@ class SchoolExtendAccessService(models.Model):
         self.save()
         self.form.access_till = date_res
         self.form.save()
+
+
+class RandomMail(models.Model):
+    text = models.TextField()

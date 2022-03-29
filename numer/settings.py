@@ -258,8 +258,11 @@ INSTALLED_APPS = [
     'events',
     'schoolpub',
     'users',
+    'school',
 # push notifications service
     'push_notifications',
+    'offers',
+    'tinkoff_credit',
 ]
 
 if DEBUG:

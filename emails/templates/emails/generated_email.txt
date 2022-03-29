@@ -1,0 +1,10 @@
+{% extends "emails/base.txt" %}
+{% load i18n %}
+
+
+
+{% block content %}
+
+{{ block_text }}
+
+{% endblock content %}
